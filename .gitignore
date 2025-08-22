@@ -1,0 +1,40 @@
+
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Distribution / Packaging
+build/
+dist/
+*.egg-info/
+.eggs/
+eggs/
+
+# Virtual Environments
+.env
+.venv
+env/
+venv/
+ENV/
+
+# Test & Coverage Reports
+.pytest_cache/
+.tox/
+htmlcov/
+.coverage
+.coverage.*
+
+# Generated Output & Data
+# LangExtract outputs are defaulted to test_output/
+/test_output/
+
+# Sphinx documentation build output
+docs/_build/
+
+# IDE / Editor specific
+.idea/
+.vscode/
+*.swp
+
+# OS-specific
+.DS_Store
