@@ -1489,6 +1489,8 @@ if __name__ == "__main__":
     video = Video.from_http_url("http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4")
     video.save("video/out_test.mp4")
 
+    # print(dir(Video))
+
     # # 1) Create from NumPy and explore options
     # T, H, W = 48, 120, 160
     # rng = np.random.default_rng(42)
