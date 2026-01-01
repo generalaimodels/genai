@@ -1,0 +1,23 @@
+{
+    "name": "markdown-docs-frontend",
+    "version": "1.0.0",
+    "description": "SOTA Markdown Documentation Website Frontend",
+    "type": "module",
+    "scripts": {
+        "dev": "vite",
+        "build": "tsc && vite build",
+        "preview": "vite preview",
+        "typecheck": "tsc --noEmit"
+    },
+    "dependencies": {
+        "katex": "^0.16.9",
+        "mermaid": "^10.6.1",
+        "prismjs": "^1.29.0"
+    },
+    "devDependencies": {
+        "@types/katex": "^0.16.7",
+        "@types/prismjs": "^1.26.3",
+        "typescript": "^5.3.3",
+        "vite": "^5.0.10"
+    }
+}
