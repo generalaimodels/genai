@@ -19,7 +19,112 @@ Low-Level Observability & Profiling:Expose nanosecond-precision latency metrics 
 NOTE: Always write code with proper standards of coding
 NOTE: don't write unnecessary content before and after files(zero unnecessary text), every explanation in the code file in the form of comments
 
-TASK: we have Generliased convertor any format markdown like github, colab (text), generalised generated any llms, all include all tag allowed in the html in the markdown
+TASK: we have Generliased convertor any format markdown like github, colab (text), generalised generated any llms, all include all tag allowed in the html in the markdown(Generalised Markdown Converter – Website Documentation
+Overview
+
+The Generalised Markdown Converter is a premium-grade rendering system designed to ingest markdown generated from any source—including GitHub, Google Colab (text outputs), and multiple LLMs—and render it into a fully interactive, standards-compliant website experience.
+
+The system supports all valid HTML tags embedded within markdown, without sanitisation loss, while maintaining layout consistency, interactivity, and accessibility.
+
+Core Objectives
+
+Universal Markdown Compatibility
+
+LLM-Generated Content Fidelity
+
+Premium UI/UX Presentation
+
+Interactive, Structured Reading Experience
+
+Scalable and Extensible Architecture
+
+Layout Architecture (UI/UX)
+1. Main Content (Center-Aligned)
+
+Acts as the primary reading canvas
+
+Renders:
+
+Headings (h1–h6)
+
+Paragraphs
+
+Lists (ordered, unordered, task lists)
+
+Code blocks (with syntax highlighting)
+
+Tables
+
+Images, videos, iframes
+
+Inline & block-level HTML tags
+
+Width constrained for optimal readability
+
+Supports:
+
+Mathematical notation (LaTeX/MathJax)
+
+Mermaid / diagram blocks
+
+Embedded HTML widgets
+
+Design Principle:
+
+Content-first, distraction-free, editorial-grade reading experience.
+
+2. Interactive Table Panel (Right Side)
+
+This panel is context-aware and click-driven.
+
+Purpose
+
+Acts as a semantic navigator for the main content
+
+Enables non-linear reading
+
+Behavior
+
+Dynamically generated from markdown structure:
+
+Headings
+
+Tables
+
+Sections
+
+On click:
+
+Smooth-scrolls to corresponding section in main content
+
+Highlights active section
+
+Supports:
+
+Expand / collapse
+
+Section filtering
+
+Table row-level interactions (optional)
+
+Premium Interaction Layer
+
+Sticky positioning
+
+Scroll-synced highlighting
+
+Keyboard navigation support
+
+Markdown Parsing & Rendering Pipeline
+Input Sources (Generalised)
+
+GitHub README / Issues / Wikis
+
+Google Colab text cells
+
+LLM-generated markdown (ChatGPT, Claude, Gemini, etc.)
+
+Internal documentation tools)
 
 
 

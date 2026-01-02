@@ -4,124 +4,113 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Beautiful interactive documentation generated from markdown files">
-  <meta name="theme-color" content="#6366f1">
+  <meta name="description" content="Neural Frontiers Lab - Pioneering Research on the Path to AGI">
+  <meta name="theme-color" content="#6b21a8">
 
-  <title>Documentation</title>
+  <title>Neural Frontiers Lab</title>
 
   <!-- Preload critical fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
-    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
     rel="stylesheet">
 
   <!-- KaTeX CSS for math rendering -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
 
-  <!-- Favicon -->
+  <!-- Favicon - Neural Network Icon -->
   <link rel="icon" type="image/svg+xml"
-    href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📚</text></svg>">
+    href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cdefs%3E%3ClinearGradient id='grad' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' style='stop-color:%236b21a8'/%3E%3Cstop offset='100%25' style='stop-color:%23ec4899'/%3E%3C/linearGradient%3E%3C/defs%3E%3Ccircle cx='50' cy='50' r='45' fill='url(%23grad)'/%3E%3Ccircle cx='50' cy='35' r='8' fill='white' opacity='0.9'/%3E%3Ccircle cx='30' cy='55' r='6' fill='white' opacity='0.7'/%3E%3Ccircle cx='70' cy='55' r='6' fill='white' opacity='0.7'/%3E%3C/svg%3E">
 
   <!-- Theme initialization (prevent flash) -->
   <script>
     (function () {
-      const theme = localStorage.getItem('theme') ||
-        (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-      document.documentElement.setAttribute('data-theme', theme);
+      // Neural Frontiers Lab defaults to dark theme
+      document.documentElement.setAttribute('data-theme', 'dark');
     })();
   </script>
 </head>
 
 <body>
-  <div id="app">
-    <!-- Sidebar Navigation -->
-    <aside id="sidebar" class="sidebar">
-      <div class="sidebar-header">
-        <h1 class="logo">
-          <span class="logo-icon">📚</span>
-          <span class="logo-text">Docs</span>
-        </h1>
-        <button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme">
-          <svg class="sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <circle cx="12" cy="12" r="5" />
-            <path
-              d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" />
-          </svg>
-          <svg class="moon-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
-          </svg>
-        </button>
-      </div>
+  <!-- React App Root -->
+  <div id="app"></div>
 
-      <div class="search-container">
-        <button id="search-trigger" class="search-trigger">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <circle cx="11" cy="11" r="8" />
-            <path d="M21 21l-4.35-4.35" />
-          </svg>
-          <span>Search docs...</span>
-          <kbd>⌘K</kbd>
-        </button>
-      </div>
+  <!-- KaTeX Auto-render -->
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+    onload="renderMathInDocument()"></script>
 
-      <nav id="navigation" class="navigation">
-        <div class="nav-loading">Loading...</div>
-      </nav>
-    </aside>
+  <!-- Mermaid Diagrams -->
+  <script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: 'dark',
+      themeVariables: {
+        primaryColor: '#8b5cf6',
+        primaryTextColor: '#e2e8f0',
+        primaryBorderColor: '#6366f1',
+        lineColor: '#818cf8',
+        secondaryColor: '#ec4899',
+        tertiaryColor: '#3b82f6',
+        background: '#1e1b4b',
+        mainBkg: '#1e1b4b',
+        nodeBorder: '#8b5cf6',
+        clusterBkg: '#312e81',
+        clusterBorder: '#6366f1'
+      }
+    });
 
-    <!-- Main Content -->
-    <main id="main" class="main">
-      <article id="content" class="content">
-        <div class="welcome">
-          <h1>Welcome to Documentation</h1>
-          <p>Select a document from the sidebar to get started.</p>
-        </div>
-      </article>
+    // Re-render mermaid on content update
+    window.renderMermaid = () => {
+      mermaid.run({ querySelector: '.mermaid' });
+    };
+  </script>
 
-      <!-- Table of Contents -->
-      <aside id="toc" class="toc">
-        <div class="toc-header">On This Page</div>
-        <nav id="toc-nav" class="toc-nav"></nav>
-      </aside>
-    </main>
+  <!-- Math Rendering - FIXED: No more blinking loop -->
+  <script>
+    window.renderMathOnce = function () {
+      if (typeof katex === 'undefined') {
+        console.log('KaTeX not loaded yet');
+        return;
+      }
 
-    <!-- Sidebar Toggle Button (Left) -->
-    <button id="sidebar-toggle" class="sidebar-toggle sidebar-toggle-left" aria-label="Toggle sidebar">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
-        stroke-linejoin="round">
-        <polyline points="15 18 9 12 15 6"></polyline>
-      </svg>
-    </button>
+      // Get all math elements
+      const mathElements = document.querySelectorAll('.math-inline[data-math], .math-block[data-math]');
+      console.log(`Found ${mathElements.length} math elements to render`);
 
-    <!-- TOC Toggle Button (Right) -->
-    <button id="toc-toggle" class="sidebar-toggle toc-toggle-right" aria-label="Toggle table of contents">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
-        stroke-linejoin="round">
-        <polyline points="9 18 15 12 9 6"></polyline>
-      </svg>
-    </button>
+      mathElements.forEach((el, index) => {
+        // Skip if already rendered
+        if (el.hasAttribute('data-katex-rendered')) return;
 
-    <!-- Search Modal -->
-    <div id="search-modal" class="search-modal" hidden>
-      <div class="search-modal-content">
-        <div class="search-input-container">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <circle cx="11" cy="11" r="8" />
-            <path d="M21 21l-4.35-4.35" />
-          </svg>
-          <input type="text" id="search-input" class="search-input" placeholder="Search documentation..."
-            autocomplete="off">
-          <kbd>ESC</kbd>
-        </div>
-        <div id="search-results" class="search-results">
-          <div class="search-hint">Type to search...</div>
-        </div>
-      </div>
-    </div>
-  </div>
+        const mathText = el.getAttribute('data-math');
+        if (!mathText) return;
 
-  <script type="module" src="/src/main.ts"></script>
+        try {
+          // Clear element
+          el.innerHTML = '';
+
+          // Render with KaTeX
+          katex.render(mathText, el, {
+            displayMode: el.classList.contains('math-block'),
+            throwOnError: false,
+            strict: false,
+            trust: true
+          });
+
+          // Mark as rendered
+          el.setAttribute('data-katex-rendered', 'true');
+          console.log(`Rendered math ${index + 1}/${mathElements.length}`);
+        } catch (e) {
+          console.error('Math render error:', e);
+          el.textContent = mathText;
+        }
+      });
+    }
+  </script>
+
+  <script type="module" src="/src/main.tsx"></script>
 </body>
 
 </html>

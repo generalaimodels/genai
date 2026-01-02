@@ -39,3 +39,4 @@ docs/_build/
 # OS-specific
 .DS_Store
 /convertor/frontend/node_modules
+convertor/frontend/node_modules

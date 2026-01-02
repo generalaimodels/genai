@@ -2,25 +2,59 @@
     "compilerOptions": {
         "target": "ES2022",
         "useDefineForClassFields": true,
-        "module": "ESNext",
         "lib": [
             "ES2022",
             "DOM",
             "DOM.Iterable"
         ],
+        "module": "ESNext",
         "skipLibCheck": true,
+        /* Bundler Mode - Required for Vite */
         "moduleResolution": "bundler",
         "allowImportingTsExtensions": true,
         "resolveJsonModule": true,
         "isolatedModules": true,
         "noEmit": true,
+        /* React JSX Configuration */
+        "jsx": "react-jsx",
+        /* Strict Type-Checking for Robust Code */
         "strict": true,
         "noUnusedLocals": true,
         "noUnusedParameters": true,
         "noFallthroughCasesInSwitch": true,
-        "forceConsistentCasingInFileNames": true
+        "noImplicitReturns": true,
+        /* Path Aliases for Clean Imports */
+        "baseUrl": ".",
+        "paths": {
+            "@/*": [
+                "src/*"
+            ],
+            "@components/*": [
+                "src/components/*"
+            ],
+            "@hooks/*": [
+                "src/hooks/*"
+            ],
+            "@context/*": [
+                "src/context/*"
+            ],
+            "@types/*": [
+                "src/types/*"
+            ],
+            "@api/*": [
+                "src/api/*"
+            ],
+            "@styles/*": [
+                "src/styles/*"
+            ]
+        }
     },
     "include": [
         "src"
+    ],
+    "references": [
+        {
+            "path": "./tsconfig.node.json"
+        }
     ]
 }

@@ -138,13 +138,14 @@ export const api = {
     },
 
     /**
-     * Get a single document by path
+     * Get a specific document by path
      */
     async getDocument(path: string): Promise<DocumentContent> {
         const cacheKey = `documents:${path}`;
         const cached = getCached<DocumentContent>(cacheKey);
         if (cached) return cached;
 
+        // Use path directly with proper encoding
         const data = await apiFetch<DocumentContent>(`/documents/${encodeURIComponent(path)}`);
         setCache(cacheKey, data);
         return data;

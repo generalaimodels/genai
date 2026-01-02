@@ -1,7 +1,7 @@
 {
     "name": "markdown-docs-frontend",
-    "version": "1.0.0",
-    "description": "SOTA Markdown Documentation Website Frontend",
+    "version": "2.0.0",
+    "description": "Premium React TypeScript Documentation Viewer with Advanced Animations",
     "type": "module",
     "scripts": {
         "dev": "vite",
@@ -10,13 +10,23 @@
         "typecheck": "tsc --noEmit"
     },
     "dependencies": {
+        "@react-three/drei": "^10.7.7",
+        "@react-three/fiber": "^9.5.0",
+        "@types/three": "^0.182.0",
+        "framer-motion": "^10.18.0",
         "katex": "^0.16.9",
         "mermaid": "^10.6.1",
-        "prismjs": "^1.29.0"
+        "prismjs": "^1.29.0",
+        "react": "^18.2.0",
+        "react-dom": "^18.2.0",
+        "three": "^0.182.0"
     },
     "devDependencies": {
         "@types/katex": "^0.16.7",
         "@types/prismjs": "^1.26.3",
+        "@types/react": "^18.2.45",
+        "@types/react-dom": "^18.2.18",
+        "@vitejs/plugin-react": "^4.2.1",
         "typescript": "^5.3.3",
         "vite": "^5.0.10"
     }

@@ -1,0 +1,224 @@
+/**
+ * DocumentsPage Component
+ * 
+ * Main documentation viewing page with:
+ * - Left sidebar: File navigation tree
+ * - Center: Document content viewer
+ * - Right sidebar: Table of contents
+ * - Top header: Search and theme toggle
+ * 
+ * Fully connected to backend API for real documentation browsing.
+ */
+
+import React, { useEffect, useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Navigation } from '@/components/Navigation';
+import { DocumentViewer } from '@/components/DocumentViewer';
+import { TableOfContents } from '@/components/TableOfContents';
+import { SearchModal } from '@/components/Search';
+import { ThemeToggle } from '@/components/ThemeToggle';
+import { useApp, useCurrentPath, useSidebarState, useTocState, useSearchState } from '@/context';
+import type { Heading } from '@/types';
+
+export function DocumentsPage(): React.ReactElement {
+    const { navigateTo } = useApp();
+    const currentPath = useCurrentPath();
+    const [sidebarCollapsed, toggleSidebar] = useSidebarState();
+    const [tocCollapsed, toggleToc] = useTocState();
+    const [, openSearch] = useSearchState();
+    const [headings, setHeadings] = useState<Heading[]>([]);
+
+    // currentPath is now the direct file path from hash (e.g., "graph.md", "folder/file.md")
+    const documentPath = currentPath;
+
+    // Update headings when document changes
+    const handleHeadingsChange = (newHeadings: Heading[]) => {
+        setHeadings(newHeadings);
+    };
+
+    // Navigate to document (use path directly)
+    const handleNavigate = (path: string) => {
+        navigateTo(path);
+    };
+
+    return (
+        <div className="docs-page" data-sidebar-collapsed={sidebarCollapsed} data-toc-collapsed={tocCollapsed}>
+            {/* Top Header */}
+            <header className="docs-header">
+                <div className="docs-header-left">
+                    <button
+                        className="docs-header-btn sidebar-toggle"
+                        onClick={toggleSidebar}
+                        aria-label="Toggle sidebar"
+                    >
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                            <line x1="3" y1="12" x2="21" y2="12" />
+                            <line x1="3" y1="6" x2="21" y2="6" />
+                            <line x1="3" y1="18" x2="21" y2="18" />
+                        </svg>
+                    </button>
+
+                    <a href="#/" className="docs-logo">
+                        <svg viewBox="0 0 40 40" fill="none">
+                            <defs>
+                                <linearGradient id="docsLogoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" stopColor="#8b5cf6" />
+                                    <stop offset="50%" stopColor="#c084fc" />
+                                    <stop offset="100%" stopColor="#ec4899" />
+                                </linearGradient>
+                            </defs>
+                            <circle cx="20" cy="20" r="18" fill="url(#docsLogoGrad)" opacity="0.2" />
+                            <circle cx="20" cy="14" r="4" fill="url(#docsLogoGrad)" />
+                            <circle cx="12" cy="24" r="3" fill="url(#docsLogoGrad)" opacity="0.8" />
+                            <circle cx="28" cy="24" r="3" fill="url(#docsLogoGrad)" opacity="0.8" />
+                            <circle cx="20" cy="30" r="2.5" fill="url(#docsLogoGrad)" opacity="0.6" />
+                            <line x1="20" y1="14" x2="12" y2="24" stroke="url(#docsLogoGrad)" strokeWidth="1.5" opacity="0.6" />
+                            <line x1="20" y1="14" x2="28" y2="24" stroke="url(#docsLogoGrad)" strokeWidth="1.5" opacity="0.6" />
+                            <line x1="12" y1="24" x2="20" y2="30" stroke="url(#docsLogoGrad)" strokeWidth="1.5" opacity="0.5" />
+                            <line x1="28" y1="24" x2="20" y2="30" stroke="url(#docsLogoGrad)" strokeWidth="1.5" opacity="0.5" />
+                        </svg>
+                        <span className="docs-logo-text">Documentation</span>
+                    </a>
+                </div>
+
+                <div className="docs-header-right">
+                    <button
+                        className="docs-header-btn search-btn"
+                        onClick={openSearch}
+                        aria-label="Search"
+                    >
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                            <circle cx="11" cy="11" r="8" />
+                            <path d="M21 21l-4.35-4.35" />
+                        </svg>
+                        <span className="search-btn-label">Search</span>
+                        <kbd className="search-kbd">⌘K</kbd>
+                    </button>
+                    <ThemeToggle />
+                </div>
+            </header>
+
+            {/* Main Layout */}
+            <div className="docs-layout">
+                {/* Left Sidebar - Navigation */}
+                <AnimatePresence initial={false}>
+                    {!sidebarCollapsed && (
+                        <motion.aside
+                            className="docs-sidebar docs-sidebar-left"
+                            initial={{ x: -280, opacity: 0 }}
+                            animate={{ x: 0, opacity: 1 }}
+                            exit={{ x: -280, opacity: 0 }}
+                            transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+                        >
+                            <div className="docs-sidebar-header">
+                                <h2>Navigation</h2>
+                            </div>
+                            <div className="docs-sidebar-content">
+                                <Navigation />
+                            </div>
+
+                            {/* Minimize button on edge */}
+                            <button
+                                className="sidebar-minimize-btn"
+                                onClick={toggleSidebar}
+                                aria-label="Minimize navigation"
+                            >
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                    <polyline points="15 18 9 12 15 6" />
+                                </svg>
+                            </button>
+                        </motion.aside>
+                    )}
+                </AnimatePresence>
+
+                {/* Show sidebar button (when collapsed) */}
+                {sidebarCollapsed && (
+                    <motion.button
+                        className="sidebar-toggle-floating"
+                        onClick={toggleSidebar}
+                        initial={{ opacity: 0, x: -10 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        aria-label="Show navigation"
+                    >
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                            <polyline points="9 18 15 12 9 6" />
+                        </svg>
+                    </motion.button>
+                )}
+
+                {/* Main Content Area */}
+                <main className="docs-main">
+                    <div className="docs-content">
+                        <DocumentViewer
+                            path={documentPath}
+                            onHeadingsChange={handleHeadingsChange}
+                        />
+                    </div>
+                </main>
+
+                {/* Right Sidebar - Table of Contents */}
+                <AnimatePresence initial={false}>
+                    {!tocCollapsed && headings.length > 0 && (
+                        <motion.aside
+                            className="docs-sidebar docs-sidebar-right"
+                            initial={{ x: 280, opacity: 0 }}
+                            animate={{ x: 0, opacity: 1 }}
+                            exit={{ x: 280, opacity: 0 }}
+                            transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+                        >
+                            <div className="docs-sidebar-header">
+                                <h2>On This Page</h2>
+                                <button
+                                    className="toc-close-btn"
+                                    onClick={toggleToc}
+                                    aria-label="Close table of contents"
+                                >
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                        <line x1="18" y1="6" x2="6" y2="18" />
+                                        <line x1="6" y1="6" x2="18" y2="18" />
+                                    </svg>
+                                </button>
+                            </div>
+                            <div className="docs-sidebar-content">
+                                <TableOfContents headings={headings} />
+                            </div>
+
+                            {/* Minimize button on edge */}
+                            <button
+                                className="sidebar-minimize-btn"
+                                onClick={toggleToc}
+                                aria-label="Minimize table of contents"
+                            >
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                    <polyline points="9 18 15 12 9 6" />
+                                </svg>
+                            </button>
+                        </motion.aside>
+                    )}
+                </AnimatePresence>
+
+                {/* TOC Toggle Button (when collapsed) */}
+                {tocCollapsed && headings.length > 0 && (
+                    <motion.button
+                        className="toc-toggle-btn"
+                        onClick={toggleToc}
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        aria-label="Show table of contents"
+                    >
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                            <line x1="3" y1="12" x2="21" y2="12" />
+                            <line x1="3" y1="6" x2="21" y2="6" />
+                            <line x1="3" y1="18" x2="21" y2="18" />
+                        </svg>
+                    </motion.button>
+                )}
+            </div>
+
+            {/* Search Modal */}
+            <SearchModal onNavigate={handleNavigate} />
+        </div>
+    );
+}
+
+export default DocumentsPage;
