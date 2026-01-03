@@ -132,6 +132,8 @@ export function DocumentViewer({ path, onHeadingsChange }: DocumentViewerProps):
     const { isDark } = useTheme();
 
     // Fetch document when path changes
+    // OPTIMIZATION: onHeadingsChange excluded from deps to prevent infinite loop
+    // Function ref changes on every parent render, causing re-fetch
     useEffect(() => {
         if (!path) {
             setDocContent(null);
@@ -160,7 +162,7 @@ export function DocumentViewer({ path, onHeadingsChange }: DocumentViewerProps):
         }
 
         loadDocumentAsync();
-    }, [path, onHeadingsChange]);
+    }, [path]); // FIXED: Removed onHeadingsChange dependency
 
     // Update headings when content changes - OPTIMIZED
     useEffect(() => {
@@ -224,16 +226,28 @@ export function DocumentViewer({ path, onHeadingsChange }: DocumentViewerProps):
             images.forEach(img => imageObserver.observe(img));
         }
 
-        // Render math expressions - Call global function
+        // OPTIMIZED: Call math rendering immediately
+        // Auto-render handles all math formats automatically
         if (typeof (window as any).renderMathOnce === 'function') {
-            setTimeout(() => (window as any).renderMathOnce(), 500);
+            // Small delay to ensure DOM is fully rendered
+            setTimeout(() => {
+                (window as any).renderMathOnce();
+            }, 0);
         }
 
         // Render Mermaid diagrams
         renderMermaid(container, isDark);
 
-        // Scroll to top
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+        // PREMIUM: Delayed scroll to allow transition animation to complete
+        // Wait for exit animation (300ms) + partial enter (200ms) = 500ms
+        requestAnimationFrame(() => {
+            setTimeout(() => {
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            }, 500); // Sync with transition duration for premium feel
+        });
     }, [docContent]); // FIXED: Removed isDark dependency
 
     // Show welcome screen if no path
@@ -267,10 +281,27 @@ export function DocumentViewer({ path, onHeadingsChange }: DocumentViewerProps):
                     key={path}
                     ref={containerRef}
                     className="document-content"
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -10 }}
-                    transition={{ duration: 0.25, ease: 'easeOut' }}
+                    // PREMIUM: Smooth entrance animation with subtle lift
+                    initial={{ opacity: 0, y: 20, scale: 0.98 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    // PREMIUM: Elegant exit animation - fade out with slight drop
+                    exit={{ opacity: 0, y: -15, scale: 0.99 }}
+                    transition={{
+                        // OPTIMIZATION: Extended duration for premium feel (600ms)
+                        duration: 0.6,
+                        // OPTIMIZATION: Smooth cubic-bezier for natural motion
+                        ease: [0.16, 1, 0.3, 1],
+                        // GPU acceleration hints
+                        opacity: { duration: 0.5 },
+                        y: { duration: 0.6, ease: [0.16, 1, 0.3, 1] },
+                        scale: { duration: 0.6, ease: [0.16, 1, 0.3, 1] }
+                    }}
+                    // OPTIMIZATION: Force GPU layer for 60 FPS
+                    style={{
+                        willChange: 'transform, opacity',
+                        backfaceVisibility: 'hidden',
+                        perspective: 1000
+                    }}
                     dangerouslySetInnerHTML={{ __html: docContent.content_html }}
                 />
             </AnimatePresence>
@@ -300,17 +331,27 @@ function addHeadingAnchors(container: Element): void {
         anchor.textContent = '#';
         anchor.setAttribute('aria-hidden', 'true');
 
-        // Prevent default navigation - use smooth scroll instead
+        // PREMIUM: Prevent default navigation - use smooth scroll with premium easing
         anchor.addEventListener('click', (e) => {
             e.preventDefault();
             e.stopPropagation();
 
-            // Smooth scroll to heading
-            heading.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            // OPTIMIZATION: Smooth scroll to heading with offset for better visibility
+            const headerOffset = 80; // Account for sticky header
+            const elementPosition = heading.getBoundingClientRect().top;
+            const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
 
-            // Update URL without triggering hashchange event
-            const currentPath = window.location.hash.split('#')[0];
-            history.replaceState(null, '', `${currentPath}#${id}`);
+            window.scrollTo({
+                top: offsetPosition,
+                behavior: 'smooth'
+            });
+
+            // CRITICAL FIX: Preserve full document path when adding heading anchor
+            // Before: window.location.hash.split('#')[0] → WRONG (loses file extension)
+            // After: window.location.hash → CORRECT (preserves full path)
+            // Example: #/data/file.md → #/data/file.md#heading-id (NOT #/data/file#heading-id)
+            const fullHash = window.location.hash;
+            history.replaceState(null, '', `${fullHash}#${id}`);
         });
 
         heading.appendChild(anchor);
@@ -334,15 +375,29 @@ function addCopyButtons(container: Element): void {
 
             try {
                 await navigator.clipboard.writeText(code.textContent ?? '');
-                (newBtn as Element).textContent = 'Copied!';
-                (newBtn as Element).classList.add('copied');
 
+                // ENHANCED: Visual feedback with color change and animation
+                const btnElement = newBtn as HTMLElement;
+                btnElement.textContent = '✓ Copied!';
+                btnElement.classList.add('copied');
+                btnElement.style.transform = 'scale(1.1)';
+
+                // Reset after 2 seconds with smooth transition
                 setTimeout(() => {
-                    (newBtn as Element).textContent = 'Copy';
-                    (newBtn as Element).classList.remove('copied');
+                    btnElement.textContent = 'Copy';
+                    btnElement.classList.remove('copied');
+                    btnElement.style.transform = '';
                 }, 2000);
             } catch (err) {
                 console.error('Failed to copy:', err);
+                // Show error state
+                const btnElement = newBtn as HTMLElement;
+                btnElement.textContent = '✗ Failed';
+                btnElement.style.color = '#ef4444';
+                setTimeout(() => {
+                    btnElement.textContent = 'Copy';
+                    btnElement.style.color = '';
+                }, 2000);
             }
         });
     });

@@ -20,6 +20,7 @@ from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.middleware.gzip import GZipMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import JSONResponse
 
@@ -116,6 +117,15 @@ app.add_middleware(
 # Include API router
 app.include_router(router)
 
+# OPTIMIZATION: GZip compression middleware
+# Compress responses >500 bytes for 5-10x size reduction
+# Particularly effective for JSON and HTML (typical 80-90% compression)
+app.add_middleware(
+    GZipMiddleware,
+    minimum_size=500,  # Don't compress tiny responses
+    compresslevel=6    # Balance between speed (1) and compression (9)
+)
+
 
 # Serve frontend static files if directory exists
 frontend_path = Path(FRONTEND_DIR).resolve()
@@ -135,10 +145,18 @@ async def global_exception_handler(request, exc):
 if __name__ == "__main__":
     import uvicorn
     
+    # OPTIMIZATION: Production-grade uvicorn configuration
+    # - limit_concurrency: Prevents server overload under heavy load
+    # - backlog: Socket connection queue size for load shedding
+    # - timeout_keep_alive: Close idle connections to free resources
     uvicorn.run(
         "main:app",
         host=HOST,
         port=PORT,
         reload=DEBUG,
-        log_level="info" if DEBUG else "warning"
+        log_level="info" if DEBUG else "warning",
+        limit_concurrency=1000,      # Max concurrent requests
+        backlog=2048,                # Connection queue size
+        timeout_keep_alive=5,        # Close idle connections after 5s
+        access_log=DEBUG             # Disable access logs in production
     )

@@ -10,7 +10,7 @@
  * Fully connected to backend API for real documentation browsing.
  */
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Navigation } from '@/components/Navigation';
 import { DocumentViewer } from '@/components/DocumentViewer';
@@ -31,10 +31,11 @@ export function DocumentsPage(): React.ReactElement {
     // currentPath is now the direct file path from hash (e.g., "graph.md", "folder/file.md")
     const documentPath = currentPath;
 
-    // Update headings when document changes
-    const handleHeadingsChange = (newHeadings: Heading[]) => {
+    // OPTIMIZATION: Memoize callback to prevent re-render cycles
+    // useCallback creates stable function reference across renders
+    const handleHeadingsChange = useCallback((newHeadings: Heading[]) => {
         setHeadings(newHeadings);
-    };
+    }, []); // Empty deps = reference never changes
 
     // Navigate to document (use path directly)
     const handleNavigate = (path: string) => {
