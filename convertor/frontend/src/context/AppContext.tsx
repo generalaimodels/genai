@@ -148,11 +148,19 @@ export function AppProvider({ children }: AppProviderProps): React.ReactElement 
                 hash = hash.substring(1);
             }
 
-            if (hash) {
+            // CRITICAL FIX: Ignore anchor-only hashes (no '/')
+            // Only update currentPath for actual document routes
+            // Anchor links like #heading-id should not trigger document loading
+            const isDocumentPath = hash.includes('/') || hash.includes('.');
+
+            if (isDocumentPath && hash) {
+                // It's a document path → update currentPath to load it
                 dispatch({ type: 'SET_PATH', payload: hash });
-            } else {
+            } else if (!hash) {
+                // Empty hash → clear currentPath
                 dispatch({ type: 'SET_PATH', payload: null });
             }
+            // else: it's an anchor (#heading-id), ignore it, don't change currentPath
         };
 
         // Set initial path from URL

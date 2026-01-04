@@ -59,9 +59,19 @@ class NotebookConverter:
     # Supported image formats for embedding
     IMAGE_FORMATS: frozenset[str] = frozenset({'image/png', 'image/jpeg', 'image/gif', 'image/svg+xml'})
     
-    def __init__(self) -> None:
-        """Initialize notebook converter."""
-        pass
+    def __init__(self, data_dir: Path = None) -> None:
+        """
+        Initialize notebook converter.
+        
+        Args:
+            data_dir: Root data directory for media path resolution
+        """
+        # Initialize media path resolver for SOTA path resolution
+        if data_dir:
+            from .media_resolver import MediaPathResolver
+            self.media_resolver = MediaPathResolver(data_dir)
+        else:
+            self.media_resolver = None
     
     def convert_file(self, filepath: str | Path) -> ConvertedNotebook:
         """
@@ -71,7 +81,7 @@ class NotebookConverter:
             filepath: Path to .ipynb file
             
         Returns:
-            ConvertedNotebook with markdown content and metadata
+            ConvertedNotebook with markdown content and media paths resolved
             
         Raises:
             ValueError: If file is not valid JSON or missing required fields
@@ -82,9 +92,10 @@ class NotebookConverter:
         with open(filepath, 'r', encoding='utf-8') as f:
             notebook_data = json.load(f)
         
-        return self.convert(notebook_data, filepath.stem)
+        # Pass filepath for media resolution
+        return self.convert(notebook_data, filepath.stem, str(filepath))
     
-    def convert(self, notebook_data: dict[str, Any], title_fallback: str = "Notebook") -> ConvertedNotebook:
+    def convert(self, notebook_data: dict[str, Any], title_fallback: str = "Notebook", document_path: str = None) -> ConvertedNotebook:
         """
         Convert notebook JSON to markdown.
         
@@ -296,7 +307,11 @@ class NotebookConverter:
         # LaTeX math
         if 'text/latex' in data:
             latex = self._join_source(data['text/latex'])
-            # Wrap in $$ for block display
+            # CRITICAL FIX: Unescape HTML entities before rendering
+            # Issue: & in LaTeX matrices becomes &amp; and displays as "amp;"
+            # Solution: Unescape HTML entities since we're wrapping in $$ for KaTeX
+            latex = html.unescape(latex)
+            # Wrap in $$ for block display if not already wrapped
             if latex and not latex.strip().startswith('$$'):
                 latex = f"$$\n{latex.strip()}\n$$"
             parts.append(latex)

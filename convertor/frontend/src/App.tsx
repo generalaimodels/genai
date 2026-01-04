@@ -23,13 +23,20 @@ export function App(): React.ReactElement {
         const handleHashChange = () => {
             const hash = window.location.hash.slice(1); // Remove #
 
-            // Route to docs page for ANY non-empty hash path
-            // Show main page only for empty hash or bare "/"
-            if (hash && hash !== '/' && hash !== '') {
+            // CRITICAL FIX: Distinguish between document paths and anchor links
+            // Document paths contain '/' (e.g., #/path/to/file.md)
+            // Anchor links don't contain '/' (e.g., #heading-id for TOC scrolling)
+            const isDocumentRoute = hash.includes('/');
+
+            if (isDocumentRoute) {
+                // Hash contains '/' → it's a document path, load it
                 setCurrentRoute('docs');
-            } else {
+            } else if (!hash || hash === '/') {
+                // Empty hash or bare '/' → show main page
                 setCurrentRoute('main');
             }
+            // else: it's an anchor link (#heading-id), stay on current route
+            // This allows TOC clicks to scroll without reloading the document
         };
 
         // Set initial route

@@ -1,0 +1,257 @@
+/* ============================================
+   Performance Stats Component (Phase 1 Showcase)
+   POSITION: Bottom-left to avoid conflict with TOC toggle
+   ============================================ */
+
+.performance-stats {
+    position: fixed;
+    bottom: var(--space-6);
+    left: var(--space-6);
+    /* ROBUST: Moved from right to left to avoid TOC button */
+    background: var(--surface-glass);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--border-primary);
+    border-radius: var(--radius-xl);
+    padding: var(--space-4);
+    box-shadow: var(--shadow-xl);
+    z-index: 65;
+    /* Below TOC toggle (70) but above content */
+    max-width: 400px;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.stats-title {
+    font-size: var(--text-sm);
+    font-weight: 600;
+    color: var(--text-secondary);
+    margin-bottom: var(--space-3);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-3);
+}
+
+.stat-card {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    padding: var(--space-3);
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-primary);
+    border-radius: var(--radius-lg);
+    cursor: pointer;
+    transition: all var(--duration-normal) var(--ease-out);
+}
+
+.stat-card:hover {
+    background: var(--bg-tertiary);
+    box-shadow: var(--shadow-md);
+}
+
+.stat-icon {
+    font-size: var(--text-3xl);
+    line-height: 1;
+}
+
+.stat-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.stat-value {
+    font-size: var(--text-xl);
+    font-weight: 700;
+    color: var(--text-primary);
+    line-height: 1.2;
+}
+
+.stat-label {
+    font-size: var(--text-xs);
+    font-weight: 600;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.stat-subtitle {
+    font-size: var(--text-xs);
+    color: var(--text-muted);
+    margin-top: var(--space-1);
+}
+
+/* Responsive: Hide on mobile and when left sidebar is visible */
+@media (max-width: 1024px) {
+    .performance-stats {
+        display: none;
+    }
+}
+
+/* ============================================
+   Format Badge Component (Phase 2 Showcase)
+   ============================================ */
+
+.format-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-1) var(--space-3);
+    border: 1.5px solid;
+    border-radius: var(--radius-full);
+    font-size: var(--text-xs);
+    font-weight: 600;
+    transition: all var(--duration-fast) var(--ease-out);
+    cursor: default;
+}
+
+.format-icon {
+    font-size: var(--text-base);
+    line-height: 1;
+}
+
+.format-label {
+    line-height: 1;
+    letter-spacing: 0.03em;
+}
+
+/* ============================================
+   Document Metadata Bar
+   ============================================ */
+
+.document-metadata {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+    padding: var(--space-4);
+    background: var(--bg-secondary);
+    border-radius: var(--radius-lg);
+    margin-bottom: var(--space-6);
+    flex-wrap: wrap;
+}
+
+.metadata-item {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-size: var(--text-sm);
+    color: var(--text-secondary);
+}
+
+.metadata-icon {
+    font-size: var(--text-lg);
+}
+
+.metadata-label {
+    font-weight: 500;
+    color: var(--text-muted);
+}
+
+.metadata-value {
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+/* ============================================
+   Feature Showcase Pills
+   ============================================ */
+
+.feature-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    margin: var(--space-4) 0;
+}
+
+.feature-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-2) var(--space-3);
+    background: linear-gradient(135deg,
+            rgba(99, 102, 241, 0.1) 0%,
+            rgba(139, 92, 246, 0.1) 100%);
+    border: 1px solid rgba(99, 102, 241, 0.3);
+    border-radius: var(--radius-full);
+    font-size: var(--text-xs);
+    font-weight: 600;
+    color: var(--color-primary-600);
+    transition: all var(--duration-fast) var(--ease-out);
+}
+
+[data-theme="dark"] .feature-pill {
+    color: var(--color-primary-400);
+    border-color: rgba(99, 102, 241, 0.4);
+}
+
+.feature-pill:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(99, 102, 241, 0.2);
+}
+
+.feature-pill-icon {
+    font-size: var(--text-base);
+}
+
+/* ============================================
+   SOTA Banner
+   ============================================ */
+
+.sota-banner {
+    background: linear-gradient(135deg,
+            rgba(99, 102, 241, 0.1) 0%,
+            rgba(139, 92, 246, 0.1) 100%);
+    border-left: 4px solid var(--color-primary-500);
+    padding: var(--space-4) var(--space-6);
+    border-radius: var(--radius-lg);
+    margin: var(--space-6) 0;
+}
+
+.sota-banner-title {
+    font-size: var(--text-sm);
+    font-weight: 700;
+    color: var(--color-primary-600);
+    margin-bottom: var(--space-2);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+[data-theme="dark"] .sota-banner-title {
+    color: var(--color-primary-400);
+}
+
+.sota-banner-content {
+    font-size: var(--text-sm);
+    color: var(--text-secondary);
+    line-height: 1.6;
+}
+
+.sota-banner-stats {
+    display: flex;
+    gap: var(--space-6);
+    margin-top: var(--space-3);
+}
+
+.sota-stat {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-2);
+}
+
+.sota-stat-value {
+    font-size: var(--text-2xl);
+    font-weight: 700;
+    color: var(--color-primary-600);
+}
+
+[data-theme="dark"] .sota-stat-value {
+    color: var(--color-primary-400);
+}
+
+.sota-stat-label {
+    font-size: var(--text-xs);
+    color: var(--text-muted);
+}

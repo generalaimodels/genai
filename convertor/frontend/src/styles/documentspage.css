@@ -167,6 +167,12 @@
     border-left: 1px solid var(--border-primary, rgba(0, 0, 0, 0.1));
 }
 
+/* ========================================
+   REMOVED: Edge minimize buttons
+   All controls now integrated in sidebar headers
+   ======================================== */
+
+/* Sidebar header controls - Premium DeepMind style */
 .docs-sidebar-header {
     padding: 1.5rem 1.5rem 1rem 1.5rem;
     border-bottom: 1px solid var(--border-primary, rgba(0, 0, 0, 0.1));
@@ -175,7 +181,7 @@
     justify-content: space-between;
     position: sticky;
     top: 0;
-    background: var(--bg-elevated, rgba(255, 255, 255, 0.95));
+    background: var(--bg-elevated, rgba(255, 255, 255, 0.98));
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     z-index: 10;
@@ -190,78 +196,54 @@
     margin: 0;
 }
 
-.toc-close-btn {
+/* Premium close/minimize button in header */
+.toc-close-btn,
+.sidebar-header-btn {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 24px;
-    height: 24px;
+    width: 28px;
+    height: 28px;
     padding: 0;
     background: transparent;
-    border: none;
-    color: var(--text-secondary, #666);
+    border: 1px solid transparent;
+    color: rgba(139, 92, 246, 0.6);
     cursor: pointer;
-    border-radius: 4px;
-    transition: all 0.2s ease;
+    border-radius: 8px;
+    transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-.toc-close-btn:hover {
-    background: var(--bg-tertiary, rgba(0, 0, 0, 0.05));
-    color: var(--text-primary, #000);
+.toc-close-btn:hover,
+.sidebar-header-btn:hover {
+    background: rgba(139, 92, 246, 0.08);
+    border-color: rgba(139, 92, 246, 0.15);
+    color: rgba(139, 92, 246, 1);
+    transform: scale(1.05);
 }
 
-.toc-close-btn svg {
+.toc-close-btn svg,
+.sidebar-header-btn svg {
     width: 16px;
     height: 16px;
+    transition: transform 0.2s ease;
 }
 
-/* Sidebar minimize button (edge toggle) */
-.sidebar-minimize-btn {
-    position: absolute;
-    top: 50%;
-    right: -12px;
-    transform: translateY(-50%);
-    width: 24px;
-    height: 48px;
-    background: var(--bg-elevated, rgba(255, 255, 255, 0.95));
-    border: 1px solid var(--border-primary, rgba(0, 0, 0, 0.1));
-    border-radius: 0 8px 8px 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--text-secondary, #666);
-    cursor: pointer;
-    transition: all 0.2s ease;
-    z-index: 51;
-    /* OPTIMIZATION: Above sidebar to always be visible */
-    border-left: none;
-    box-shadow: 2px 0 8px rgba(0, 0, 0, 0.08);
-    /* Subtle elevation */
+.toc-close-btn:hover svg,
+.sidebar-header-btn:hover svg {
+    transform: scale(1.1);
 }
 
-.sidebar-minimize-btn:hover {
-    background: var(--bg-primary, #fff);
-    border-color: var(--border-hover, rgba(0, 0, 0, 0.2));
-    color: var(--text-primary, #000);
-    width: 28px;
+/* Dark mode */
+[data-theme="dark"] .toc-close-btn,
+[data-theme="dark"] .sidebar-header-btn {
+    color: rgba(167, 139, 250, 0.7);
 }
 
-.sidebar-minimize-btn svg {
-    width: 14px;
-    height: 14px;
-}
-
-/* Right sidebar minimize button - FIXED: Always visible even at 100% */
-.docs-sidebar-right .sidebar-minimize-btn {
-    right: auto;
-    left: -12px;
-    border-radius: 8px 0 0 8px;
-    border-right: none;
-    border-left: 1px solid var(--border-primary, rgba(0, 0, 0, 0.1));
-    z-index: 51;
-    /* OPTIMIZATION: Above sidebar (50) to ensure visibility */
-    box-shadow: -2px 0 8px rgba(0, 0, 0, 0.08);
-    /* Subtle depth */
+[data-theme="dark"] .toc-close-btn:hover,
+[data-theme="dark"] .sidebar-header-btn:hover {
+    background: rgba(167, 139, 250, 0.12);
+    border-color: rgba(167, 139, 250, 0.2);
+    color: rgba(167, 139, 250, 1);
 }
 
 .docs-sidebar-content {
@@ -302,89 +284,242 @@
 }
 
 /* ========================================
-   Sidebar Toggle Buttons
+   Premium Sidebar Toggle Buttons (Floating)
+   DESIGN: Glassmorphism at top corners
    ======================================== */
 
-/* Left sidebar toggle (when collapsed) */
+/* Left sidebar toggle (when collapsed) - TOP LEFT */
 .sidebar-toggle-floating {
     position: fixed;
-    top: 50%;
+    top: calc(var(--docs-header-height) + 1rem);
+    /* Below header */
     left: 1rem;
-    transform: translateY(-50%);
     width: 40px;
     height: 40px;
+
+    /* Ultra-premium glassmorphism effect */
+    background: linear-gradient(135deg,
+            rgba(255, 255, 255, 0.98),
+            rgba(255, 255, 255, 0.92));
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+
+    /* Refined border with subtle gradient */
+    border: 1px solid rgba(139, 92, 246, 0.2);
+    border-radius: 12px;
+
+    /* Premium shadows for floating effect */
+    box-shadow:
+        0 8px 24px rgba(0, 0, 0, 0.12),
+        0 4px 8px rgba(0, 0, 0, 0.08),
+        inset 0 1px 0 rgba(255, 255, 255, 0.6);
+
     display: flex;
     align-items: center;
     justify-content: center;
-    background: var(--bg-elevated, rgba(255, 255, 255, 0.95));
-    border: 1px solid var(--border-primary, rgba(0, 0, 0, 0.1));
-    border-radius: 8px;
-    color: var(--text-secondary, #666);
+    color: rgba(139, 92, 246, 0.8);
     cursor: pointer;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    transition: all 0.2s ease;
+
+    /* Buttery smooth transitions */
+    transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+
     z-index: 60;
+    opacity: 0.9;
 }
 
 .sidebar-toggle-floating:hover {
-    background: var(--bg-primary, #fff);
-    border-color: var(--border-hover, rgba(0, 0, 0, 0.2));
-    color: var(--text-primary, #000);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    opacity: 1;
+    transform: scale(1.05) translateY(-1px);
+    background: linear-gradient(135deg,
+            rgba(255, 255, 255, 1),
+            rgba(255, 255, 255, 0.98));
+    border-color: rgba(139, 92, 246, 0.35);
+    box-shadow:
+        0 8px 28px rgba(139, 92, 246, 0.18),
+        0 4px 12px rgba(0, 0, 0, 0.08),
+        inset 0 1px 1px rgba(255, 255, 255, 1);
+    color: rgba(139, 92, 246, 1);
+}
+
+.sidebar-toggle-floating:active {
+    transform: scale(1.02);
 }
 
 .sidebar-toggle-floating svg {
-    width: 20px;
-    height: 20px;
+    width: 18px;
+    height: 18px;
+    transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-/* Right sidebar toggle (when collapsed) */
-.toc-toggle-btn {
-    position: fixed;
-    top: 50%;
-    right: 1rem;
-    transform: translateY(-50%);
-    width: 40px;
-    height: 40px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: var(--bg-elevated, rgba(255, 255, 255, 0.95));
-    border: 1px solid var(--border-primary, rgba(0, 0, 0, 0.1));
-    border-radius: 8px;
-    color: var(--text-secondary, #666);
-    cursor: pointer;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    transition: all 0.2s ease;
-    z-index: 40;
+.sidebar-toggle-floating:hover svg {
+    transform: scale(1.15) rotate(2deg);
 }
 
-.toc-toggle-btn:hover {
-    background: var(--bg-primary, #fff);
-    border-color: var(--border-hover, rgba(0, 0, 0, 0.2));
-    color: var(--text-primary, #000);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+/* Dark mode premium styling */
+[data-theme="dark"] .sidebar-toggle-floating {
+    background: linear-gradient(135deg,
+            rgba(30, 41, 59, 0.95),
+            rgba(30, 41, 59, 0.85));
+    border-color: rgba(99, 102, 241, 0.35);
+    color: var(--color-primary-400);
+    box-shadow:
+        0 8px 24px rgba(0, 0, 0, 0.4),
+        0 4px 8px rgba(0, 0, 0, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.12);
 }
 
-.toc-toggle-btn svg {
-    width: 20px;
-    height: 20px;
+[data-theme="dark"] .sidebar-toggle-floating:hover {
+    background: linear-gradient(135deg,
+            rgba(30, 41, 59, 1),
+            rgba(30, 41, 59, 0.98));
+    border-color: rgba(99, 102, 241, 0.55);
+    color: var(--color-primary-300);
+    box-shadow:
+        0 12px 32px rgba(99, 102, 241, 0.3),
+        0 6px 12px rgba(0, 0, 0, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.18);
 }
 
 /* ========================================
-   Responsive Design
+   Premium TOC Toggle Button (Floating)
+   DESIGN: Glassmorphism at top-right corner
    ======================================== */
 
-@media (max-width: 1280px) {
+.toc-toggle-btn {
+    position: fixed;
+    top: calc(var(--docs-header-height) + 1rem);
+    /* Below header */
+    right: var(--space-4);
+    width: 40px;
+    height: 40px;
+
+    /* Ultra-premium glassmorphism effect */
+    background: linear-gradient(135deg,
+            rgba(255, 255, 255, 0.98),
+            rgba(255, 255, 255, 0.92));
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+
+    /* Refined border with subtle gradient */
+    border: 1px solid rgba(139, 92, 246, 0.2);
+    border-radius: 12px;
+
+    /* Elegant layered shadows */
+    box-shadow:
+        0 4px 16px rgba(139, 92, 246, 0.08),
+        0 2px 8px rgba(0, 0, 0, 0.06),
+        inset 0 1px 1px rgba(255, 255, 255, 0.8);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba(139, 92, 246, 0.8);
+    cursor: pointer;
+
+    /* Buttery smooth transitions */
+    transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+
+    z-index: 70;
+    /* Above all content */
+    opacity: 0.9;
+}
+
+.toc-toggle-btn:hover {
+    opacity: 1;
+    transform: scale(1.05) translateY(-1px);
+    background: linear-gradient(135deg,
+            rgba(255, 255, 255, 1),
+            rgba(255, 255, 255, 0.98));
+    border-color: rgba(139, 92, 246, 0.35);
+    box-shadow:
+        0 8px 28px rgba(139, 92, 246, 0.18),
+        0 4px 12px rgba(0, 0, 0, 0.08),
+        inset 0 1px 1px rgba(255, 255, 255, 1);
+    color: rgba(139, 92, 246, 1);
+}
+
+.toc-toggle-btn:active {
+    transform: scale(1.02);
+}
+
+.toc-toggle-btn svg {
+    width: 18px;
+    height: 18px;
+    transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.toc-toggle-btn:hover svg {
+    transform: scale(1.15) rotate(-2deg);
+}
+
+/* When TOC is visible, button moves with it */
+.docs-page:not([data-toc-collapsed="true"]) .toc-toggle-btn {
+    /* HIDE: Button should not show when TOC is visible */
+    display: none;
+}
+
+/* Dark mode premium styling */
+[data-theme="dark"] .toc-toggle-btn {
+    background: linear-gradient(135deg,
+            rgba(30, 41, 59, 0.95),
+            rgba(30, 41, 59, 0.85));
+    border-color: rgba(99, 102, 241, 0.35);
+    color: var(--color-primary-400);
+    box-shadow:
+        0 8px 24px rgba(0, 0, 0, 0.4),
+        0 4px 8px rgba(0, 0, 0, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.12);
+}
+
+[data-theme="dark"] .toc-toggle-btn:hover {
+    background: linear-gradient(135deg,
+            rgba(30, 41, 59, 1),
+            rgba(30, 41, 59, 0.98));
+    border-color: rgba(99, 102, 241, 0.55);
+    color: var(--color-primary-300);
+    box-shadow:
+        0 12px 32px rgba(99, 102, 241, 0.3),
+        0 6px 12px rgba(0, 0, 0, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.18);
+}
+
+/* ========================================
+   Responsive Design - Zero Hardcoding
+   ======================================== */
+
+/* ROBUST: Dynamic TOC visibility based on actual available space
+   Instead of hardcoded breakpoint, calculate if there's room for TOC
+   Formula: Show TOC if viewport > min-content-width + sidebar + toc + padding
+   This ensures TOC is always accessible when there's physical space */
+
+@media (max-width: calc(850px + var(--docs-sidebar-width) + var(--docs-toc-width) + 200px)) {
+
+    /* Not enough space for full 3-column layout */
     .docs-main {
         margin-right: 0;
     }
 
     .docs-sidebar-right {
+        /* Still render but animate out - allows smooth transitions */
+        transform: translateX(100%);
+        pointer-events: none;
+    }
+
+    /* Keep toggle button visible - user can manually open TOC as overlay */
+    .toc-toggle-btn {
+        display: flex;
+        z-index: 60;
+        /* Above potentially overlapping content */
+    }
+}
+
+/* Mobile: Hide TOC entirely on very small screens */
+@media (max-width: 768px) {
+    .toc-toggle-btn {
         display: none;
     }
 
-    .toc-toggle-btn {
+    .docs-sidebar-right {
         display: none;
     }
 }

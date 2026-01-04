@@ -1,0 +1,207 @@
+
+/* ========================================
+   MDX Components - Premium Styling
+   ======================================== */
+
+/* MDX Tabs Component */
+.mdx-tabs {
+    margin: var(--space-6) 0;
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    background: var(--bg-secondary);
+    box-shadow: var(--shadow-md);
+    border: 1px solid rgba(99, 102, 241, 0.15);
+}
+
+.mdx-tab {
+    border-bottom: 1px solid rgba(99, 102, 241, 0.1);
+}
+
+.mdx-tab:last-child {
+    border-bottom: none;
+}
+
+.mdx-tab-label {
+    padding: var(--space-3) var(--space-4);
+    background: linear-gradient(90deg, rgba(139, 92, 246, 0.1), rgba(99, 102, 241, 0.05));
+    font-weight: 600;
+    font-size: var(--text-sm);
+    color: var(--color-primary-400);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    cursor: pointer;
+    transition: all var(--duration-fast) var(--ease-out);
+}
+
+.mdx-tab-label:hover {
+    background: linear-gradient(90deg, rgba(139, 92, 246, 0.15), rgba(99, 102, 241, 0.08));
+    transform: translateX(2px);
+}
+
+.mdx-tab-content {
+    padding: var(--space-4);
+}
+
+/* MDX Playground Component */
+.mdx-playground {
+    margin: var(--space-6) 0;
+    padding: var(--space-5);
+    border-radius: var(--radius-xl);
+    background: linear-gradient(145deg, rgba(139, 92, 246, 0.05), rgba(59, 130, 246, 0.03));
+    border: 1px solid rgba(139, 92, 246, 0.2);
+    backdrop-filter: blur(10px);
+    box-shadow: 
+        0 4px 6px rgba(0, 0, 0, 0.1),
+        0 0 20px rgba(139, 92, 246, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    transition: all var(--duration-normal) var(--ease-out);
+}
+
+.mdx-playground:hover {
+    box-shadow:
+        0 6px 12px rgba(0, 0, 0, 0.15),
+        0 0 30px rgba(139, 92, 246, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    transform: translateY(-2px);
+}
+
+/* MDX Props Table */
+.mdx-props-table {
+    margin: var(--space-6) 0;
+}
+
+.mdx-props-table table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    background: var(--bg-secondary);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow-md);
+}
+
+.mdx-props-table table th {
+    background: linear-gradient(90deg, rgba(139, 92, 246, 0.12), rgba(99, 102, 241, 0.08));
+    color: var(--color-primary-400);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-size: var(--text-sm);
+    padding: var(--space-3) var(--space-4);
+    text-align: left;
+}
+
+.mdx-props-table table td {
+    padding: var(--space-3) var(--space-4);
+    border-top: 1px solid rgba(99, 102, 241, 0.1);
+}
+
+.mdx-props-table table td code {
+    background: rgba(139, 92, 246, 0.1);
+    padding: var(--space-1) var(--space-2);
+    border-radius: var(--radius-sm);
+    font-size: 0.875em;
+    color: var(--color-primary-400);
+}
+
+/* MDX Demo/Sandbox */
+.mdx-demo,
+.mdx-sandbox {
+    margin: var(--space-6) 0;
+    padding: var(--space-5);
+    border-radius: var(--radius-xl);
+    background: var(--bg-tertiary);
+    border: 1px dashed rgba(99, 102, 241, 0.3);
+    backdrop-filter: blur(5px);
+}
+
+/* ========================================
+   R Documentation (.rd) Components
+   ======================================== */
+
+.rd-function-doc {
+    margin: var(--space-8) 0;
+}
+
+.rd-arguments-table {
+    margin: var(--space-4) 0;
+}
+
+.rd-arguments-table ul {
+    list-style: none;
+    padding: 0;
+}
+
+.rd-arguments-table li {
+    padding: var(--space-3);
+    background: var(--bg-secondary);
+    border-left: 3px solid var(--color-success-500);
+    margin: var(--space-2) 0;
+    border-radius: 0 var(--radius-md) var(--radius-md) 0;
+    transition: all var(--duration-fast) var(--ease-out);
+}
+
+.rd-arguments-table li:hover {
+    background: var(--bg-tertiary);
+    transform: translateX(4px);
+    border-left-width: 4px;
+}
+
+.rd-examples-section {
+    margin: var(--space-6) 0;
+}
+
+/*========================================
+   reStructuredText (.rst) Components
+   ======================================== */
+
+.rst-admonition {
+    margin: var(--space-6) 0;
+}
+
+.rst-api-reference {
+    margin: var(--space-6) 0;
+}
+
+.rst-api-reference dl {
+    background: var(--bg-secondary);
+    padding: var(--space-4);
+    border-radius: var(--radius-lg);
+    border-left: 4px solid var(--color-accent-500);
+}
+
+.rst-api-reference dt {
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+    background: rgba(99, 102, 241, 0.1);
+    padding: var(--space-2) var(--space-3);
+    border-radius: var(--radius-md);
+    margin-top: var(--space-3);
+    color: var(--color-primary-400);
+}
+
+.rst-api-reference dd {
+    margin-left: var(--space-4);
+    padding-left: var(--space-4);
+    border-left: 2px solid rgba(99, 102, 241, 0.2);
+}
+
+.rst-version-history {
+    margin: var(--space-6) 0;
+    padding: var(--space-4);
+    background: linear-gradient(135deg, rgba(34, 197, 94, 0.05), rgba(59, 130, 246, 0.03));
+    border-radius: var(--radius-lg);
+    border-left: 4px solid var(--color-success-500);
+}
+
+/* Enhanced GitHub-style alerts for RST admonitions */
+[data-theme="dark"] .document-content blockquote.note,
+[data-theme="dark"] .document-content blockquote.tip,
+[data-theme="dark"] .document-content blockquote.important,
+[data-theme="dark"] .document-content blockquote.warning,
+[data-theme="dark"] .document-content blockquote.caution {
+    backdrop-filter: blur(8px);
+    box-shadow:
+        0 4px 6px rgba(0, 0, 0, 0.2),
+        0 0 20px rgba(139, 92, 246, 0.1);
+}

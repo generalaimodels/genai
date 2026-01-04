@@ -81,35 +81,53 @@
      * Eliminates race condition where renderMathInElement is called before CDN loads
      */
 
-    // Global promise for KaTeX availability - O(1) access across all calls
+    // ========================================
+    // CRITICAL: KaTeX Loading with Enhanced Retry
+    // ========================================
     window.__katexReady = new Promise((resolve, reject) => {
-      const maxRetries = 8; // Exponential backoff: 50ms → 6.4s total
+      const maxRetries = 12; // ENHANCED: Increased for slower connections and reloads
       let attempts = 0;
 
       function checkKatexLoaded() {
-        if (typeof renderMathInElement !== 'undefined') {
-          console.log('✓ KaTeX loaded successfully');
+        if (typeof renderMathInElement !== 'undefined' &&
+          typeof katex !== 'undefined' &&
+          (document.readyState === 'complete' || document.readyState === 'interactive')) {
+          console.log('✓ KaTeX loaded successfully (attempt', attempts + 1, ')');
           resolve(true);
-          return;
-        }
 
-        attempts++;
-        if (attempts >= maxRetries) {
-          console.error('✗ KaTeX failed to load after', maxRetries, 'retries');
-          reject(new Error('KaTeX load timeout'));
-          return;
+          // Immediately trigger math rendering on first load
+          setTimeout(() => {
+            if (typeof window.renderMathOnce === 'function') {
+              console.log('🚀 Triggering initial math render...');
+              window.renderMathOnce();
+            }
+          }, 100);
+        } else if (attempts < maxRetries) {
+          attempts++;
+          const delay = 100 + (attempts * 150); // Exponential backoff
+          setTimeout(checkKatexLoaded, delay);
+        } else {
+          reject(new Error('KaTeX failed to load after ' + maxRetries + ' attempts'));
         }
-
-        // Exponential backoff: 50ms, 100ms, 200ms, 400ms, 800ms, 1600ms, 3200ms, 6400ms
-        const delay = 50 * Math.pow(2, attempts - 1);
-        setTimeout(checkKatexLoaded, delay);
       }
 
-      // Start checking after initial page load
       if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', checkKatexLoaded);
       } else {
         checkKatexLoaded();
+      }
+    });
+
+    // CRITICAL: Add hash change listener for navigation
+    // This ensures math re-renders when user navigates between documents
+    window.addEventListener('hashchange', () => {
+      console.log('🔄 Hash changed, re-rendering math...');
+      if (window.__katexReady) {
+        setTimeout(() => {
+          if (typeof window.renderMathOnce === 'function') {
+            window.renderMathOnce();
+          }
+        }, 300); // Wait for content to load
       }
     });
 
@@ -145,11 +163,128 @@
 
           console.log('✓ Math rendered with auto-render (async)');
         });
-      } catch (error) {
-        console.error('✗ Math rendering failed:', error);
+      } catch (err) {
+        console.error('❌ Math rendering failed:', err);
         // Graceful degradation - equations will show raw LaTeX
       }
     };
+
+    // CRITICAL: Enhanced resize/zoom listener for math re-rendering
+    // Detects both window resize AND browser zoom changes
+    let resizeTimeout;
+    let lastWidth = window.innerWidth;
+    let lastZoom = window.visualViewport ? window.visualViewport.scale : 1;
+
+    async function handleResizeOrZoom() {
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(async () => {
+        const currentWidth = window.innerWidth;
+        const currentZoom = window.visualViewport ? window.visualViewport.scale : 1;
+
+        // Detect if zoom changed or window resized
+        const zoomChanged = Math.abs(currentZoom - lastZoom) > 0.01;
+        const widthChanged = Math.abs(currentWidth - lastWidth) > 10;
+
+        if (zoomChanged || widthChanged) {
+          console.log('📐 Window resized/zoomed, re-rendering math...', {
+            zoom: currentZoom.toFixed(2),
+            width: currentWidth
+          });
+
+          lastWidth = currentWidth;
+          lastZoom = currentZoom;
+
+          if (typeof window.renderMathOnce === 'function') {
+            try {
+              // Force re-render by calling the async function
+              await window.renderMathOnce();
+            } catch (err) {
+              console.error('Math re-render error:', err);
+            }
+          }
+        }
+      }, 200); // Slightly longer delay for smoother UX
+    }
+
+    window.addEventListener('resize', handleResizeOrZoom);
+    if (window.visualViewport) {
+      window.visualViewport.addEventListener('resize', handleResizeOrZoom);
+    }
+
+    // CRITICAL: Re-render math when page becomes visible (e.g., tab switch)
+    document.addEventListener('visibilitychange', async () => {
+      if (!document.hidden) {
+        console.log('👁️ Page visible, re-rendering math...');
+        await new Promise(resolve => setTimeout(resolve, 150));
+        if (typeof window.renderMathOnce === 'function') {
+          try {
+            await window.renderMathOnce();
+          } catch (err) {
+            console.error('Math re-render error:', err);
+          }
+        }
+      }
+    });
+
+    // CRITICAL: Re-render math when theme changes (light/dark mode toggle)
+    // Watch for data-theme attribute changes on document element
+    const themeObserver = new MutationObserver((mutations) => {
+      mutations.forEach(async (mutation) => {
+        if (mutation.type === 'attributes' && mutation.attributeName === 'data-theme') {
+          console.log('🎨 Theme changed, re-rendering math...');
+          await new Promise(resolve => setTimeout(resolve, 150));
+          if (typeof window.renderMathOnce === 'function') {
+            try {
+              await window.renderMathOnce();
+            } catch (err) {
+              console.error('Math re-render error:', err);
+            }
+          }
+        }
+      });
+    });
+
+    // Start observing theme changes on html or body element
+    const targetNode = document.documentElement || document.body;
+    themeObserver.observe(targetNode, {
+      attributes: true,
+      attributeFilter: ['data-theme', 'class']
+    });
+
+    // CRITICAL: Re-render math when sidebars toggle (collapse/expand)
+    // Watch for sidebar state changes on .docs-page element
+    const sidebarObserver = new MutationObserver((mutations) => {
+      mutations.forEach(async (mutation) => {
+        if (mutation.type === 'attributes' &&
+          (mutation.attributeName === 'data-sidebar-collapsed' ||
+            mutation.attributeName === 'data-toc-collapsed')) {
+          console.log('📱 Sidebar toggled, re-rendering math after layout settles...');
+          // Longer delay to let sidebar animation complete fully
+          await new Promise(resolve => setTimeout(resolve, 350));
+          if (typeof window.renderMathOnce === 'function') {
+            try {
+              await window.renderMathOnce();
+              console.log('✅ Math re-rendered after sidebar toggle');
+            } catch (err) {
+              console.error('Math re-render error:', err);
+            }
+          }
+        }
+      });
+    });
+
+    // Start observing sidebar state changes
+    // Wait a bit for the page element to be available
+    setTimeout(() => {
+      const docsPage = document.querySelector('.docs-page');
+      if (docsPage) {
+        sidebarObserver.observe(docsPage, {
+          attributes: true,
+          attributeFilter: ['data-sidebar-collapsed', 'data-toc-collapsed']
+        });
+        console.log('✅ Sidebar state observer initialized');
+      }
+    }, 500);
   </script>
 
   <script type="module" src="/src/main.tsx"></script>

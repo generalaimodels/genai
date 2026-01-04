@@ -226,14 +226,54 @@ export function DocumentViewer({ path, onHeadingsChange }: DocumentViewerProps):
             images.forEach(img => imageObserver.observe(img));
         }
 
-        // OPTIMIZED: Call math rendering immediately
-        // Auto-render handles all math formats automatically
-        if (typeof (window as any).renderMathOnce === 'function') {
-            // Small delay to ensure DOM is fully rendered
-            setTimeout(() => {
-                (window as any).renderMathOnce();
-            }, 0);
-        }
+        // ========================================
+        // Math Rendering with Robust Retry Mechanism  
+        // ========================================
+        // Retry mechanism ensures math renders even on slow KaTeX loading
+        let mathAttempts = 0;
+        const maxMathAttempts = 8; // Increased for reliability
+        let retryTimeout: NodeJS.Timeout | null = null;
+
+        const tryRenderMath = () => {
+            console.log(`🔢 Attempting math render (attempt ${mathAttempts + 1}/${maxMathAttempts})...`);
+            
+            if (typeof (window as any).renderMathOnce === 'function') {
+                try {
+                    (window as any).renderMathOnce();
+                    console.log('✅ Math render triggered successfully');
+                } catch (err) {
+                    console.error('❌ Math render error:', err);
+                }
+                mathAttempts++;
+                
+                // Keep trying a few more times to ensure all equations render
+                if (mathAttempts < maxMathAttempts) {
+                    const delay = 100 * Math.pow(1.5, mathAttempts - 1); 
+                    retryTimeout = setTimeout(tryRenderMath, delay);
+                }
+            } else if (mathAttempts < maxMathAttempts) {
+                console.warn('⚠️ renderMathOnce not available yet, retrying...');
+                mathAttempts++;
+                const delay = 100 * Math.pow(1.5, mathAttempts - 1);
+                retryTimeout = setTimeout(tryRenderMath, delay);
+            }
+        };
+
+        // Trigger math rendering with multiple strategies
+        requestAnimationFrame(() => {
+            setTimeout(tryRenderMath, 100); // Initial delay
+        });
+
+        const cleanup = () => {
+            if (retryTimeout) {
+                clearTimeout(retryTimeout);
+                retryTimeout = null;
+            }
+            mathAttempts = maxMathAttempts;
+        };
+
+        // Clean up on component unmount
+        return cleanup;
 
         // Render Mermaid diagrams
         renderMermaid(container, isDark);

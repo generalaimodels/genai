@@ -548,9 +548,10 @@ class MarkdownParser:
         )
         
         # Add lazy loading to images
+        # Properly handle self-closing tags and existing attributes
         html_content = re.sub(
-            r'<img\s+([^>]*?)(?<!loading=")>',
-            r'<img \1 loading="lazy">',
+            r'<img\s+([^>]*?)\s*(/?)>',
+            r'<img \1 loading="lazy" \2>',
             html_content
         )
         
