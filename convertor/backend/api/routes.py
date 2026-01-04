@@ -7,13 +7,14 @@ Fixes:
 3. Uses streaming loader for on-demand content loading
 4. Proper link resolution with frontend hash routing
 5. Enhanced health endpoint with real stats
+6. WebSocket endpoint for real-time file updates
 """
 
 from __future__ import annotations
 
 import hashlib
 import time
-from fastapi import APIRouter, HTTPException, Query, Request, Response
+from fastapi import APIRouter, HTTPException, Query, Request, Response, WebSocket, WebSocketDisconnect
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel, Field
 from datetime import datetime
@@ -389,3 +390,67 @@ async def serve_media(file_path: str, request: Request) -> Response:
             'Cache-Control': 'public, max-age=3600',  # Cache for 1 hour
         }
     )
+
+
+# ============================================
+# WebSocket Endpoint for Real-Time Updates
+# ============================================
+
+@router.websocket("/ws")
+async def websocket_endpoint(websocket: WebSocket):
+    """
+    WebSocket endpoint for real-time file updates.
+    
+    Protocol:
+    1. Client connects → server accepts and sends connection_id
+    2. Server broadcasts file change events to all connected clients
+    3. Client receives events and updates UI accordingly
+    4. Heartbeat every 30s to detect stale connections
+    
+    Message Format:
+    ```json
+    {
+        "type": "file_changed" | "connected" | "heartbeat",
+        "path": "relative/path/to/file.md",  // for file_changed
+        "action": "modified" | "created" | "deleted",  // for file_changed
+        "timestamp": 1704376800.123,
+        "connection_id": "ws_1"  // for connected
+    }
+    ```
+    
+    Error Handling:
+    - WebSocketDisconnect: Clean shutdown, remove from manager
+    - RuntimeError: Log and attempt graceful degradation
+    """
+    # Access app state via websocket.app
+    ws_manager = websocket.app.state.ws_manager
+    connection_id = await ws_manager.connect(websocket)
+    
+    try:
+        # Send connection acknowledgment
+        await websocket.send_json({
+            "type": "connected",
+            "connection_id": connection_id,
+            "timestamp": time.time()
+        })
+        
+        # Keep connection alive, listen for heartbeat/ACK messages
+        while True:
+            # Receive any messages from client (heartbeat, ACK, etc.)
+            # This also keeps the connection active
+            try:
+                message = await websocket.receive_text()
+                # We don't process client messages currently, just keep alive
+            except WebSocketDisconnect:
+                break
+                
+    except WebSocketDisconnect:
+        # Client disconnected normally
+        await ws_manager.disconnect(connection_id)
+        
+    except Exception as e:
+        # Unexpected error, clean up connection
+        print(f"⚠️  WebSocket error for {connection_id}: {e}")
+        await ws_manager.disconnect(connection_id)
+
+

@@ -18,6 +18,8 @@ import { TableOfContents } from '@/components/TableOfContents';
 import { SearchModal } from '@/components/Search';
 import { ThemeToggle } from '@/components/ThemeToggle';
 import { useApp, useCurrentPath, useSidebarState, useTocState, useSearchState } from '@/context';
+import { useWebSocket } from '@/hooks/useWebSocket';
+import { api } from '@/api/client';
 import type { Heading } from '@/types';
 
 export function DocumentsPage(): React.ReactElement {
@@ -27,6 +29,11 @@ export function DocumentsPage(): React.ReactElement {
     const [tocCollapsed, toggleToc] = useTocState();
     const [, openSearch] = useSearchState();
     const [headings, setHeadings] = useState<Heading[]>([]);
+    const [refreshKey, setRefreshKey] = useState(0);  // Force re-render on file changes
+    const [updateNotification, setUpdateNotification] = useState<string | null>(null);
+
+    // WebSocket connection for live updates
+    const { isConnected, lastMessage } = useWebSocket();
 
     // currentPath is now the direct file path from hash (e.g., "graph.md", "folder/file.md")
     const documentPath = currentPath;
@@ -42,8 +49,76 @@ export function DocumentsPage(): React.ReactElement {
         navigateTo(path);
     };
 
+    // Handle WebSocket file change events
+    useEffect(() => {
+        if (lastMessage?.type === 'file_changed' && lastMessage.path) {
+            const changedPath = lastMessage.path;
+            const currentDoc = decodeURIComponent(currentPath);
+
+            console.log('[Auto-Update] File changed:', changedPath, 'Current:', currentDoc);
+
+            // Check if the changed file matches the currently viewed document
+            // Handle both exact match and partial match (for nested paths)
+            if (currentDoc === changedPath || currentDoc.includes(changedPath) || changedPath.includes(currentDoc)) {
+                console.log('[Auto-Update] Current document changed, refreshing...');
+
+                // Clear API cache for this document
+                api.clearCache();
+
+                // Show notification based on action
+                const actionText = lastMessage.action === 'modified' ? 'updated' : lastMessage.action;
+                setUpdateNotification(`Document ${actionText}`);
+
+                // Hide notification after 3 seconds
+                setTimeout(() => setUpdateNotification(null), 3000);
+
+                // Handle delete action differently
+                if (lastMessage.action === 'deleted') {
+                    console.log('[Auto-Update] Document deleted, navigating to home');
+                    // Navigate back to home since document no longer exists
+                    window.location.hash = '#/';
+                } else {
+                    // Force re-render of DocumentViewer by changing key
+                    setRefreshKey(Date.now());
+                }
+            } else {
+                // File changed but not currently viewing it
+                // Still clear cache to ensure fresh data on next view
+                api.clearCache();
+            }
+        }
+    }, [lastMessage, currentPath]);
+
     return (
         <div className="docs-page" data-sidebar-collapsed={sidebarCollapsed} data-toc-collapsed={tocCollapsed}>
+            {/* WebSocket Connection Status */}
+            {!isConnected && (
+                <div className="connection-status offline">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                        <circle cx="12" cy="12" r="3" />
+                        <circle cx="12" cy="12" r="10" opacity="0.3" />
+                    </svg>
+                    <span>Reconnecting to live updates...</span>
+                </div>
+            )}
+
+            {/* Update Notification */}
+            <AnimatePresence>
+                {updateNotification && (
+                    <motion.div
+                        className="update-notification"
+                        initial={{ opacity: 0, y: -20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -20 }}
+                        transition={{ duration: 0.3 }}
+                    >
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                            <polyline points="20 6 9 17 4 12" />
+                        </svg>
+                        <span>✓ {updateNotification}</span>
+                    </motion.div>
+                )}
+            </AnimatePresence>
             {/* Top Header */}
             <header className="docs-header">
                 <div className="docs-header-left">
@@ -149,6 +224,7 @@ export function DocumentsPage(): React.ReactElement {
                 <main className="docs-main">
                     <div className="docs-content">
                         <DocumentViewer
+                            key={refreshKey}  // Force re-render on file changes
                             path={documentPath}
                             onHeadingsChange={handleHeadingsChange}
                         />

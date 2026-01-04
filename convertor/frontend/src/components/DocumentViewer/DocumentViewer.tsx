@@ -130,6 +130,7 @@ export function DocumentViewer({ path, onHeadingsChange }: DocumentViewerProps):
     const [error, setError] = useState(false);
     const containerRef = useRef<HTMLElement>(null);
     const { isDark } = useTheme();
+    const previousPathRef = useRef<string | null>(null);
 
     // Fetch document when path changes
     // OPTIMIZATION: onHeadingsChange excluded from deps to prevent infinite loop
@@ -146,8 +147,11 @@ export function DocumentViewer({ path, onHeadingsChange }: DocumentViewerProps):
             setError(false);
 
             try {
-                const doc = await api.getDocument(path!);
+                // Bust cache if this is a re-render of the same path (triggered by key change)
+                const bustCache = path === previousPathRef.current;
+                const doc = await api.getDocument(path!, bustCache);
                 setDocContent(doc);
+                previousPathRef.current = path;
 
                 // Update page title
                 const pageTitle = doc.headings[0]?.text ?? path!.split('/').pop() ?? 'Documentation';
@@ -236,7 +240,7 @@ export function DocumentViewer({ path, onHeadingsChange }: DocumentViewerProps):
 
         const tryRenderMath = () => {
             console.log(`🔢 Attempting math render (attempt ${mathAttempts + 1}/${maxMathAttempts})...`);
-            
+
             if (typeof (window as any).renderMathOnce === 'function') {
                 try {
                     (window as any).renderMathOnce();
@@ -245,10 +249,10 @@ export function DocumentViewer({ path, onHeadingsChange }: DocumentViewerProps):
                     console.error('❌ Math render error:', err);
                 }
                 mathAttempts++;
-                
+
                 // Keep trying a few more times to ensure all equations render
                 if (mathAttempts < maxMathAttempts) {
-                    const delay = 100 * Math.pow(1.5, mathAttempts - 1); 
+                    const delay = 100 * Math.pow(1.5, mathAttempts - 1);
                     retryTimeout = setTimeout(tryRenderMath, delay);
                 }
             } else if (mathAttempts < maxMathAttempts) {

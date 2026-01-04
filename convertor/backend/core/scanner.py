@@ -611,6 +611,10 @@ class DocumentScanner:
             path: Specific path to invalidate, or None for all
         """
         if path is None:
+            print(f"🗑️  Clearing entire scanner cache ({len(self._cache)} entries)")
             self._cache.clear()
         elif path in self._cache:
+            print(f"🗑️  Invalidating scanner cache for: {path}")
             del self._cache[path]
+        else:
+            print(f"⚠️  Cache miss during invalidation: {path} (not in cache)")

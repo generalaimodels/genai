@@ -33,6 +33,8 @@ try:
     from core.task_queue import DAGTaskQueue, TaskPriority
     from core.streaming_loader import StreamingLoader
     from core.hash_index import HashIndex
+    from core.file_watcher import FileWatcher
+    from core.websocket_manager import WebSocketManager
     from api import router
 except ImportError:
     from .core import MarkdownParser, DocumentScanner, SearchEngine
@@ -40,6 +42,8 @@ except ImportError:
     from .core.task_queue import DAGTaskQueue, TaskPriority
     from .core.streaming_loader import StreamingLoader
     from .core.hash_index import HashIndex
+    from .core.file_watcher import FileWatcher
+    from .core.websocket_manager import WebSocketManager
     from .api import router
 
 
@@ -89,6 +93,9 @@ async def lifespan(app: FastAPI):
     # CRITICAL: Pass database reference to scanner for navigation building
     scanner.db = db
     
+    # Initialize WebSocket manager
+    ws_manager = WebSocketManager()
+    
     # Set app.state for routes
     app.state.db = db
     app.state.queue = queue
@@ -97,6 +104,7 @@ async def lifespan(app: FastAPI):
     app.state.search_engine = search_engine
     app.state.streaming_loader = streaming_loader
     app.state.hash_index = hash_index
+    app.state.ws_manager = ws_manager
     
     # SOTA: Fast metadata-only scan
     async def fast_metadata_scan():
@@ -212,6 +220,83 @@ async def lifespan(app: FastAPI):
         index_time = (time.perf_counter() - index_start)
         print(f"✓ Search indexing complete: {indexed_count} documents in {index_time:.1f}s")
     
+    # File change callback for live updates
+    async def on_file_changed(path: str, action: str):
+        """
+        Callback invoked by FileWatcher on document changes.
+        
+        Atomically:
+        1. Invalidate backend caches (scanner, hash index)
+        2. Re-index document in database
+        3. Update hash index
+        4. Broadcast WebSocket event to all clients
+        """
+        try:
+            print(f"📝 File {action}: {path}")
+            
+            # 1. Invalidate caches
+            if hasattr(scanner, 'invalidate_cache'):
+                scanner.invalidate_cache(path)
+            
+            # 2. Re-index if modified/created
+            if action in ["modified", "created"]:
+                try:
+                    full_doc = await scanner.get_document(path)
+                    if full_doc:
+                        # Check if document exists in database
+                        existing_doc = await db.get_document_by_path(path)
+                        
+                        # Delete existing entry if it exists
+                        if existing_doc:
+                            await db.delete_document(path)
+                        
+                        # Insert fresh document metadata
+                        db_doc = DocumentMetadata(
+                            path=path,
+                            title=full_doc.info.title,
+                            description=full_doc.info.description,
+                            file_type=Path(path).suffix.lstrip('.') or 'md',
+                            size_bytes=full_doc.info.size_bytes,
+                            modified_at=full_doc.info.modified_at.timestamp(),
+                            heading_count=full_doc.info.heading_count
+                        )
+                        await db.insert_document(db_doc)
+                        
+                        # Update hash index
+                        content_hash = db.hash_content(full_doc.parsed.content_html)
+                        hash_index.add(path, content_hash)
+                        
+                        print(f"✓ Re-indexed: {path}")
+                except Exception as e:
+                    print(f"⚠️  Error re-indexing {path}: {e}")
+                    import traceback
+                    traceback.print_exc()
+            
+            # 3. Delete if removed
+            elif action == "deleted":
+                try:
+                    await db.delete_document(path)
+                    if hasattr(hash_index, 'remove'):
+                        hash_index.remove(path)
+                    print(f"✓ Removed from index: {path}")
+                except Exception as e:
+                    print(f"⚠️  Error deleting {path}: {e}")
+            
+            # 4. Broadcast to all WebSocket clients
+            await ws_manager.broadcast({
+                "type": "file_changed",
+                "path": path,
+                "action": action,
+                "timestamp": time.time()
+            })
+            print(f"📡 Broadcast sent to {len(ws_manager.connections)} clients")
+            
+        except Exception as e:
+            print(f"⚠️  Error in on_file_changed for {path}: {e}")
+            import traceback
+            traceback.print_exc()
+
+    
     # Run fast metadata scan (synchronous - super fast)
     await fast_metadata_scan()
     
@@ -221,6 +306,12 @@ async def lifespan(app: FastAPI):
         background_search_index,
         priority=TaskPriority.LOW
     )
+    
+    # Initialize and start file watcher
+    file_watcher = FileWatcher(data_path, on_file_changed, debounce_delay=0.3)
+    await file_watcher.start()
+    app.state.file_watcher = file_watcher
+    print(f"✓ File watcher active (monitoring: {data_path})")
     
     startup_time = (time.perf_counter() - startup_start) * 1000
     
@@ -257,6 +348,10 @@ async def lifespan(app: FastAPI):
     print(f"   Bloom hit rate: {hash_stats['bloom_hit_rate']:.2%}")
     print(f"   Streaming loader cache hits: {loader_stats['cache_hits']}")
     print(f"   Streaming loader hit rate: {loader_stats['hit_rate']:.2%}")
+    
+    # Stop file watcher
+    if hasattr(app.state, 'file_watcher'):
+        await app.state.file_watcher.stop()
     
     await queue.shutdown()
     for w in workers:

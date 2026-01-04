@@ -73,21 +73,13 @@ export class ApiError extends Error {
     }
 }
 
-// Simple in-memory cache
-const cache = new Map<string, { data: unknown; timestamp: number }>();
-const CACHE_TTL = 60 * 1000; // 1 minute
-
-function getCached<T>(key: string): T | null {
-    const entry = cache.get(key);
-    if (entry && Date.now() - entry.timestamp < CACHE_TTL) {
-        return entry.data as T;
-    }
-    return null;
-}
-
-function setCache<T>(key: string, data: T): void {
-    cache.set(key, { data, timestamp: Date.now() });
-}
+// SOTA LRU Cache
+// - 100 entries max (prevents memory bloat)
+// - 60 second TTL with lazy expiration
+// - O(1) get/set operations via HashMap + Doubly Linked List
+// - Per-document invalidation
+import { LRUCache } from '@/utils/LRUCache';
+const cache = new LRUCache<unknown>(100, 60);
 
 // Base fetch function
 async function apiFetch<T>(
@@ -129,25 +121,30 @@ export const api = {
      */
     async listDocuments(): Promise<DocumentListResponse> {
         const cacheKey = 'documents:list';
-        const cached = getCached<DocumentListResponse>(cacheKey);
+        const cached = cache.get(cacheKey) as DocumentListResponse | null;
         if (cached) return cached;
 
         const data = await apiFetch<DocumentListResponse>('/documents');
-        setCache(cacheKey, data);
+        cache.set(cacheKey, data);
         return data;
     },
 
     /**
      * Get a specific document by path
      */
-    async getDocument(path: string): Promise<DocumentContent> {
+    async getDocument(path: string, bustCache = false): Promise<DocumentContent> {
         const cacheKey = `documents:${path}`;
-        const cached = getCached<DocumentContent>(cacheKey);
-        if (cached) return cached;
 
-        // Use path directly with proper encoding
-        const data = await apiFetch<DocumentContent>(`/documents/${encodeURIComponent(path)}`);
-        setCache(cacheKey, data);
+        // Skip cache if busting
+        if (!bustCache) {
+            const cached = cache.get(cacheKey) as DocumentContent | null;
+            if (cached) return cached;
+        }
+
+        // Add cache-busting timestamp if needed to prevent browser HTTP caching
+        const cacheBuster = bustCache ? `?_t=${Date.now()}` : '';
+        const data = await apiFetch<DocumentContent>(`/documents/${encodeURIComponent(path)}${cacheBuster}`);
+        cache.set(cacheKey, data);
         return data;
     },
 
@@ -156,11 +153,11 @@ export const api = {
      */
     async getNavigation(): Promise<NavigationNode> {
         const cacheKey = 'navigation';
-        const cached = getCached<NavigationNode>(cacheKey);
+        const cached = cache.get(cacheKey) as NavigationNode | null;
         if (cached) return cached;
 
         const data = await apiFetch<NavigationNode>('/navigation');
-        setCache(cacheKey, data);
+        cache.set(cacheKey, data);
         return data;
     },
 
@@ -175,9 +172,30 @@ export const api = {
     },
 
     /**
-     * Clear cache
+     * Invalidate specific document from cache
+     */
+    invalidateDocument(path: string): void {
+        cache.delete(`documents:${path}`);
+    },
+
+    /**
+     * Invalidate all documents matching a pattern
+     */
+    invalidatePattern(pattern: string | RegExp): number {
+        return cache.invalidatePattern(pattern);
+    },
+
+    /**
+     * Clear entire cache
      */
     clearCache(): void {
         cache.clear();
+    },
+
+    /**
+     * Get cache statistics
+     */
+    getCacheStats() {
+        return cache.getStats();
     },
 };

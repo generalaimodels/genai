@@ -15,6 +15,7 @@ dependencies = [
     "python-multipart>=0.0.6",
     "aiofiles>=23.2.1",
     "docutils>=0.20.0",
+    "watchdog>=4.0.0",
 ]
 
 [project.optional-dependencies]
