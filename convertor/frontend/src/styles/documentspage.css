@@ -288,14 +288,16 @@
    DESIGN: Glassmorphism at top corners
    ======================================== */
 
-/* Left sidebar toggle (when collapsed) - TOP LEFT */
+/* Left sidebar toggle (when collapsed) - TOP LEFT - COMPACT SIZE */
 .sidebar-toggle-floating {
     position: fixed;
     top: calc(var(--docs-header-height) + 1rem);
     /* Below header */
     left: 1rem;
-    width: 40px;
-    height: 40px;
+    width: 32px;
+    /* Reduced from 40px */
+    height: 32px;
+    /* Reduced from 40px */
 
     /* Ultra-premium glassmorphism effect */
     background: linear-gradient(135deg,
@@ -306,12 +308,13 @@
 
     /* Refined border with subtle gradient */
     border: 1px solid rgba(139, 92, 246, 0.2);
-    border-radius: 12px;
+    border-radius: 10px;
+    /* Proportionally smaller */
 
     /* Premium shadows for floating effect */
     box-shadow:
-        0 8px 24px rgba(0, 0, 0, 0.12),
-        0 4px 8px rgba(0, 0, 0, 0.08),
+        0 6px 18px rgba(0, 0, 0, 0.1),
+        0 3px 6px rgba(0, 0, 0, 0.06),
         inset 0 1px 0 rgba(255, 255, 255, 0.6);
 
     display: flex;
@@ -335,8 +338,8 @@
             rgba(255, 255, 255, 0.98));
     border-color: rgba(139, 92, 246, 0.35);
     box-shadow:
-        0 8px 28px rgba(139, 92, 246, 0.18),
-        0 4px 12px rgba(0, 0, 0, 0.08),
+        0 8px 24px rgba(139, 92, 246, 0.16),
+        0 4px 10px rgba(0, 0, 0, 0.08),
         inset 0 1px 1px rgba(255, 255, 255, 1);
     color: rgba(139, 92, 246, 1);
 }
@@ -346,8 +349,10 @@
 }
 
 .sidebar-toggle-floating svg {
-    width: 18px;
-    height: 18px;
+    width: 16px;
+    /* Reduced from 18px */
+    height: 16px;
+    /* Reduced from 18px */
     transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
@@ -390,8 +395,10 @@
     top: calc(var(--docs-header-height) + 1rem);
     /* Below header */
     right: var(--space-4);
-    width: 40px;
-    height: 40px;
+    width: 32px;
+    /* Reduced from 40px */
+    height: 32px;
+    /* Reduced from 40px */
 
     /* Ultra-premium glassmorphism effect */
     background: linear-gradient(135deg,
@@ -402,12 +409,13 @@
 
     /* Refined border with subtle gradient */
     border: 1px solid rgba(139, 92, 246, 0.2);
-    border-radius: 12px;
+    border-radius: 10px;
+    /* Proportionally smaller */
 
     /* Elegant layered shadows */
     box-shadow:
-        0 4px 16px rgba(139, 92, 246, 0.08),
-        0 2px 8px rgba(0, 0, 0, 0.06),
+        0 4px 14px rgba(139, 92, 246, 0.08),
+        0 2px 6px rgba(0, 0, 0, 0.06),
         inset 0 1px 1px rgba(255, 255, 255, 0.8);
 
     display: flex;
@@ -432,8 +440,8 @@
             rgba(255, 255, 255, 0.98));
     border-color: rgba(139, 92, 246, 0.35);
     box-shadow:
-        0 8px 28px rgba(139, 92, 246, 0.18),
-        0 4px 12px rgba(0, 0, 0, 0.08),
+        0 8px 24px rgba(139, 92, 246, 0.16),
+        0 4px 10px rgba(0, 0, 0, 0.08),
         inset 0 1px 1px rgba(255, 255, 255, 1);
     color: rgba(139, 92, 246, 1);
 }
@@ -443,8 +451,10 @@
 }
 
 .toc-toggle-btn svg {
-    width: 18px;
-    height: 18px;
+    width: 16px;
+    /* Reduced from 18px */
+    height: 16px;
+    /* Reduced from 18px */
     transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
@@ -623,7 +633,7 @@
     color: white;
     font-size: 0.875rem;
     font-weight: 500;
-    box-shadow: 
+    box-shadow:
         0 8px 24px rgba(249, 115, 22, 0.25),
         0 4px 8px rgba(0, 0, 0, 0.1);
     z-index: 9999;
@@ -637,8 +647,15 @@
 }
 
 @keyframes pulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.5; }
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.5;
+    }
 }
 
 @keyframes slideInUp {
@@ -646,6 +663,7 @@
         opacity: 0;
         transform: translateX(-50%) translateY(20px);
     }
+
     to {
         opacity: 1;
         transform: translateX(-50%) translateY(0);

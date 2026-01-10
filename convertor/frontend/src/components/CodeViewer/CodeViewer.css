@@ -1,0 +1,622 @@
+/**
+ * CodeViewer Component Styles - Premium Design System
+ * 
+ * Architecture:
+ * - BEM methodology (Block Element Modifier)
+ * - CSS Grid for layout (GPU-accelerated)
+ * - Flexbox for component alignment
+ * - CSS custom properties for theming
+ * 
+ * Performance:
+ * - Zero JavaScript layout calculations
+ * - GPU composite layers for smooth scrolling
+ * - Will-change hints for animations
+ * - Contain property for render optimization
+ * 
+ * Accessibility:
+ * - ARIA roles and labels
+ * - Keyboard navigation support
+ * - Screen reader optimized
+ * - Focus visible indicators
+ */
+
+/* ================================================================
+   Code Viewer Container
+   
+   Layout: CSS Grid for header + content separation
+   Performance: contain: layout style paint (render isolation)
+   ================================================================ */
+
+.code-viewer {
+    display: grid;
+    grid-template-rows: auto 1fr;
+    height: 100%;
+    min-height: 400px;
+    background: var(--code-bg);
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid var(--code-border);
+    box-shadow:
+        0 4px 6px -1px rgba(0, 0, 0, 0.1),
+        0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    transition:
+        box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+        border-color 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+    /* Performance optimization: isolate rendering */
+    contain: layout style paint;
+}
+
+.code-viewer:hover {
+    box-shadow:
+        0 10px 15px -3px rgba(0, 0, 0, 0.1),
+        0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    border-color: var(--code-border-focus);
+}
+
+/* ================================================================
+   Code Header (File Info, Language Badge, Metadata)
+   
+   Layout: Flexbox with space-between
+   Z-index: 10 (above content for sticky behavior)
+   ================================================================ */
+
+.code-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 16px;
+    background: var(--code-bg-elevated);
+    border-bottom: 1px solid var(--code-divider);
+    min-height: 48px;
+    z-index: 10;
+
+    /* Sticky header for large files */
+    position: sticky;
+    top: 0;
+}
+
+.code-header-left,
+.code-header-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.code-filename {
+    font-family: var(--font-mono, 'JetBrains Mono', monospace);
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--code-text);
+    max-width: 300px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.code-language-badge {
+    padding: 4px 8px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    background: var(--token-keyword);
+    color: #ffffff;
+    border-radius: 4px;
+}
+
+.code-meta {
+    font-size: 12px;
+    color: var(--code-text-muted);
+    font-family: var(--font-mono, 'JetBrains Mono', monospace);
+}
+
+.code-meta-divider {
+    color: var(--code-text-muted);
+    opacity: 0.5;
+}
+
+/* ================================================================
+   Content Wrapper (Symbol Outline + Code Content)
+   
+   Layout: CSS Grid with dynamic columns
+   - Symbol outline: Auto width (collapses to 0 when hidden)
+   - Code content: 1fr (fills remaining space)
+   ================================================================ */
+
+.code-content-wrapper {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    height: 100%;
+    overflow: hidden;
+}
+
+/* ================================================================
+   Symbol Outline Navigator
+   
+   Performance: transform for animations (GPU-accelerated)
+   Transitions: width 0.3s (smooth collapse/expand)
+   ================================================================ */
+
+.symbol-outline {
+    width: 240px;
+    background: var(--code-bg-elevated);
+    border-right: 1px solid var(--code-divider);
+    overflow-y: auto;
+    overflow-x: hidden;
+    transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+    /* Performance: separate composite layer */
+    will-change: width;
+}
+
+.symbol-outline.collapsed {
+    width: 0;
+    border-right-width: 0;
+}
+
+.symbol-outline-header {
+    position: sticky;
+    top: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px;
+    background: var(--code-bg-elevated);
+    border-bottom: 1px solid var(--code-divider);
+    z-index: 5;
+}
+
+.symbol-outline-title {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--code-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.symbol-outline-toggle {
+    padding: 4px 8px;
+    background: transparent;
+    border: 1px solid var(--code-border);
+    border-radius: 4px;
+    color: var(--code-text-muted);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 12px;
+}
+
+.symbol-outline-toggle:hover {
+    background: var(--code-selection-inactive);
+    color: var(--code-text);
+}
+
+.symbol-outline-content {
+    padding: 8px;
+}
+
+.symbol-group {
+    margin-bottom: 16px;
+}
+
+.symbol-group-title {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--code-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 8px;
+    padding-left: 8px;
+}
+
+.symbol-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    padding: 6px 8px;
+    background: transparent;
+    border: none;
+    border-radius: 4px;
+    text-align: left;
+    cursor: pointer;
+    transition: background 0.15s ease;
+    font-family: var(--font-mono, 'JetBrains Mono', monospace);
+    font-size: 13px;
+    color: var(--code-text);
+}
+
+.symbol-item:hover {
+    background: var(--code-selection-inactive);
+}
+
+.symbol-item.active {
+    background: var(--code-selection);
+    color: var(--code-text);
+    font-weight: 600;
+}
+
+.symbol-icon {
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+    border-radius: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    font-weight: 700;
+}
+
+.symbol-icon-function::before {
+    content: 'ƒ';
+    color: var(--token-function);
+}
+
+.symbol-icon-class::before {
+    content: 'C';
+    color: var(--token-class);
+}
+
+.symbol-icon-method::before {
+    content: 'M';
+    color: var(--token-method);
+}
+
+.symbol-icon-variable::before {
+    content: 'V';
+    color: var(--token-variable);
+}
+
+.symbol-name {
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.symbol-line {
+    font-size: 11px;
+    color: var(--code-text-muted);
+}
+
+/* ================================================================
+   Code Content Area (Pre-rendered HTML)
+   
+   Scrolling: Custom scrollbar for theme consistency
+   Typography: Monospace font optimized for code readability
+   ================================================================ */
+
+.code-content {
+    overflow: auto;
+    padding: 16px;
+    font-family: 'JetBrains Mono', 'Fira Code', 'SF Mono', 'Consolas', monospace;
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--code-text);
+
+    /* Enable font ligatures for code (arrows, operators) */
+    font-feature-settings: 'liga' 1, 'calt' 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+
+    /* Performance: GPU-accelerated scrolling */
+    will-change: scroll-position;
+
+    /* Prevent text selection of line numbers */
+    user-select: text;
+}
+
+/* Custom scrollbar styling */
+.code-content::-webkit-scrollbar {
+    width: 12px;
+    height: 12px;
+}
+
+.code-content::-webkit-scrollbar-track {
+    background: var(--code-scrollbar-bg);
+}
+
+.code-content::-webkit-scrollbar-thumb {
+    background: var(--code-scrollbar-thumb);
+    border-radius: 6px;
+    border: 2px solid var(--code-scrollbar-bg);
+}
+
+.code-content::-webkit-scrollbar-thumb:hover {
+    background: var(--code-scrollbar-thumb-hover);
+}
+
+/* Firefox scrollbar */
+.code-content {
+    scrollbar-width: thin;
+    scrollbar-color: var(--code-scrollbar-thumb) var(--code-scrollbar-bg);
+}
+
+/* ================================================================
+   Code Line Styling (From Backend HTML)
+   
+   Structure: <div class="code-line" data-line="1">...</div>
+   Performance: No JavaScript layout calculations
+   ================================================================ */
+
+.code-line {
+    display: flex;
+    align-items: flex-start;
+    min-height: 1.6em;
+    position: relative;
+    padding: 0 8px;
+    border-radius: 2px;
+    transition: background 0.15s ease;
+}
+
+.code-line:hover {
+    background: var(--code-line-highlight);
+}
+
+.code-line-highlighted {
+    background: var(--code-selection);
+    border-left: 3px solid var(--token-info);
+    padding-left: 5px;
+}
+
+/* Line flash animation (symbol navigation feedback) */
+@keyframes lineFlash {
+
+    0%,
+    100% {
+        background: transparent;
+    }
+
+    50% {
+        background: var(--code-selection);
+    }
+}
+
+.line-flash {
+    animation: lineFlash 1s ease;
+}
+
+/* Line number styling */
+.line-number {
+    display: inline-block;
+    min-width: 40px;
+    padding-right: 16px;
+    color: var(--code-line-number);
+    text-align: right;
+    user-select: none;
+    font-variant-numeric: tabular-nums;
+}
+
+.code-line:hover .line-number {
+    color: var(--code-line-number-active);
+}
+
+/* Line content (tokens) */
+.line-content {
+    flex: 1;
+    white-space: pre;
+}
+
+/* ================================================================
+   Token Styling (Syntax Highlighting)
+   
+   Colors defined in vscode-dark-theme.css / vscode-light-theme.css
+   Applied via CSS custom properties for O(1) theme switching
+   ================================================================ */
+
+.token {
+    /* Tokens inherit color from theme CSS variables */
+    font-style: normal;
+    font-weight: normal;
+}
+
+.token.keyword {
+    color: var(--token-keyword);
+}
+
+.token.control {
+    color: var(--token-control);
+}
+
+.token.string {
+    color: var(--token-string);
+}
+
+.token.template-string {
+    color: var(--token-template-string);
+}
+
+.token.regex {
+    color: var(--token-regex);
+}
+
+.token.comment {
+    color: var(--token-comment);
+    font-style: italic;
+}
+
+.token.function {
+    color: var(--token-function);
+}
+
+.token.method {
+    color: var(--token-method);
+}
+
+.token.class {
+    color: var(--token-class);
+    font-weight: 500;
+}
+
+.token.type {
+    color: var(--token-type);
+}
+
+.token.variable {
+    color: var(--token-variable);
+}
+
+.token.property {
+    color: var(--token-property);
+}
+
+.token.parameter {
+    color: var(--token-parameter);
+}
+
+.token.constant {
+    color: var(--token-constant);
+}
+
+.token.number {
+    color: var(--token-number);
+}
+
+.token.boolean {
+    color: var(--token-boolean);
+}
+
+.token.operator {
+    color: var(--token-operator);
+}
+
+.token.punctuation {
+    color: var(--token-punctuation);
+}
+
+.token.decorator {
+    color: var(--token-decorator);
+}
+
+.token.tag {
+    color: var(--token-tag);
+}
+
+.token.attribute {
+    color: var(--token-attribute);
+}
+
+.token.namespace {
+    color: var(--token-namespace);
+}
+
+/* Default text token (fallback for unclassified tokens) */
+.token.text,
+.token {
+    color: var(--code-text);
+}
+
+/* ================================================================
+   Loading State (Skeleton Loader)
+   
+   UX: Placeholder while fetching code
+   Performance: CSS animations (GPU-accelerated)
+   ================================================================ */
+
+.code-viewer-loading {
+    opacity: 0.6;
+}
+
+.skeleton-header {
+    background: linear-gradient(90deg,
+            var(--code-bg-elevated) 25%,
+            var(--code-line-highlight) 50%,
+            var(--code-bg-elevated) 75%);
+    background-size: 200% 100%;
+    animation: shimmer 2s infinite linear;
+}
+
+.code-content-skeleton {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.skeleton-line {
+    height: 20px;
+    background: linear-gradient(90deg,
+            var(--code-bg-elevated) 25%,
+            var(--code-line-highlight) 50%,
+            var(--code-bg-elevated) 75%);
+    background-size: 200% 100%;
+    animation: shimmer 2s infinite linear;
+    border-radius: 4px;
+}
+
+.skeleton-line:nth-child(odd) {
+    width: 80%;
+}
+
+.skeleton-line:nth-child(even) {
+    width: 60%;
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: -200% 0;
+    }
+
+    100% {
+        background-position: 200% 0;
+    }
+}
+
+/* ================================================================
+   Responsive Design (Mobile, Tablet, Desktop)
+   ================================================================ */
+
+@media (max-width: 768px) {
+    .symbol-outline {
+        position: absolute;
+        left: 0;
+        top: 0;
+        height: 100%;
+        z-index: 20;
+        box-shadow: 2px 0 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .code-filename {
+        max-width: 150px;
+    }
+
+    .code-header-right {
+        display: none;
+        /* Hide metadata on mobile */
+    }
+}
+
+/* ================================================================
+   Accessibility Enhancements
+   ================================================================ */
+
+/* Focus indicators for keyboard navigation */
+.symbol-item:focus-visible,
+.symbol-outline-toggle:focus-visible {
+    outline: 2px solid var(--code-focus-border);
+    outline-offset: 2px;
+}
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+    .code-viewer {
+        border-width: 2px;
+    }
+
+    .token {
+        font-weight: 500;
+    }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}

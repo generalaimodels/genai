@@ -130,31 +130,34 @@ https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.m
 
 ```html
 <video width="320" height="180" controls>
-  <source src="VIDEO_URL.mp4" type="video/mp4">
+  <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4">
 </video>
 ```
 <video width="320" height="180" controls>
-  <source src="VIDEO_URL.mp4" type="video/mp4">
+  <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4">
 </video>
+
 ### Portrait (9:16 – Simulated)
 
 ```html
 <video width="180" height="320" controls>
-  <source src="VIDEO_URL.mp4" type="video/mp4">
+  <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4">
 </video>
 ```
 <video width="180" height="320" controls>
-  <source src="VIDEO_URL.mp4" type="video/mp4">
+  <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4">
 </video>
+
 ### Square (1:1)
 
 ```html
 <video width="240" height="240" controls>
-  <source src="VIDEO_URL.mp4" type="video/mp4">
+  <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4">
 </video>
 ```
 <video width="240" height="240" controls>
-  <source src="VIDEO_URL.mp4" type="video/mp4">
+  <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4">
+</video>
 ---
 
 ## 🧪 Ultra-Lightweight Preview (Muted, No Autoplay)
@@ -169,7 +172,7 @@ https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.m
   playsinline
   preload="none"
 >
-  <source src="VIDEO_URL.mp4" type="video/mp4">
+  <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4">
 </video>
 ```
 <video
@@ -179,7 +182,7 @@ https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.m
   playsinline
   preload="none"
 >
-  <source src="VIDEO_URL.mp4" type="video/mp4">
+  <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4">
 </video>
 ---
 

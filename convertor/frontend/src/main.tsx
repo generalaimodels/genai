@@ -13,6 +13,8 @@ import '@/styles/index.css';
 import '@/styles/components.css';
 import '@/styles/mainpage.css';
 import '@/styles/documentspage.css';
+import '@/styles/vscode-dark-theme.css';
+import '@/styles/vscode-light-theme.css';
 
 // Get root element
 const rootElement = document.getElementById('app');

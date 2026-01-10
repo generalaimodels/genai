@@ -23,6 +23,7 @@ from .notebook_converter import NotebookConverter
 from .mdx_converter import MdxConverter
 from .rd_converter import RdConverter
 from .rst_converter import RstConverter
+from .code_converter import CodeConverter, is_code_extension
 from .hash_index import HashIndex
 from .streaming_loader import StreamingLoader
 from .database import DocumentDatabase
@@ -77,9 +78,26 @@ class DocumentScanner:
     - Thread-safe design with atomic operations
     """
     
-    # File extensions to recognize as markdown and documentation formats
-    # NOTE: Scanner now indexes ALL files - this is kept for backward compatibility
-    MARKDOWN_EXTENSIONS: frozenset[str] = frozenset({'.md', '.markdown', '.mdown', '.mkd', '.mkdn', '.ipynb', '.mdx', '.rd', '.rdx', '.rst'})
+    # File extensions to recognize as markdown, documentation, and code formats
+    # Includes documentation (.md, .rst, .ipynb, etc.) and code files (.py, .js, .ts, etc.)
+    MARKDOWN_EXTENSIONS: frozenset[str] = frozenset({
+        # Documentation formats
+        '.md', '.markdown', '.mdown', '.mkd', '.mkdn', '.ipynb', '.mdx', '.rd', '.rdx', '.rst',
+        # Code formats (Tier 1: Most common)
+        '.py', '.js', '.ts', '.tsx', '.jsx', '.java', '.cpp', '.c', '.h', '.hpp', '.go', '.rs',
+        '.rb', '.php', '.cs', '.swift', '.kt', '.kts', '.scala',
+        # Web & scripting
+        '.html', '.css', '.scss', '.sass', '.less', '.vue', '.svelte',
+        '.sh', '.bash', '.zsh', '.fish', '.ps1', '.bat', '.cmd',
+        # Data & config
+        '.json', '.yaml', '.yml', '.toml', '.xml', '.sql', '.graphql', '.proto',
+        # Systems & compiled
+        '.asm', '.s', '.zig', '.nim', '.d', '.v', '.vhd',
+        # Functional & academic
+        '.hs', '.ml', '.fs', '.elm', '.clj', '.ex', '.erl', '.lisp', '.scm',
+        # JVM & others
+        '.gradle', '.groovy', '.dart', '.m', '.mm', '.tex', '.r', '.R', '.jl', '.lua', '.pl', '.pm'
+    })
     
     # Maximum file size to parse (10MB) - prevents memory exhaustion
     MAX_FILE_SIZE: int = 10 * 1024 * 1024
@@ -105,6 +123,9 @@ class DocumentScanner:
         self._mdx_converter: MdxConverter | None = None
         self._rd_converter: RdConverter | None = None
         self._rst_converter: RstConverter | None = None
+        
+        # SOTA: Code file converter with production-grade patterns
+        self.code_converter = CodeConverter(self.data_dir)
         
         # Cache for parsed documents (path -> FullDocument)
         self._cache: dict[str, FullDocument] = {}

@@ -13,7 +13,7 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Navigation } from '@/components/Navigation';
-import { DocumentViewer } from '@/components/DocumentViewer';
+import { SmartDocumentRenderer } from '../SmartDocumentRenderer/SmartDocumentRenderer';
 import { TableOfContents } from '@/components/TableOfContents';
 import { SearchModal } from '@/components/Search';
 import { ThemeToggle } from '@/components/ThemeToggle';
@@ -78,7 +78,7 @@ export function DocumentsPage(): React.ReactElement {
                     // Navigate back to home since document no longer exists
                     window.location.hash = '#/';
                 } else {
-                    // Force re-render of DocumentViewer by changing key
+                    // Force re-render of SmartDocumentRenderer by changing key
                     setRefreshKey(Date.now());
                 }
             } else {
@@ -223,7 +223,7 @@ export function DocumentsPage(): React.ReactElement {
                 {/* Main Content Area */}
                 <main className="docs-main">
                     <div className="docs-content">
-                        <DocumentViewer
+                        <SmartDocumentRenderer
                             key={refreshKey}  // Force re-render on file changes
                             path={documentPath}
                             onHeadingsChange={handleHeadingsChange}

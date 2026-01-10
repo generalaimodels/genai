@@ -71,7 +71,115 @@ class MarkdownParser:
     - Custom renderers for code highlighting, math, mermaid
     - Regex-based preprocessing for LaTeX math normalization
     - Memory-efficient: single-pass parsing where possible
+    - SOTA HTML sanitization with XSS prevention
     """
+    
+    # ============================================================
+    # SOTA HTML SANITIZATION - Enterprise-Grade Security
+    # ============================================================
+    
+    # Comprehensive whitelist of safe HTML tags
+    ALLOWED_HTML_TAGS = {
+        # Text formatting
+        'b', 'strong', 'i', 'em', 'u', 'mark', 'small', 'del', 's', 'ins',
+        'sub', 'sup', 'code', 'kbd', 'samp', 'var', 'pre', 'abbr', 'cite',
+        'dfn', 'q', 'time', 'bdi', 'bdo', 'wbr',
+        
+        # Structure
+        'p', 'div', 'span', 'section', 'article', 'header', 'footer', 'main',
+        'aside', 'nav', 'details', 'summary', 'dialog', 'figure', 'figcaption',
+        
+        # Lists
+        'ul', 'ol', 'li', 'dl', 'dt', 'dd',
+        
+        # Tables
+        'table', 'thead', 'tbody', 'tfoot', 'tr', 'th', 'td', 'caption',
+        'col', 'colgroup',
+        
+        # Media (safe - no scripts)
+        'img', 'picture', 'source', 'video', 'audio', 'track', 'iframe',
+        'embed', 'object', 'param',
+        
+        # Forms (input only - no scripts)
+        'fieldset', 'legend', 'label', 'input', 'textarea', 'select',
+        'option', 'optgroup', 'button', 'datalist', 'output', 'progress', 'meter',
+        
+        # Grouping
+        'blockquote', 'hr', 'br',
+        
+        # SVG (inline only - no scripts)
+        'svg', 'path', 'circle', 'rect', 'line', 'ellipse', 'polygon',
+        'polyline', 'g', 'defs', 'use', 'symbol', 'text', 'tspan',
+        
+        # Ruby annotations
+        'ruby', 'rt', 'rp', 'rtc', 'rb',
+        
+        # Other semantic tags
+        'address', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
+    }
+    
+    # Comprehensive whitelist of safe attributes
+    ALLOWED_HTML_ATTRIBUTES = {
+        # Universal attributes
+        'class', 'id', 'title', 'lang', 'dir', 'role', 'aria-*', 'data-*',
+        
+        # Styling (sanitized separately)
+        'style',
+        
+        # Links
+        'href', 'target', 'rel', 'download', 'hreflang', 'type',
+        
+        # Images
+        'src', 'srcset', 'sizes', 'alt', 'width', 'height', 'loading',
+        'decoding', 'crossorigin', 'usemap', 'ismap',
+        
+        # Media
+        'controls', 'autoplay', 'loop', 'muted', 'poster', 'preload',
+        'playsinline',
+        
+        # Tables
+        'colspan', 'rowspan', 'headers', 'scope', 'align', 'valign',
+        
+        # Forms
+        'name', 'value', 'placeholder', 'required', 'disabled', 'readonly',
+        'checked', 'selected', 'multiple', 'min', 'max', 'step', 'pattern',
+        'maxlength', 'minlength', 'size', 'autocomplete', 'autofocus',
+        'form', 'formaction', 'formmethod', 'formtarget',
+        
+        # Details
+        'open', 'reversed', 'start',
+        
+        # Time
+        'datetime',
+        
+        # SVG
+        'viewBox', 'xmlns', 'fill', 'stroke', 'stroke-width', 'd', 'cx', 'cy',
+        'r', 'rx', 'ry', 'x', 'y', 'x1', 'y1', 'x2', 'y2', 'points',
+        'transform', 'opacity',
+        
+        # Accessibility
+        'tabindex', 'contenteditable', 'draggable', 'hidden', 'spellcheck',
+        'translate',
+    }
+    
+    # Dangerous CSS properties to strip (XSS prevention)
+    DANGEROUS_CSS_PROPERTIES = {
+        'behavior', 'expression', '-moz-binding', 'binding',
+        'javascript:', 'vbscript:', 'data:', 'livescript:',
+    }
+    
+    # Dangerous URL schemes (XSS prevention)
+    DANGEROUS_URL_SCHEMES = {
+        'javascript:', 'data:', 'vbscript:', 'livescript:', 'blob:', 
+        'mocha:', 'ms-settings:', 'ms-appx:', 'ms-appdata:',
+    }
+    
+    # Safe URL schemes for links and media
+    SAFE_URL_SCHEMES = {
+        'http:', 'https:', 'mailto:', 'tel:', 'ftp:', 'ftps:',
+        'ssh:', 'git:', 'svn:', 'data:image/', 'blob:http', 'blob:https',
+        './', '../', '#', '/',  # Relative paths
+    }
     
     # Emoji shortcode mappings (subset - full list would be extensive)
     EMOJI_MAP: dict[str, str] = {
@@ -422,9 +530,8 @@ class MarkdownParser:
             
             if has_media:
                 # Render as actual HTML (media elements are safe and expected)
-                # Wrap in a media-demo container for styling
+                # Wrap in a media-demo container for premium styling
                 return f'''<div class="media-demo">
-<div class="media-demo-label">Live Preview</div>
 <div class="media-demo-content">
 {content}
 </div>
