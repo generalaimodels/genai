@@ -35,7 +35,7 @@ try:
     from core.hash_index import HashIndex
     from core.file_watcher import FileWatcher
     from core.websocket_manager import WebSocketManager
-    from api import router
+    from api import router, init_preview_cache
 except ImportError:
     from .core import MarkdownParser, DocumentScanner, SearchEngine
     from .core.database import DocumentDatabase, DocumentMetadata
@@ -44,7 +44,7 @@ except ImportError:
     from .core.hash_index import HashIndex
     from .core.file_watcher import FileWatcher
     from .core.websocket_manager import WebSocketManager
-    from .api import router
+    from .api import router, init_preview_cache
 
 
 @asynccontextmanager
@@ -105,6 +105,10 @@ async def lifespan(app: FastAPI):
     app.state.streaming_loader = streaming_loader
     app.state.hash_index = hash_index
     app.state.ws_manager = ws_manager
+    
+    # Initialize preview cache for editor (100MB LRU)
+    init_preview_cache(capacity_mb=100)
+    print("✓ Preview cache initialized (100MB LRU)")
     
     # SOTA: Fast metadata-only scan
     async def fast_metadata_scan():

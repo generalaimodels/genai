@@ -4,6 +4,7 @@
  * Root application component with hash-based routing
  * Routes:
  * - #/ or empty: MainPage (Neural Frontiers Lab landing)
+ * - #/editor or #/editor/path: EditorLayout (markdown editor)
  * - #/any-file-path: DocumentsPage (shows document content from backend)
  */
 
@@ -11,32 +12,45 @@ import React, { useState, useEffect } from 'react';
 import { AppProvider } from '@/context';
 import { MainPage } from '@/components/MainPage';
 import { DocumentsPage } from '@/components/DocumentsPage';
+import { EditorLayout } from '@/components/EditorLayout';
 
 // ============================================
 // App Component - Hash-Based Router
 // ============================================
 
+type RouteType = 'main' | 'docs' | 'editor';
+
 export function App(): React.ReactElement {
-    const [currentRoute, setCurrentRoute] = useState<'main' | 'docs'>('main');
+    const [currentRoute, setCurrentRoute] = useState<RouteType>('main');
+    const [editorPath, setEditorPath] = useState<string | undefined>(undefined);
 
     useEffect(() => {
         const handleHashChange = () => {
             const hash = window.location.hash.slice(1); // Remove #
 
+            // Check if it's the editor route
+            if (hash.startsWith('/editor')) {
+                setCurrentRoute('editor');
+                // Extract file path if present (e.g., #/editor/notes/file.md)
+                const pathMatch = hash.match(/^\/editor\/?(.*)$/);
+                setEditorPath(pathMatch?.[1] || undefined);
+            }
             // CRITICAL FIX: Distinguish between document paths and anchor links
             // Document paths contain '/' (e.g., #/path/to/file.md)
             // Anchor links don't contain '/' (e.g., #heading-id for TOC scrolling)
-            const isDocumentRoute = hash.includes('/');
+            else {
+                const isDocumentRoute = hash.includes('/');
 
-            if (isDocumentRoute) {
-                // Hash contains '/' → it's a document path, load it
-                setCurrentRoute('docs');
-            } else if (!hash || hash === '/') {
-                // Empty hash or bare '/' → show main page
-                setCurrentRoute('main');
+                if (isDocumentRoute) {
+                    // Hash contains '/' → it's a document path, load it
+                    setCurrentRoute('docs');
+                } else if (!hash || hash === '/') {
+                    // Empty hash or bare '/' → show main page
+                    setCurrentRoute('main');
+                }
+                // else: it's an anchor link (#heading-id), stay on current route
+                // This allows TOC clicks to scroll without reloading the document
             }
-            // else: it's an anchor link (#heading-id), stay on current route
-            // This allows TOC clicks to scroll without reloading the document
         };
 
         // Set initial route
@@ -47,11 +61,25 @@ export function App(): React.ReactElement {
         return () => window.removeEventListener('hashchange', handleHashChange);
     }, []);
 
+    // Render appropriate component based on route
+    const renderRoute = () => {
+        switch (currentRoute) {
+            case 'editor':
+                return <EditorLayout path={editorPath} />;
+            case 'docs':
+                return <DocumentsPage />;
+            case 'main':
+            default:
+                return <MainPage />;
+        }
+    };
+
     return (
         <AppProvider>
-            {currentRoute === 'main' ? <MainPage /> : <DocumentsPage />}
+            {renderRoute()}
         </AppProvider>
     );
 }
 
 export default App;
+

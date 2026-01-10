@@ -1,0 +1,588 @@
+.editor-layout {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    background: #1e1e1e;
+    /* Classic: Neutral gray instead of blue */
+    color: #e2e8f0;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    overflow: hidden;
+}
+
+/* ========== TOP BAR ========== */
+.editor-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 20px;
+    background: rgba(30, 30, 30, 0.85);
+    /* Premium: Glassmorphism */
+    border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    z-index: 100;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    flex-shrink: 0;
+}
+
+.topbar-left,
+.topbar-center,
+.topbar-right,
+.header-left,
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.header-left h2 {
+    font-size: 16px;
+    font-weight: 600;
+    color: #e2e8f0;
+    margin: 0;
+}
+
+/* Premium: Editable filename */
+.filename-display {
+    font-size: 16px;
+    font-weight: 600;
+    color: #e2e8f0;
+    margin: 0;
+    cursor: pointer;
+    padding: 6px 12px;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+}
+
+.filename-display:hover {
+    background: rgba(212, 175, 55, 0.1);
+    color: #d4af37;
+}
+
+.filename-input {
+    font-size: 16px;
+    font-weight: 600;
+    color: #e2e8f0;
+    background: rgba(212, 175, 55, 0.15);
+    border: 2px solid #d4af37;
+    padding: 6px 12px;
+    border-radius: 6px;
+    outline: none;
+    min-width: 200px;
+    font-family: inherit;
+    box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.1);
+}
+
+.filename-input::placeholder {
+    color: #858585;
+}
+
+/* Dirty indicator - unsaved changes */
+.dirty-indicator {
+    color: #f59e0b;
+    font-size: 20px;
+    line-height: 1;
+    animation: pulse-dot 2s ease-in-out infinite;
+}
+
+@keyframes pulse-dot {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.5;
+    }
+}
+
+/* Premium: Cloud sync status */
+.sync-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 12px;
+    color: #10b981;
+    background: rgba(16, 185, 129, 0.1);
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-weight: 500;
+}
+
+/* Classic: Icon button */
+.btn-icon {
+    min-width: auto !important;
+    width: 36px !important;
+    height: 36px !important;
+    padding: 0 !important;
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.topbar-left {
+    flex: 1;
+}
+
+.topbar-center {
+    flex: 0 0 auto;
+}
+
+.topbar-right {
+    flex: 1;
+    justify-content: flex-end;
+}
+
+.icon-button {
+    background: transparent;
+    border: none;
+    color: var(--text-secondary, #999999);
+    font-size: 14px;
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.icon-button:hover {
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--text-primary, #cccccc);
+}
+
+.file-path {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-primary, #cccccc);
+    max-width: 300px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.dirty-indicator {
+    color: var(--accent-color, #d4af37);
+    font-size: 20px;
+    line-height: 1;
+    animation: pulse-dot 2s ease-in-out infinite;
+}
+
+@keyframes pulse-dot {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.5;
+    }
+}
+
+.toolbar-toggle {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid transparent;
+    color: var(--text-secondary, #999999);
+    font-size: 12px;
+    padding: 6px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-weight: 500;
+}
+
+.toolbar-toggle:hover {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: var(--accent-color, #d4af37);
+}
+
+.toolbar-toggle.active {
+    background: var(--accent-color, #d4af37);
+    color: #1e1e1e;
+    border-color: var(--accent-color, #d4af37);
+}
+
+.save-indicator {
+    font-size: 12px;
+    color: var(--accent-color, #d4af37);
+    animation: pulse 1.5s ease-in-out infinite;
+}
+
+.last-saved {
+    font-size: 11px;
+    color: var(--text-tertiary, #666666);
+}
+
+.btn-primary,
+.btn-danger {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-primary {
+    background: var(--accent-color, #d4af37);
+    color: #1e1e1e;
+}
+
+.btn-primary:hover:not(:disabled) {
+    background: #c49d2f;
+    box-shadow: 0 2px 8px rgba(212, 175, 55, 0.3);
+}
+
+.btn-primary:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.btn-danger {
+    background: rgba(220, 53, 69, 0.2);
+    color: #dc3545;
+    border: 1px solid #dc3545;
+}
+
+.btn-danger:hover {
+    background: #dc3545;
+    color: white;
+}
+
+/* ========== TOOLBAR ========== */
+.editor-toolbar {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 8px 16px;
+    background: #252526;
+    border-bottom: 1px solid rgba(212, 175, 55, 0.15);
+    flex-wrap: wrap;
+    overflow: hidden;
+    /* Critical: prevents layout shift */
+    min-height: 0;
+    /* Allow complete collapse */
+    flex-shrink: 0;
+    /* Don't affect main content */
+}
+
+.editor-toolbar button {
+    background: transparent;
+    border: none;
+    color: #cccccc;
+    padding: 8px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    min-width: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    white-space: nowrap;
+}
+
+.editor-toolbar button:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: var(--accent-color, #d4af37);
+    color: var(--text-primary, #cccccc);
+}
+
+.editor-toolbar button:active {
+    background: rgba(212, 175, 55, 0.1);
+    transform: scale(0.95);
+}
+
+.toolbar-divider {
+    width: 1px;
+    height: 24px;
+    /* Classic: Taller for better visual separation */
+    background: linear-gradient(180deg,
+            transparent 0%,
+            rgba(212, 175, 55, 0.3) 20%,
+            rgba(212, 175, 55, 0.3) 80%,
+            transparent 100%);
+    margin: 0 12px;
+    /* More spacing between groups */
+    box-shadow: 1px 0 0 rgba(255, 255, 255, 0.05);
+}
+
+/* ========== MAIN EDITOR AREA ========== */
+.editor-main {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+    position: relative;
+    min-height: 0;
+    /* Critical for flex children with overflow */
+    gap: 0;
+    /* Remove any gaps */
+}
+
+.editor-pane {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    background: #1e1e1e;
+    border-right: 1px solid rgba(212, 175, 55, 0.2);
+    min-width: 300px;
+    /* Prevent collapse */
+    position: relative;
+    flex-shrink: 0;
+    /* Don't shrink below width */
+}
+
+.preview-pane {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    background: #1e1e1e;
+    flex: 1;
+    /* Take all remaining space */
+    min-width: 0;
+    /* Allow shrinking */
+}
+
+.editor-splitter {
+    width: 6px;
+    background: var(--border-color, #3c3c3c);
+    cursor: col-resize;
+    position: relative;
+    transition: background 0.15s ease;
+    flex-shrink: 0;
+}
+
+.editor-splitter:hover {
+    background: var(--accent-color, #d4af37);
+}
+
+.editor-splitter::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 2px;
+    height: 40px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 1px;
+}
+
+/* ========== STATUS BAR ========== */
+.editor-status {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 28px;
+    padding: 0 16px;
+    background: #252526;
+    border-top: 1px solid rgba(212, 175, 55, 0.15);
+    font-size: 12px;
+    color: #858585;
+    flex-shrink: 0;
+}
+
+.status-left,
+.status-right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Premium: Interactive status metrics */
+.status-metric.clickable {
+    cursor: pointer;
+    background: transparent;
+    border: none;
+    color: #858585;
+    font-size: 12px;
+    padding: 4px 8px;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+    font-family: inherit;
+}
+
+.status-metric.clickable:hover {
+    background: rgba(212, 175, 55, 0.15);
+    color: #d4af37;
+}
+
+.status-separator {
+    color: #404040;
+    user-select: none;
+}
+
+.status-left {
+    flex: 1;
+}
+
+.status-center {
+    flex: 0 0 auto;
+}
+
+.status-right {
+    flex: 1;
+    justify-content: flex-end;
+}
+
+.cache-indicator {
+    padding: 2px 8px;
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 3px;
+    font-size: 10px;
+    font-weight: 600;
+}
+
+.render-time {
+    font-family: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
+    font-size: 11px;
+    opacity: 0.8;
+}
+
+/* Premium: Enhanced buttons */
+.btn-primary,
+.btn-secondary,
+.btn-danger {
+    padding: 8px 20px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    border: none;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    letter-spacing: 0.3px;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #d4af37 0%, #c9a325 100%);
+    color: #1a1a1a;
+}
+
+.btn-primary:hover:not(:disabled) {
+    background: linear-gradient(135deg, #e8c547 0%, #d4af37 100%);
+    box-shadow: 0 4px 16px rgba(212, 175, 55, 0.4);
+    transform: translateY(-1px);
+}
+
+.btn-primary:active {
+    transform: translateY(0);
+}
+
+.btn-primary:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
+.btn-secondary {
+    background: rgba(255, 255, 255, 0.05);
+    color: #94a3b8;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.btn-secondary:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(212, 175, 55, 0.3);
+    color: #d4af37;
+    box-shadow: 0 4px 12px rgba(212, 175, 55, 0.15);
+}
+
+.btn-danger {
+    background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+    color: white;
+}
+
+.btn-danger:hover {
+    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+    box-shadow: 0 4px 16px rgba(220, 38, 38, 0.4);
+    transform: translateY(-1px);
+}
+
+/* ========== ANIMATIONS ========== */
+@keyframes pulse {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.6;
+    }
+}
+
+/* ========== RESPONSIVE ========== */
+@media (max-width: 768px) {
+    .editor-main {
+        flex-direction: column;
+    }
+
+    .editor-pane,
+    .preview-pane {
+        width: 100% !important;
+        height: 50% !important;
+    }
+
+    .editor-splitter {
+        width: 100%;
+        height: 6px;
+        cursor: row-resize;
+    }
+
+    .editor-splitter::before {
+        width: 40px;
+        height: 2px;
+    }
+
+    .topbar-left .file-path {
+        max-width: 150px;
+    }
+
+    .editor-toolbar {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+}
+
+/* ========== DARK MODE ENHANCEMENTS ========== */
+:root {
+    --bg-primary: #1e1e1e;
+    --bg-secondary: #252526;
+    --bg-tertiary: #2d2d2d;
+    --bg-statusbar: #007acc;
+    --text-primary: #cccccc;
+    --text-secondary: #999999;
+    --text-tertiary: #666666;
+    --border-color: #3c3c3c;
+    --accent-color: #d4af37;
+}
+
+/* ========== SCROLLBAR STYLING ========== */
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--bg-secondary, #252526);
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(121, 121, 121, 0.4);
+    border-radius: 5px;
+    transition: background 0.2s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(100, 100, 100, 0.7);
+}
+
+::-webkit-scrollbar-thumb:active {
+    background: rgba(191, 191, 191, 0.4);
+}
