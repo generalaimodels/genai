@@ -135,25 +135,22 @@ export function DocumentsPage(): React.ReactElement {
                     </button>
 
                     <a href="#/" className="docs-logo">
-                        <svg viewBox="0 0 40 40" fill="none">
-                            <defs>
-                                <linearGradient id="docsLogoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                                    <stop offset="0%" stopColor="#8b5cf6" />
-                                    <stop offset="50%" stopColor="#c084fc" />
-                                    <stop offset="100%" stopColor="#ec4899" />
-                                </linearGradient>
-                            </defs>
-                            <circle cx="20" cy="20" r="18" fill="url(#docsLogoGrad)" opacity="0.2" />
-                            <circle cx="20" cy="14" r="4" fill="url(#docsLogoGrad)" />
-                            <circle cx="12" cy="24" r="3" fill="url(#docsLogoGrad)" opacity="0.8" />
-                            <circle cx="28" cy="24" r="3" fill="url(#docsLogoGrad)" opacity="0.8" />
-                            <circle cx="20" cy="30" r="2.5" fill="url(#docsLogoGrad)" opacity="0.6" />
-                            <line x1="20" y1="14" x2="12" y2="24" stroke="url(#docsLogoGrad)" strokeWidth="1.5" opacity="0.6" />
-                            <line x1="20" y1="14" x2="28" y2="24" stroke="url(#docsLogoGrad)" strokeWidth="1.5" opacity="0.6" />
-                            <line x1="12" y1="24" x2="20" y2="30" stroke="url(#docsLogoGrad)" strokeWidth="1.5" opacity="0.5" />
-                            <line x1="28" y1="24" x2="20" y2="30" stroke="url(#docsLogoGrad)" strokeWidth="1.5" opacity="0.5" />
-                        </svg>
-                        <span className="docs-logo-text">Documentation</span>
+                        <img
+                            src="/src/asserts/logopng.png"
+                            alt="AEGIS AI Logo"
+                            className="docs-logo-img"
+                            style={{ height: '32px', width: 'auto', marginRight: 'var(--space-3)' }}
+                        />
+                        <span className="docs-logo-text" style={{
+                            fontSize: '1rem',
+                            fontWeight: 600,
+                            background: 'linear-gradient(to right, #C5A572, #D4B88A)', /* Authentic AEGIS Gold */
+                            WebkitBackgroundClip: 'text',
+                            WebkitTextFillColor: 'transparent',
+                            letterSpacing: '-0.01em'
+                        }}>
+                            Advanced Engineering for General Intelligence System
+                        </span>
                     </a>
                 </div>
 
@@ -205,20 +202,7 @@ export function DocumentsPage(): React.ReactElement {
                     )}
                 </AnimatePresence>
 
-                {/* Show sidebar button (when collapsed) */}
-                {sidebarCollapsed && (
-                    <motion.button
-                        className="sidebar-toggle-floating"
-                        onClick={toggleSidebar}
-                        initial={{ opacity: 0, x: -10 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        aria-label="Show navigation"
-                    >
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                            <polyline points="9 18 15 12 9 6" />
-                        </svg>
-                    </motion.button>
-                )}
+
 
                 {/* Main Content Area */}
                 <main className="docs-main">

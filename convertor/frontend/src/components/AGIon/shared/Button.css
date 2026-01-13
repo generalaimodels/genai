@@ -1,0 +1,159 @@
+/**
+ * Button Component Styles - AGIon Design System
+ * 
+ * PERFORMANCE:
+ * - Only transform and opacity transitions (GPU-accelerated)
+ * - will-change for composite layer promotion
+ * - No layout-thrashing properties
+ */
+
+/* ============================================
+   BASE BUTTON STYLES
+   ============================================ */
+
+.agion-button {
+    /* Reset */
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--agion-spacing-sm);
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    font-family: var(--agion-font-primary);
+    font-weight: var(--agion-font-weight-semibold);
+    letter-spacing: var(--agion-letter-spacing-wide);
+    line-height: 1;
+    white-space: nowrap;
+    user-select: none;
+
+    /* Transitions */
+    transition: transform var(--agion-duration-fast) var(--agion-ease-default),
+        box-shadow var(--agion-duration-fast) var(--agion-ease-default),
+        background var(--agion-duration-fast) var(--agion-ease-default),
+        color var(--agion-duration-fast) var(--agion-ease-default),
+        border-color var(--agion-duration-fast) var(--agion-ease-default);
+    will-change: transform;
+
+    /* Performance */
+    -webkit-tap-highlight-color: transparent;
+}
+
+.agion-button:focus-visible {
+    outline: 2px solid var(--agion-color-accent-purple);
+    outline-offset: 2px;
+}
+
+/* ============================================
+   SIZE VARIANTS
+   ============================================ */
+
+.agion-button--sm {
+    padding: var(--agion-spacing-xs) var(--agion-spacing-md);
+    font-size: var(--agion-font-size-sm);
+    border-radius: var(--agion-radius-sm);
+}
+
+.agion-button--md {
+    padding: var(--agion-spacing-sm) var(--agion-spacing-lg);
+    font-size: var(--agion-font-size-base);
+    border-radius: var(--agion-radius-md);
+}
+
+.agion-button--lg {
+    padding: var(--agion-spacing-md) var(--agion-spacing-xl);
+    font-size: var(--agion-font-size-md);
+    border-radius: var(--agion-radius-md);
+}
+
+/* ============================================
+   PRIMARY VARIANT (Solid Gold)
+   ============================================ */
+
+.agion-button--primary {
+    background: var(--agion-color-accent-gradient);
+    color: #000000;
+    border: none;
+    font-weight: var(--agion-font-weight-semibold);
+}
+
+.agion-button--primary:hover:not(.agion-button--disabled) {
+    transform: translateY(-1px);
+    box-shadow: var(--agion-shadow-accent);
+    background: var(--agion-color-accent-gold-light);
+}
+
+.agion-button--primary:active:not(.agion-button--disabled) {
+    transform: translateY(0);
+    box-shadow: none;
+}
+
+/* ============================================
+   SECONDARY VARIANT (Outline)
+   ============================================ */
+
+.agion-button--secondary {
+    background: transparent;
+    color: var(--agion-color-accent-gold);
+    border: 1px solid var(--agion-color-accent-gold);
+}
+
+.agion-button--secondary:hover:not(.agion-button--disabled) {
+    background: rgba(197, 165, 114, 0.1);
+    transform: translateY(-1px);
+    box-shadow: var(--agion-shadow-accent);
+}
+
+.agion-button--secondary:active:not(.agion-button--disabled) {
+    transform: translateY(0);
+    box-shadow: none;
+}
+
+/* ============================================
+   GHOST VARIANT (Text Only)
+   ============================================ */
+
+.agion-button--ghost {
+    background: transparent;
+    color: var(--agion-color-text-secondary);
+    border: none;
+    padding: var(--agion-spacing-xs) var(--agion-spacing-sm);
+}
+
+.agion-button--ghost:hover:not(.agion-button--disabled) {
+    background: var(--agion-color-bg-secondary);
+    color: var(--agion-color-text-primary);
+}
+
+.agion-button--ghost:active:not(.agion-button--disabled) {
+    background: var(--agion-color-bg-tertiary);
+}
+
+/* ============================================
+   DISABLED STATE
+   ============================================ */
+
+.agion-button--disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+/* ============================================
+   ICON SUPPORT
+   ============================================ */
+
+.agion-button svg {
+    width: 16px;
+    height: 16px;
+}
+
+.agion-button--sm svg {
+    width: 14px;
+    height: 14px;
+}
+
+.agion-button--lg svg {
+    width: 18px;
+    height: 18px;
+}

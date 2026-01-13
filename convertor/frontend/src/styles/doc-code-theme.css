@@ -1,0 +1,339 @@
+/**
+ * Documentation Content Styles - PREMIUM READABILITY
+ * Ultra-high contrast for perfect readability
+ * Simple, clean, professional
+ */
+
+/* ============================================
+   DARK THEME - Pure White Text
+   100% Readable
+   ============================================ */
+
+
+
+[data-theme="dark"] .document-content pre {
+    background: transparent;
+    color: #ffffff !important;
+    border: none;
+    border-radius: 0;
+    padding: 20px 24px;
+    margin: 0;
+    font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+    font-size: 15px;
+    line-height: 1.7;
+    font-weight: 400;
+    overflow-x: auto;
+    box-shadow: none;
+}
+
+/* Force all code tokens to be white in dark mode for maximum readability */
+[data-theme="dark"] .document-content pre *,
+[data-theme="dark"] .document-content pre span,
+[data-theme="dark"] .document-content pre code {
+    color: #ffffff !important;
+    text-shadow: none !important;
+}
+
+[data-theme="dark"] .document-content code:not(pre code) {
+    background: rgba(25, 25, 25, 1);
+    color: rgba(255, 255, 255, 1);
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+    font-size: 14px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* ============================================
+   LIGHT THEME - Pure Black Text  
+   100% Readable
+   ============================================ */
+
+[data-theme="light"] .document-content pre {
+    background: transparent;
+    color: #ffffff;
+    border: none;
+    border-radius: 0;
+    padding: 20px 24px;
+    margin: 0;
+    font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+    font-size: 15px;
+    line-height: 1.7;
+    font-weight: 400;
+    overflow-x: auto;
+    box-shadow: none;
+}
+
+[data-theme="light"] .document-content code:not(pre code) {
+    background: rgba(240, 240, 240, 1);
+    color: rgba(30, 30, 30, 1);
+    padding: 3px 8px;
+    border-radius: 6px;
+    font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+    font-size: 14px;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+/* ============================================
+   REMOVE ALL SYNTAX HIGHLIGHTING
+   Just pure readable text
+   ============================================ */
+
+[data-theme="dark"] .document-content .token {
+    color: rgba(255, 255, 255, 1) !important;
+}
+
+[data-theme="light"] .document-content .token {
+    color: rgba(255, 255, 255, 1) !important;
+}
+
+/* ============================================
+   Code Block Container
+   Clean and simple
+   ============================================ */
+
+.document-content .code-block-container {
+    margin: 2rem 0;
+}
+
+[data-theme="dark"] .document-content .code-block-container {
+    background: rgba(15, 15, 15, 1);
+    border: 2px solid rgba(255, 255, 255, 0.15);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
+}
+
+[data-theme="light"] .document-content .code-block-container {
+    background: rgba(15, 15, 15, 1);
+    border: 2px solid rgba(255, 255, 255, 0.15);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
+}
+
+/* Traffic lights */
+.document-content .code-block-header {
+    display: flex;
+    align-items: center;
+    padding: 14px 20px;
+    gap: 10px;
+}
+
+[data-theme="dark"] .document-content .code-block-header {
+    background: rgba(20, 20, 20, 1);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+[data-theme="light"] .document-content .code-block-header {
+    background: rgba(20, 20, 20, 1);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Force header text to be white in all themes */
+.document-content .code-block-header,
+.document-content .code-block-header *,
+.document-content .code-block-filename,
+.document-content .code-block-close,
+.document-content .language-badge,
+.document-content .copy-button,
+.document-content .copy-button span,
+.document-content .copy-button svg {
+    color: #ffffff !important;
+    fill: #ffffff !important;
+}
+
+.document-content .code-block-dots {
+    display: flex;
+    gap: 8px;
+}
+
+.document-content .code-block-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+}
+
+.document-content .code-block-dot:nth-child(1) {
+    background: #ff5f56;
+}
+
+.document-content .code-block-dot:nth-child(2) {
+    background: #ffbd2e;
+}
+
+.document-content .code-block-dot:nth-child(3) {
+    background: #27c93f;
+}
+
+.document-content .code-block-filename {
+    flex: 1;
+    text-align: center;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+[data-theme="dark"] .document-content .code-block-filename {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+[data-theme="light"] .document-content .code-block-filename {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+/* Code content */
+.document-content pre[class*="language-"] {
+    margin: 0;
+    padding: 28px;
+    overflow-x: auto;
+    font-size: 15px;
+    line-height: 1.9;
+    font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+}
+
+.document-content code[class*="language-"] {
+    font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+    font-size: 15px;
+}
+
+/* Line numbers */
+.document-content .code-line-number {
+    display: inline-block;
+    width: 40px;
+    text-align: right;
+    padding-right: 16px;
+    user-select: none;
+}
+
+[data-theme="dark"] .document-content .code-line-number {
+    color: rgba(255, 255, 255, 0.4);
+}
+
+[data-theme="light"] .document-content .code-line-number {
+    color: rgba(0, 0, 0, 0.4);
+}
+
+/* Scrollbar */
+[data-theme="dark"] .document-content pre::-webkit-scrollbar {
+    height: 10px;
+    background: rgba(30, 30, 30, 1);
+}
+
+[data-theme="dark"] .document-content pre::-webkit-scrollbar-thumb {
+    background: rgba(100, 100, 100, 1);
+    border-radius: 5px;
+}
+
+[data-theme="light"] .document-content pre::-webkit-scrollbar {
+    height: 10px;
+    background: rgba(240, 240, 240, 1);
+}
+
+[data-theme="light"] .document-content pre::-webkit-scrollbar-thumb {
+    background: rgba(180, 180, 180, 1);
+    border-radius: 5px;
+}
+
+/* Close button (optional) */
+.document-content .code-block-close {
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    opacity: 0.5;
+    transition: opacity 0.2s;
+}
+
+.document-content .code-block-close:hover {
+    opacity: 1;
+}
+
+[data-theme="dark"] .document-content .code-block-close {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+[data-theme="light"] .document-content .code-block-close {
+    color: rgba(0, 0, 0, 0.7);
+}
+
+/* ============================================
+   PARAGRAPHS & HEADINGS
+   100% Readable
+   ============================================ */
+
+[data-theme="dark"] .document-content,
+[data-theme="dark"] .document-content p,
+[data-theme="dark"] .document-content li,
+[data-theme="dark"] .document-content div {
+    color: rgba(255, 255, 255, 1) !important;
+}
+
+[data-theme="light"] .document-content,
+[data-theme="light"] .document-content p,
+[data-theme="light"] .document-content li,
+[data-theme="light"] .document-content div {
+    color: rgba(0, 0, 0, 1) !important;
+}
+
+[data-theme="dark"] .document-content h1,
+[data-theme="dark"] .document-content h2,
+[data-theme="dark"] .document-content h3,
+[data-theme="dark"] .document-content h4,
+[data-theme="dark"] .document-content h5,
+[data-theme="dark"] .document-content h6 {
+    color: #C5A572 !important;
+    /* Authentic AEGIS Gold - Force Override */
+}
+
+[data-theme="light"] .document-content h1,
+[data-theme="light"] .document-content h2,
+[data-theme="light"] .document-content h3,
+[data-theme="light"] .document-content h4,
+[data-theme="light"] .document-content h5,
+[data-theme="light"] .document-content h6 {
+    color: #C5A572 !important;
+    /* Authentic AEGIS Gold - Force Override */
+}
+
+/* Strong/Bold text */
+[data-theme="dark"] .document-content strong,
+[data-theme="dark"] .document-content b {
+    color: rgba(255, 255, 255, 1) !important;
+    font-weight: 700;
+}
+
+[data-theme="light"] .document-content strong,
+[data-theme="light"] .document-content b {
+    color: rgba(0, 0, 0, 1) !important;
+    font-weight: 700;
+}
+
+/* ============================================
+   MOBILE RESPONSIVE
+   ============================================ */
+
+@media (max-width: 768px) {
+    .document-content {
+        font-size: 16px !important;
+        padding: 16px !important;
+    }
+
+    [data-theme="dark"] .document-content h1,
+    [data-theme="light"] .document-content h1 {
+        font-size: 1.75rem !important;
+    }
+
+    [data-theme="dark"] .document-content h2,
+    [data-theme="light"] .document-content h2 {
+        font-size: 1.5rem !important;
+    }
+
+    [data-theme="dark"] .document-content pre,
+    [data-theme="light"] .document-content pre {
+        font-size: 13px !important;
+        padding: 16px !important;
+    }
+}

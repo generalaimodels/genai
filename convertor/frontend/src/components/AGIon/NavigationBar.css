@@ -1,0 +1,241 @@
+/**
+ * Navigation Bar Styles - AGIon Landing Page
+ */
+
+/* ============================================
+   NAV BAR BASE
+   ============================================ */
+
+.agion-nav {
+    position: sticky;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: var(--agion-z-sticky);
+    height: 72px;
+    background: rgba(0, 0, 0, 0.9);
+    backdrop-filter: blur(24px) saturate(180%);
+    -webkit-backdrop-filter: blur(24px) saturate(180%);
+    border-bottom: 1px solid rgba(197, 165, 114, 0.2);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3), 0 1px 3px rgba(0, 0, 0, 0.15);
+}
+
+/* 8K Scaling */
+@media (min-width: 3840px) {
+    .agion-nav {
+        height: 100px;
+    }
+
+    .nav-content {
+        height: 100px;
+    }
+}
+
+.nav-content {
+    height: 72px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+}
+
+/* ============================================
+   NAV LEFT - LOGO + BRAND
+   ============================================ */
+
+.nav-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.nav-logo {
+    display: flex;
+    align-items: center;
+}
+
+.nav-logo-img {
+    height: 44px;
+    width: auto;
+    object-fit: contain;
+    display: block;
+}
+
+/* 8K Scaling */
+@media (min-width: 3840px) {
+    .nav-logo-img {
+        height: 64px;
+    }
+}
+
+.nav-brand {
+    font-size: 18px;
+    font-weight: var(--agion-font-weight-bold);
+    letter-spacing: 0.05em;
+    color: var(--agion-color-accent-gold);
+    text-transform: uppercase;
+    line-height: 1;
+    padding-top: 2px;
+}
+
+/* ============================================
+   NAV CENTER - DESKTOP LINKS
+   ============================================ */
+
+.nav-center {
+    display: flex;
+    align-items: center;
+    gap: 32px;
+    flex: 1;
+    justify-content: center;
+}
+
+.nav-link {
+    font-size: 14px;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.85);
+    transition: color 0.2s ease;
+    position: relative;
+    text-decoration: none;
+    white-space: nowrap;
+    display: inline-block;
+}
+
+.nav-link:hover {
+    color: rgba(255, 255, 255, 1);
+}
+
+/* 8K Scaling */
+@media (min-width: 3840px) {
+    .nav-link {
+        font-size: 20px;
+    }
+}
+
+/* Hide on mobile */
+.agion-hidden-mobile {
+    display: none !important;
+}
+
+@media (min-width: 1024px) {
+    .agion-hidden-mobile {
+        display: flex !important;
+    }
+}
+
+/* Hide on desktop */
+.agion-hidden-desktop {
+    display: flex;
+}
+
+@media (min-width: 1024px) {
+    .agion-hidden-desktop {
+        display: none !important;
+    }
+}
+
+/* ============================================
+   NAV RIGHT - ACTIONS
+   ============================================ */
+
+.nav-right {
+    display: flex;
+    align-items: center;
+    gap: var(--agion-spacing-sm);
+}
+
+/* ============================================
+   MOBILE TOGGLE
+   ============================================ */
+
+.nav-mobile-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: none;
+    color: var(--agion-color-text-primary);
+    cursor: pointer;
+    padding: var(--agion-spacing-xs);
+    transition: color var(--agion-duration-fast) var(--agion-ease-default);
+}
+
+.nav-mobile-toggle:hover {
+    color: var(--agion-color-accent-gold);
+}
+
+/* ============================================
+   MOBILE MENU PANEL
+   ============================================ */
+
+.nav-mobile-menu {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 85%;
+    max-width: 380px;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.98);
+    border-left: 1px solid rgba(197, 165, 114, 0.2);
+    transform: translateX(100%);
+    transition: transform var(--agion-duration-normal) var(--agion-ease-default);
+    z-index: var(--agion-z-modal);
+    display: flex;
+    flex-direction: column;
+    padding: var(--agion-spacing-4xl) var(--agion-spacing-xl);
+    overflow-y: auto;
+    backdrop-filter: blur(20px);
+}
+
+.nav-mobile-menu.open {
+    transform: translateX(0);
+}
+
+.nav-mobile-links {
+    display: flex;
+    flex-direction: column;
+    gap: var(--agion-spacing-xs);
+    margin-bottom: var(--agion-spacing-3xl);
+}
+
+.nav-mobile-link {
+    font-size: 16px;
+    font-weight: var(--agion-font-weight-medium);
+    color: rgba(255, 255, 255, 0.9);
+    text-decoration: none;
+    padding: var(--agion-spacing-md) var(--agion-spacing-sm);
+    transition: all var(--agion-duration-fast) var(--agion-ease-default);
+    border-left: 2px solid transparent;
+    padding-left: var(--agion-spacing-md);
+}
+
+.nav-mobile-link:hover {
+    color: rgba(255, 255, 255, 1);
+    border-left-color: rgba(255, 255, 255, 0.5);
+    padding-left: var(--agion-spacing-lg);
+}
+
+.nav-mobile-actions {
+    display: flex;
+    flex-direction: column;
+    gap: var(--agion-spacing-md);
+    margin-bottom: var(--agion-spacing-3xl);
+    padding-top: var(--agion-spacing-xl);
+    border-top: 1px solid rgba(197, 165, 114, 0.15);
+}
+
+.nav-mobile-actions .agion-button {
+    width: 100%;
+}
+
+.nav-mobile-footer {
+    margin-top: auto;
+    text-align: center;
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.4);
+    padding-top: var(--agion-spacing-xl);
+    border-top: 1px solid rgba(197, 165, 114, 0.1);
+    line-height: 1.6;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+}

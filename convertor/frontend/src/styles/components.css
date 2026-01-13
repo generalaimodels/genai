@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Component Styles - Document Content Rendering
  * 
  * Styles for:
@@ -126,14 +126,25 @@
    Paragraphs and Text
    ======================================== */
 
-.document-content p {
+[data-theme="dark"] .document-content p {
     margin: var(--space-6) 0;
     font-size: 1.0625rem;
     /* 17px for optimal readability */
     line-height: 1.8;
-    color: var(--text-primary);
+    color: rgba(255, 255, 255, 1) !important;
     max-width: 75ch;
     /* Optimal line length for reading */
+    hyphens: auto;
+    text-align: justify;
+    text-justify: inter-word;
+}
+
+[data-theme="light"] .document-content p {
+    margin: var(--space-6) 0;
+    font-size: 1.0625rem;
+    line-height: 1.8;
+    color: rgba(0, 0, 0, 1) !important;
+    max-width: 75ch;
     hyphens: auto;
     text-align: justify;
     text-justify: inter-word;
@@ -551,12 +562,194 @@
     tab-size: 4;
 }
 
-.document-content pre code {
+[data-theme="dark"] .document-content pre code {
     background: none;
     padding: 0;
     font-size: inherit;
-    color: #e2e8f0;
+    color: rgba(255, 255, 255, 1) !important;
     font-family: 'JetBrains Mono', 'Fira Code', 'SF Mono', Consolas, monospace;
+}
+
+[data-theme="light"] .document-content pre code {
+    background: none;
+    padding: 0;
+    font-size: inherit;
+    color: rgba(255, 255, 255, 1) !important;
+    font-family: 'JetBrains Mono', 'Fira Code', 'SF Mono', Consolas, monospace;
+}
+
+/* ============================================
+   NUCLEAR OVERRIDE - FORCE 100% READABILITY
+   ============================================ */
+
+/* =========================================================================
+   CLEAN PREMIUM THEME (Authentic AEGIS Gold)
+   ========================================================================= */
+
+/* 1. Standardize Body Text - High Contrast */
+/* Light Mode: Authentic Dark Text from Tokens */
+[data-theme="light"] .document-content p,
+[data-theme="light"] .document-content li,
+[data-theme="light"] .document-content dd,
+[data-theme="light"] .document-content td,
+[data-theme="light"] .document-content th {
+    color: #111827 !important;
+}
+
+/* Dark Mode: Soft White */
+[data-theme="dark"] .document-content p,
+[data-theme="dark"] .document-content li,
+[data-theme="dark"] .document-content dd,
+[data-theme="dark"] .document-content td,
+[data-theme="dark"] .document-content th {
+    color: #F1F5F9 !important;
+}
+
+/* 2. Headings - Authentic AEGIS Gold (#C5A572) */
+/* Light Mode */
+[data-theme="light"] .document-content h1,
+[data-theme="light"] .document-content h2,
+[data-theme="light"] .document-content h3 {
+    color: #C5A572 !important;
+    /* The REAL AEGIS Gold */
+    background: none !important;
+    -webkit-text-fill-color: initial !important;
+}
+
+/* Dark Mode */
+[data-theme="dark"] .document-content h1,
+[data-theme="dark"] .document-content h2,
+[data-theme="dark"] .document-content h3 {
+    color: #C5A572 !important;
+    /* Same Gold for Brand Stability */
+    background: none !important;
+    -webkit-text-fill-color: initial !important;
+}
+
+/* H1 Underline */
+[data-theme="light"] .document-content h1 {
+    border-bottom: 2px solid #C5A572 !important;
+}
+
+[data-theme="dark"] .document-content h1 {
+    border-bottom: 2px solid #C5A572 !important;
+}
+
+/* 3. Links - AEGIS Gold */
+.document-content a {
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.2s;
+}
+
+[data-theme="light"] .document-content a {
+    color: #C5A572 !important;
+    background: none !important;
+}
+
+[data-theme="light"] .document-content a:hover {
+    color: #D4B88A !important;
+    /* Lighter Gold on Hover */
+    text-decoration: underline;
+}
+
+[data-theme="dark"] .document-content a {
+    color: #C5A572 !important;
+    background: none !important;
+}
+
+[data-theme="dark"] .document-content a:hover {
+    color: #D4B88A !important;
+    text-decoration: underline;
+    text-shadow: 0 0 10px rgba(197, 165, 114, 0.4);
+}
+
+/* 4. CODE BLOCKS - ALWAYS DARK & READABLE */
+/* Explicitly style code content to be white on dark background in ALL themes */
+[data-theme] .document-content pre,
+[data-theme] .document-content pre *,
+[data-theme] .document-content .code-block,
+[data-theme] .document-content .code-block * {
+    color: #ffffff !important;
+    text-shadow: none !important;
+}
+
+/* Reset specific token overrides */
+[data-theme] .document-content .token {
+    color: inherit !important;
+}
+
+.document-content h2 {
+    color: #9a3412 !important;
+    /* Orange-900 (Copper) */
+    border-bottom-color: rgba(154, 52, 18, 0.2);
+}
+
+[data-theme="dark"] .document-content h2 {
+    color: #fbbf24 !important;
+    /* Amber-400 */
+    border-bottom-color: rgba(251, 191, 36, 0.2);
+}
+
+/* H3 - Deep Gold */
+.document-content h3 {
+    color: #b45309 !important;
+    /* Amber-700 */
+}
+
+[data-theme="dark"] .document-content h3 {
+    color: #fde047 !important;
+    /* Yellow-300 */
+}
+
+/* Links - Classic Gold */
+.document-content a {
+    color: #d97706 !important;
+    /* Amber-600 */
+    font-weight: 600;
+    transition: all 0.2s ease;
+}
+
+[data-theme="dark"] .document-content a {
+    color: #fbbf24 !important;
+    /* Amber-400 */
+}
+
+/* Link Hover - Glowing Gold */
+.document-content a:hover {
+    color: #f59e0b !important;
+    /* Amber-500 */
+    text-shadow: 0 0 1px rgba(245, 158, 11, 0.3);
+    text-decoration: underline;
+    text-decoration-color: rgba(245, 158, 11, 0.5);
+    background: none !important;
+    /* Remove gradient underline for cleaner look */
+}
+
+[data-theme="dark"] .document-content a:hover {
+    color: #fcd34d !important;
+    /* Amber-300 */
+    text-shadow: 0 0 8px rgba(252, 211, 77, 0.5);
+    /* Premium Glow */
+    text-decoration-color: rgba(252, 211, 77, 0.5);
+}
+
+/* Exclude pre, code, and their children from the black text forcing */
+[data-theme="light"] .document-content *:not(pre):not(code):not(.token):not(.code-block-container):not(.code-block-header):not(.code-block-filename):not(.code-line-number) {
+    color: rgba(0, 0, 0, 1);
+}
+
+/* Ensure code block specific elements are white */
+[data-theme="light"] .document-content pre,
+[data-theme="light"] .document-content pre span,
+[data-theme="light"] .document-content .code-block-filename,
+[data-theme="light"] .document-content .code-line-number {
+    color: rgba(255, 255, 255, 1) !important;
+}
+
+/* Ensure inline code uses dark text for better contrast on light bg */
+[data-theme="light"] .document-content code:not(pre code) {
+    color: rgba(30, 30, 30, 1) !important;
 }
 
 /* ========================================
@@ -1211,24 +1404,55 @@
    ======================================== */
 
 
+
 .math-block {
     position: relative;
-    margin: var(--space-8) 0;
-    padding: var(--space-7) var(--space-8);
-    background: linear-gradient(135deg,
-            rgba(99, 102, 241, 0.05),
-            rgba(139, 92, 246, 0.05),
-            rgba(168, 85, 247, 0.03));
-    border-radius: var(--radius-2xl);
-    border: 1px solid rgba(99, 102, 241, 0.2);
-    overflow-x: auto;
+    /* Inline Flex for perfect shrinking to content */
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    margin: 0.25rem 0;
+    padding: 0 4px;
+    /* Almost zero horizontal, zero vertical */
+
+    /* Subtle background */
+    background: rgba(99, 102, 241, 0.03);
+    border-radius: 4px;
+    /* Tiny radius */
+    border: 1px solid rgba(99, 102, 241, 0.1);
+
     text-align: center;
-    box-shadow:
-        0 8px 24px -4px rgba(99, 102, 241, 0.12),
-        0 4px 12px -2px rgba(0, 0, 0, 0.08),
-        inset 0 1px 0 rgba(255, 255, 255, 0.08);
-    backdrop-filter: blur(8px);
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    width: auto;
+    max-width: 100%;
+
+    /* Shrink Font & Line Height */
+    font-size: 0.85em !important;
+    line-height: 1 !important;
+    min-height: 0 !important;
+}
+
+/* Center the wrapper if used */
+.math-block-wrapper {
+    text-align: center;
+    margin: 0.25rem 0;
+    line-height: 0;
+    /* Remove wrapper vertical space */
+}
+
+/* Aggressive strip of children */
+.math-block .katex-display,
+.math-block .MathJax_Display {
+    margin: 0 !important;
+    padding: 0 !important;
+    width: auto !important;
+    display: inline-block !important;
+    /* Force inline inside */
+}
+
+.math-block p,
+.math-block div {
+    margin: 0 !important;
+    padding: 0 !important;
 }
 
 /* Subtle accent line at top */
@@ -2261,16 +2485,16 @@ span.katex,
     color: #a78bfa;
 }
 
-/* ========================================
-   Responsive Design
-   ======================================== */
-
+/* Media queries for responsive design */
 @media (max-width: 1280px) {
     .reading-progress {
-        display: none;
+        display: none !important;
     }
 
     .document-viewer-wrapper {
+        display: block !important;
+        width: 100% !important;
+        grid-template-columns: 1fr !important;
         gap: 0;
     }
 

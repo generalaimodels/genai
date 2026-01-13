@@ -1,0 +1,171 @@
+/**
+ * Team Section Styles - AGIon Landing Page
+ */
+
+/* ============================================
+   TEAM SECTION BASE
+   ============================================ */
+
+.team-section {
+    background: var(--agion-color-bg-primary);
+}
+
+.team-header {
+    text-align: center;
+    max-width: 720px;
+    margin: 0 auto var(--agion-spacing-4xl);
+}
+
+.team-title {
+    margin-bottom: var(--agion-spacing-md);
+}
+
+.team-description {
+    font-size: var(--agion-font-size-lg);
+    color: var(--agion-color-text-secondary);
+}
+
+/* ============================================
+   TEAM GRID
+   ============================================ */
+
+.team-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--agion-spacing-xl);
+    margin-bottom: var(--agion-spacing-3xl);
+    justify-items: center;
+}
+
+@media (min-width: 768px) {
+    .team-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (min-width: 1024px) {
+    .team-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+/* ============================================
+   TEAM CARD
+   ============================================ */
+
+.team-card {
+    text-align: center;
+    max-width: 360px;
+    padding: var(--agion-spacing-2xl);
+    border-radius: var(--agion-radius-xl);
+    background: rgba(20, 20, 20, 0.85);
+    border: 1.5px solid rgba(197, 165, 114, 0.2);
+    backdrop-filter: blur(12px);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3),
+        0 2px 8px rgba(0, 0, 0, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.team-card:hover {
+    transform: translateY(-8px);
+    border-color: rgba(197, 165, 114, 0.5);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4),
+        0 6px 16px rgba(0, 0, 0, 0.25),
+        0 0 0 1px rgba(197, 165, 114, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    background: rgba(20, 20, 20, 0.95);
+}
+
+.team-card-image {
+    margin-bottom: var(--agion-spacing-lg);
+    display: flex;
+    justify-content: center;
+}
+
+.team-avatar {
+    width: 120px;
+    height: 120px;
+    border-radius: var(--agion-radius-full);
+    overflow: hidden;
+    border: 3px solid rgba(197, 165, 114, 0.3);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3),
+        0 0 0 1px rgba(255, 255, 255, 0.05);
+    transition: all var(--agion-duration-normal) var(--agion-ease-default);
+}
+
+.team-card:hover .team-avatar {
+    transform: scale(1.08);
+    border-color: rgba(197, 165, 114, 0.6);
+    box-shadow: 0 8px 20px rgba(197, 165, 114, 0.3),
+        0 4px 10px rgba(0, 0, 0, 0.4),
+        0 0 0 1px rgba(255, 255, 255, 0.1);
+}
+
+.team-card-name {
+    font-size: var(--agion-font-size-xl);
+    font-weight: var(--agion-font-weight-bold);
+    margin-bottom: var(--agion-spacing-xs);
+    color: #FFFFFF;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.team-card-role {
+    font-size: var(--agion-font-size-sm);
+    color: rgba(197, 165, 114, 0.9);
+    margin-bottom: var(--agion-spacing-md);
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+}
+
+.team-card-bio {
+    font-size: var(--agion-font-size-base);
+    color: rgba(255, 255, 255, 0.82);
+    line-height: var(--agion-line-height-relaxed);
+    margin-bottom: var(--agion-spacing-lg);
+    font-weight: 400;
+}
+
+/* ============================================
+   TEAM SOCIAL LINKS
+   ============================================ */
+
+.team-card-links {
+    display: flex;
+    justify-content: center;
+    gap: var(--agion-spacing-md);
+}
+
+.team-social-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border-radius: var(--agion-radius-full);
+    background: rgba(197, 165, 114, 0.15);
+    border: 1px solid rgba(197, 165, 114, 0.25);
+    color: rgba(255, 255, 255, 0.8);
+    transition: all var(--agion-duration-fast) var(--agion-ease-default);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+.team-social-link:hover {
+    background: rgba(197, 165, 114, 0.3);
+    border-color: rgba(197, 165, 114, 0.5);
+    color: #FFFFFF;
+    transform: translateY(-3px);
+    box-shadow: 0 4px 12px rgba(197, 165, 114, 0.3),
+        0 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+/* ============================================
+   TEAM CTA
+   ============================================ */
+
+.team-cta {
+    display: flex;
+    justify-content: center;
+    margin-top: var(--agion-spacing-3xl);
+}

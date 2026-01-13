@@ -66,7 +66,14 @@ function WelcomeScreen(): React.ReactElement {
                 textAlign: 'center',
             }}
         >
-            <h1 style={{ fontSize: 'var(--text-3xl)', marginBottom: 'var(--space-4)' }}>
+            <h1 style={{
+                fontSize: 'var(--text-3xl)',
+                marginBottom: 'var(--space-4)',
+                background: 'linear-gradient(to right, #C5A572, #D4B88A)', // Authentic AEGIS Gold Gradient
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                fontWeight: 800
+            }}>
                 Welcome to Documentation
             </h1>
             <p style={{ color: 'var(--text-secondary)', marginBottom: 'var(--space-6)' }}>
@@ -155,7 +162,7 @@ export function DocumentViewer({ path, onHeadingsChange }: DocumentViewerProps):
 
                 // Update page title
                 const pageTitle = doc.headings[0]?.text ?? path!.split('/').pop() ?? 'Documentation';
-                window.document.title = `${pageTitle} | Docs`;
+                window.document.title = `${pageTitle} | AEGIS AI`;
             } catch (err) {
                 console.error('Failed to load document:', err);
                 setError(true);

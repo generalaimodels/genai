@@ -1,0 +1,35 @@
+/* 
+   FORCE GOLD OVERRIDE 
+   This file is loaded last to guarantee the Gold theme wins 
+   against any legacy styles or cache mismatches.
+*/
+
+[data-theme="dark"] h1,
+[data-theme="dark"] h2,
+[data-theme="dark"] h3,
+[data-theme="dark"] h4,
+[data-theme="dark"] h5,
+[data-theme="dark"] h6,
+[data-theme="dark"] .document-content h1,
+[data-theme="dark"] .document-content h2,
+[data-theme="dark"] .document-content h3,
+[data-theme="dark"] .document-content h4,
+[data-theme="dark"] .document-content h5,
+[data-theme="dark"] .document-content h6 {
+    color: #C5A572 !important;
+}
+
+[data-theme="light"] h1,
+[data-theme="light"] h2,
+[data-theme="light"] h3,
+[data-theme="light"] h4,
+[data-theme="light"] h5,
+[data-theme="light"] h6,
+[data-theme="light"] .document-content h1,
+[data-theme="light"] .document-content h2,
+[data-theme="light"] .document-content h3,
+[data-theme="light"] .document-content h4,
+[data-theme="light"] .document-content h5,
+[data-theme="light"] .document-content h6 {
+    color: #C5A572 !important;
+}

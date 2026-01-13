@@ -1,0 +1,400 @@
+/**
+ * AGIon Animation System
+ * 
+ * DESIGN CONSTRAINTS:
+ * - Only transform and opacity animations (GPU-accelerated)
+ * - No layout-thrashing properties (width, height, top, left)
+ * - Deterministic cubic-bezier easing
+ * - Respects prefers-reduced-motion
+ * 
+ * PERFORMANCE:
+ * - All animations use will-change for composite layer promotion
+ * - Animations triggered via classes for fine-grained control
+ * - Maximum duration: 500ms to prevent sluggishness
+ */
+
+/* ============================================
+   KEYFRAME ANIMATIONS
+   ============================================ */
+
+@keyframes agion-fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes agion-fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes agion-fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes agion-fadeInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes agion-fadeInRight {
+    from {
+        opacity: 0;
+        transform: translateX(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes agion-scaleIn {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes agion-slideUnderline {
+    from {
+        transform: scaleX(0);
+        transform-origin: left center;
+    }
+
+    to {
+        transform: scaleX(1);
+        transform-origin: left center;
+    }
+}
+
+@keyframes agion-pulse {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.7;
+    }
+}
+
+@keyframes agion-spin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Infinite horizontal scroll for logo carousel */
+@keyframes agion-scrollHorizontal {
+    from {
+        transform: translateX(0);
+    }
+
+    to {
+        transform: translateX(-50%);
+    }
+}
+
+/* ============================================
+   ANIMATION UTILITY CLASSES
+   ============================================ */
+
+.agion-animate-fadeIn {
+    animation: agion-fadeIn var(--agion-duration-normal) var(--agion-ease-default) forwards;
+}
+
+.agion-animate-fadeInUp {
+    animation: agion-fadeInUp var(--agion-duration-normal) var(--agion-ease-default) forwards;
+}
+
+.agion-animate-fadeInDown {
+    animation: agion-fadeInDown var(--agion-duration-normal) var(--agion-ease-default) forwards;
+}
+
+.agion-animate-fadeInLeft {
+    animation: agion-fadeInLeft var(--agion-duration-normal) var(--agion-ease-default) forwards;
+}
+
+.agion-animate-fadeInRight {
+    animation: agion-fadeInRight var(--agion-duration-normal) var(--agion-ease-default) forwards;
+}
+
+.agion-animate-scaleIn {
+    animation: agion-scaleIn var(--agion-duration-normal) var(--agion-ease-default) forwards;
+}
+
+.agion-animate-pulse {
+    animation: agion-pulse 2s var(--agion-ease-default) infinite;
+}
+
+.agion-animate-spin {
+    animation: agion-spin 1s linear infinite;
+}
+
+/* Staggered animation delays (for lists) */
+.agion-animate-delay-100 {
+    animation-delay: 100ms;
+}
+
+.agion-animate-delay-200 {
+    animation-delay: 200ms;
+}
+
+.agion-animate-delay-300 {
+    animation-delay: 300ms;
+}
+
+.agion-animate-delay-400 {
+    animation-delay: 400ms;
+}
+
+.agion-animate-delay-500 {
+    animation-delay: 500ms;
+}
+
+/* ============================================
+   TRANSITION UTILITIES
+   ============================================ */
+
+/* Base transition class */
+.agion-transition {
+    transition: all var(--agion-duration-fast) var(--agion-ease-default);
+}
+
+/* Specific property transitions */
+.agion-transition-opacity {
+    transition: opacity var(--agion-duration-fast) var(--agion-ease-default);
+}
+
+.agion-transition-transform {
+    transition: transform var(--agion-duration-fast) var(--agion-ease-default);
+}
+
+.agion-transition-colors {
+    transition: color var(--agion-duration-fast) var(--agion-ease-default),
+        background-color var(--agion-duration-fast) var(--agion-ease-default),
+        border-color var(--agion-duration-fast) var(--agion-ease-default);
+}
+
+/* Slower transitions */
+.agion-transition-slow {
+    transition: all var(--agion-duration-normal) var(--agion-ease-default);
+}
+
+/* ============================================
+   HOVER EFFECTS
+   ============================================ */
+
+/* Card lift effect */
+.agion-hover-lift {
+    transition: transform var(--agion-duration-fast) var(--agion-ease-default),
+        box-shadow var(--agion-duration-fast) var(--agion-ease-default);
+    will-change: transform;
+}
+
+.agion-hover-lift:hover {
+    transform: translateY(-4px);
+}
+
+/* Button lift effect (smaller) */
+.agion-hover-lift-sm {
+    transition: transform var(--agion-duration-fast) var(--agion-ease-default);
+    will-change: transform;
+}
+
+.agion-hover-lift-sm:hover {
+    transform: translateY(-1px);
+}
+
+/* Scale on hover */
+.agion-hover-scale {
+    transition: transform var(--agion-duration-fast) var(--agion-ease-default);
+    will-change: transform;
+}
+
+.agion-hover-scale:hover {
+    transform: scale(1.05);
+}
+
+/* Opacity fade */
+.agion-hover-opacity {
+    transition: opacity var(--agion-duration-fast) var(--agion-ease-default);
+}
+
+.agion-hover-opacity:hover {
+    opacity: 1;
+}
+
+/* Grayscale to color (for images) */
+.agion-hover-grayscale {
+    filter: grayscale(100%);
+    transition: filter var(--agion-duration-normal) var(--agion-ease-default);
+    will-change: filter;
+}
+
+.agion-hover-grayscale:hover {
+    filter: grayscale(0%);
+}
+
+/* ============================================
+   UNDERLINE ANIMATIONS
+   ============================================ */
+
+.agion-underline-animated {
+    position: relative;
+    display: inline-block;
+}
+
+.agion-underline-animated::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background: currentColor;
+    transform: scaleX(0);
+    transform-origin: left center;
+    transition: transform var(--agion-duration-fast) var(--agion-ease-default);
+}
+
+.agion-underline-animated:hover::after {
+    transform: scaleX(1);
+}
+
+/* ============================================
+   SCROLL REVEAL (via Intersection Observer)
+   ============================================ */
+
+/* Elements start hidden */
+.agion-scroll-reveal {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity var(--agion-duration-normal) var(--agion-ease-default),
+        transform var(--agion-duration-normal) var(--agion-ease-default);
+}
+
+/* Class added by JS when in viewport */
+.agion-scroll-reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* ============================================
+   GLASSMORPHISM EFFECTS
+   ============================================ */
+
+.agion-glass {
+    background: var(--agion-glass-bg);
+    border: 1px solid var(--agion-glass-border);
+    backdrop-filter: var(--agion-glass-blur) saturate(180%);
+    -webkit-backdrop-filter: var(--agion-glass-blur) saturate(180%);
+}
+
+.agion-glass-heavy {
+    background: var(--agion-glass-bg);
+    border: 1px solid var(--agion-glass-border);
+    backdrop-filter: var(--agion-glass-blur-heavy) saturate(180%);
+    -webkit-backdrop-filter: var(--agion-glass-blur-heavy) saturate(180%);
+}
+
+/* ============================================
+   LOADING STATES
+   ============================================ */
+
+.agion-skeleton {
+    background: linear-gradient(90deg,
+            rgba(255, 255, 255, 0.05) 25%,
+            rgba(255, 255, 255, 0.1) 50%,
+            rgba(255, 255, 255, 0.05) 75%);
+    background-size: 200% 100%;
+    animation: agion-shimmer 1.5s ease-in-out infinite;
+}
+
+@keyframes agion-shimmer {
+    0% {
+        background-position: 200% 0;
+    }
+
+    100% {
+        background-position: -200% 0;
+    }
+}
+
+/* ============================================
+   REDUCED MOTION
+   ============================================ */
+
+@media (prefers-reduced-motion: reduce) {
+
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+
+    .agion-scroll-reveal {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+/* ============================================
+   PERFORMANCE HINTS
+   ============================================ */
+
+/* Promote to composite layer for smooth animations */
+.agion-will-change-transform {
+    will-change: transform;
+}
+
+.agion-will-change-opacity {
+    will-change: opacity;
+}
+
+/* GPU acceleration */
+.agion-gpu-accelerate {
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    perspective: 1000px;
+}

@@ -1,5 +1,7 @@
 @import './premium-ui.css';
 @import './phase-integration.css';
+@import './doc-code-theme.css';
+@import './force-gold.css';
 
 /**
  * Design System - CSS Variables and Base Styles
@@ -168,7 +170,7 @@ html {
 
   /* ============================================
      8K ULTRA HIGH-RESOLUTION OPTIMIZATIONS
-     World-class smooth rendering
+     Premium + Classic rendering at 7680×4320
      ============================================ */
 
   /* Smooth scrolling with GPU acceleration */
@@ -179,16 +181,17 @@ html {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
-  font-feature-settings: "kern" 1, "liga" 1, "calt" 1;
+  font-feature-settings: "kern" 1, "liga" 1, "calt" 1, "clig" 1;
   font-kerning: normal;
   font-variant-ligatures: common-ligatures;
+  font-optical-sizing: auto;
 
-  /* GPU-accelerated rendering */
-  transform: translateZ(0);
-  -webkit-transform: translateZ(0);
+  /* GPU-accelerated rendering for silky 120Hz+ */
+  /* transform: translateZ(0); - BLOCKS FIXED POSITIONING */
+  /* -webkit-transform: translateZ(0); */
   will-change: scroll-position;
 
-  /* High-DPI display optimization */
+  /* High-DPI display optimization (Retina/4K/8K) */
   -webkit-tap-highlight-color: transparent;
   -webkit-text-size-adjust: 100%;
   -moz-text-size-adjust: 100%;
@@ -197,8 +200,44 @@ html {
   /* Perfect subpixel rendering */
   -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
-  -webkit-perspective: 1000;
-  perspective: 1000;
+  /* -webkit-perspective: 1000; - REMOVED: Stacking Context issues */
+  /* perspective: 1000; */
+
+  /* ============================================
+     ZOOM SYNCHRONIZATION
+     Ensures all elements scale together consistently
+     ============================================ */
+
+  /* Support browser zoom - all rem units will scale together */
+  zoom: 1;
+  -moz-transform: scale(1);
+  -moz-transform-origin: 0 0;
+}
+
+/* ============================================
+   8K RESOLUTION SCALING (3840px+)
+   Premium typography and spacing adjustments
+   ============================================ */
+
+@media (min-width: 3840px) {
+  html {
+    font-size: 24px;
+    /* Scale up base font size for 8K */
+  }
+}
+
+@media (min-width: 5120px) {
+  html {
+    font-size: 28px;
+    /* Scale up further for 5K+ displays */
+  }
+}
+
+@media (min-width: 7680px) {
+  html {
+    font-size: 32px;
+    /* Maximum scaling for true 8K displays */
+  }
 }
 
 body {
@@ -208,7 +247,7 @@ body {
   color: var(--text-primary);
   background: var(--bg-primary);
   min-height: 100vh;
-  overflow-x: hidden;
+  /* overflow-x: hidden; - BLOCKS STICKY */
   transition: background-color var(--duration-normal) var(--ease-out),
     color var(--duration-normal) var(--ease-out);
 
@@ -217,14 +256,14 @@ body {
      ============================================ */
 
   /* GPU layer promotion for smooth scrolling */
-  transform: translate3d(0, 0, 0);
-  -webkit-transform: translate3d(0, 0, 0);
+  /* transform: translate3d(0, 0, 0); - BLOCKS STICKY/FIXED CONTEXT */
+  /* -webkit-transform: translate3d(0, 0, 0); */
 
   /* Hardware acceleration */
   -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
-  -webkit-perspective: 1000px;
-  perspective: 1000px;
+  /* -webkit-perspective: 1000px; - REMOVED: Stacking Context issues */
+  /* perspective: 1000px; */
 
   /* Optimized rendering */
   -webkit-font-smoothing: antialiased;
@@ -236,29 +275,29 @@ body {
   image-rendering: crisp-edges;
 
   /* Perfect layout containment */
-  contain: layout style paint;
+  /* contain: layout style paint; - FATAL: BREAKS FIXED POSITIONING */
 
   /* Ultra-smooth 120Hz/144Hz support */
   will-change: auto;
 }
 
 a {
-  color: var(--color-primary-500);
+  color: rgba(255, 255, 255, 0.85);
   text-decoration: none;
   transition: color var(--duration-fast) var(--ease-out);
 }
 
 a:hover {
-  color: var(--color-primary-600);
-  text-decoration: underline;
+  color: rgba(255, 255, 255, 0.85);
+  text-decoration: none;
 }
 
 [data-theme="dark"] a {
-  color: var(--color-primary-400);
+  color: rgba(255, 255, 255, 0.85);
 }
 
 [data-theme="dark"] a:hover {
-  color: var(--color-primary-300);
+  color: rgba(255, 255, 255, 0.85);
 }
 
 code,
@@ -275,24 +314,40 @@ img {
 
   /* ============================================
      8K IMAGE OPTIMIZATION
-     Ultra-sharp rendering for high-DPI displays
+     Ultra-sharp rendering for premium displays
      ============================================ */
 
-  /* Perfect image scaling (retina/4K/8K) */
+  /* Perfect image scaling for 8K displays */
   image-rendering: -webkit-optimize-contrast;
-  image-rendering: -moz-crisp-edges;
+  image-rendering: high-quality;
   image-rendering: crisp-edges;
+  image-rendering: pixelated;
+  /* For pixel-perfect scaling */
+
+  /* Modern browsers: smooth & high quality */
+  -ms-interpolation-mode: bicubic;
 
   /* GPU-accelerated rendering */
   transform: translateZ(0);
   -webkit-transform: translateZ(0);
 
-  /* Smooth loading transitions */
-  transition: opacity 0.3s ease, transform 0.3s ease;
+  /* Premium smooth transitions */
+  transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+    transform 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+    filter 0.3s ease;
 
-  /* Prevent layout shift */
+  /* Prevent layout shift and maintain quality */
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
+
+  /* Anti-aliasing for premium look */
+  -webkit-filter: contrast(1.02) saturate(1.05);
+  filter: contrast(1.02) saturate(1.05);
+}
+
+img:hover {
+  -webkit-filter: contrast(1.05) saturate(1.1);
+  filter: contrast(1.05) saturate(1.1);
 }
 
 button {
@@ -351,7 +406,7 @@ button {
   display: flex;
   min-height: 100vh;
   position: relative;
-  overflow-x: hidden;
+  /* overflow-x: hidden; - REMOVED: Breaks position: sticky */
 }
 
 /* Left Sidebar with Glassmorphism */
@@ -369,6 +424,18 @@ button {
   flex-direction: column;
   z-index: 100;
   overflow: hidden;
+}
+
+/* MOBILE: Hide sidebar by default on mobile */
+@media (max-width: 768px) {
+  .sidebar {
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+  }
+
+  .sidebar.mobile-open {
+    transform: translateX(0);
+  }
 }
 
 /* Dark theme sidebar glass */
@@ -406,6 +473,20 @@ button {
   font-size: 1.0625rem;
   line-height: 1.8;
   letter-spacing: -0.011em;
+}
+
+/* MOBILE: Full-width content with better padding */
+@media (max-width: 768px) {
+  .content {
+    max-width: 100%;
+    padding: var(--space-6) var(--space-4);
+    width: 100%;
+  }
+
+  .main {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
 }
 
 /* Right TOC with Glassmorphism */
@@ -496,6 +577,41 @@ button {
 
 .sidebar-toggle-left.collapsed svg {
   transform: rotate(180deg);
+}
+
+/* MOBILE: Hamburger menu button */
+@media (max-width: 768px) {
+  .sidebar-toggle-left {
+    left: 16px;
+    top: 20px;
+    transform: none;
+    width: 44px;
+    height: 44px;
+    z-index: 200;
+  }
+
+  .sidebar-toggle-left svg {
+    width: 24px;
+    height: 24px;
+  }
+
+  /* Show hamburger icon on mobile */
+  .mobile-menu-btn {
+    position: fixed;
+    top: 20px;
+    left: 16px;
+    z-index: 200;
+    width: 44px;
+    height: 44px;
+    background: var(--bg-elevated);
+    border: 1px solid var(--border-primary);
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: var(--shadow-lg);
+  }
 }
 
 .toc-toggle-right {

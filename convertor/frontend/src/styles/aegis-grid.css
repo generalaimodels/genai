@@ -1,0 +1,533 @@
+/**
+ * AGIon Grid System
+ * 
+ * ARCHITECTURE:
+ * - Fluid 12-column CSS Grid layout
+ * - Max-width: 1440px for optimal readability
+ * - Mobile-first responsive design
+ * - 24px gutters (3 * 8px baseline)
+ * - Supports 60/40, 50/50, 33/33/33 fractional layouts
+ * 
+ * PERFORMANCE:
+ * - Uses CSS Grid for modern, efficient layouts
+ * - No JavaScript required for responsive behavior
+ * - Minimal specificity for easy overrides
+ */
+
+/* ============================================
+   CONTAINER SYSTEM
+   ============================================ */
+
+.agion-container {
+  width: 100%;
+  max-width: 1920px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 24px;
+  padding-right: 24px;
+}
+
+@media (min-width: 768px) {
+  .agion-container {
+    padding-left: 32px;
+    padding-right: 32px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .agion-container {
+    padding-left: 40px;
+    padding-right: 40px;
+  }
+}
+
+@media (min-width: 1920px) {
+  .agion-container {
+    max-width: 2200px;
+    padding-left: 48px;
+    padding-right: 48px;
+  }
+}
+
+/* Full-width container (no max-width constraint) */
+.agion-container-fluid {
+  width: 100%;
+  padding-left: var(--agion-container-padding);
+  padding-right: var(--agion-container-padding);
+}
+
+@media (min-width: 1024px) {
+  .agion-container-fluid {
+    padding-left: var(--agion-container-padding-desktop);
+    padding-right: var(--agion-container-padding-desktop);
+  }
+}
+
+/* ============================================
+   12-COLUMN GRID SYSTEM
+   ============================================ */
+
+.agion-grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: var(--agion-spacing-lg);
+  /* 24px */
+  width: 100%;
+}
+
+/* Grid with smaller gap */
+.agion-grid-sm {
+  gap: var(--agion-spacing-md);
+  /* 16px */
+}
+
+/* Grid with larger gap */
+.agion-grid-lg {
+  gap: var(--agion-spacing-2xl);
+  /* 48px */
+}
+
+/* ============================================
+   COLUMN SPAN UTILITIES
+   ============================================ */
+
+/* Mobile: All columns stack to full width by default */
+.agion-col-1,
+.agion-col-2,
+.agion-col-3,
+.agion-col-4,
+.agion-col-5,
+.agion-col-6,
+.agion-col-7,
+.agion-col-8,
+.agion-col-9,
+.agion-col-10,
+.agion-col-11,
+.agion-col-12 {
+  grid-column: span 12;
+}
+
+/* Tablet and up: Responsive column spans */
+@media (min-width: 768px) {
+  .agion-col-1 {
+    grid-column: span 1;
+  }
+
+  .agion-col-2 {
+    grid-column: span 2;
+  }
+
+  .agion-col-3 {
+    grid-column: span 3;
+  }
+
+  .agion-col-4 {
+    grid-column: span 4;
+  }
+
+  .agion-col-5 {
+    grid-column: span 5;
+  }
+
+  .agion-col-6 {
+    grid-column: span 6;
+  }
+
+  .agion-col-7 {
+    grid-column: span 7;
+  }
+
+  .agion-col-8 {
+    grid-column: span 8;
+  }
+
+  .agion-col-9 {
+    grid-column: span 9;
+  }
+
+  .agion-col-10 {
+    grid-column: span 10;
+  }
+
+  .agion-col-11 {
+    grid-column: span 11;
+  }
+
+  .agion-col-12 {
+    grid-column: span 12;
+  }
+}
+
+/* ============================================
+   COMMON LAYOUT PATTERNS
+   ============================================ */
+
+/* 60/40 Asymmetric Split (Hero Section) */
+.agion-grid-60-40 {
+  display: grid;
+  grid-template-columns: 1fr;
+  /* Stack on mobile */
+  gap: var(--agion-spacing-lg);
+}
+
+@media (min-width: 768px) {
+  .agion-grid-60-40 {
+    grid-template-columns: 60% 40%;
+  }
+}
+
+/* 50/50 Split */
+.agion-grid-50-50 {
+  display: grid;
+  grid-template-columns: 1fr;
+  /* Stack on mobile */
+  gap: var(--agion-spacing-lg);
+}
+
+@media (min-width: 768px) {
+  .agion-grid-50-50 {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+/* 3-Column Equal Grid */
+.agion-grid-3-col {
+  display: grid;
+  grid-template-columns: 1fr;
+  /* Stack on mobile */
+  gap: var(--agion-spacing-lg);
+}
+
+@media (min-width: 768px) {
+  .agion-grid-3-col {
+    grid-template-columns: repeat(2, 1fr);
+    /* 2 cols on tablet */
+  }
+}
+
+@media (min-width: 1024px) {
+  .agion-grid-3-col {
+    grid-template-columns: repeat(3, 1fr);
+    /* 3 cols on desktop */
+  }
+}
+
+/* 4-Column Equal Grid */
+.agion-grid-4-col {
+  display: grid;
+  grid-template-columns: 1fr;
+  /* Stack on mobile */
+  gap: var(--agion-spacing-lg);
+}
+
+@media (min-width: 640px) {
+  .agion-grid-4-col {
+    grid-template-columns: repeat(2, 1fr);
+    /* 2 cols on small tablet */
+  }
+}
+
+@media (min-width: 1024px) {
+  .agion-grid-4-col {
+    grid-template-columns: repeat(4, 1fr);
+    /* 4 cols on desktop */
+  }
+}
+
+/* 2x2 Grid (Values Cards) */
+.agion-grid-2x2 {
+  display: grid;
+  grid-template-columns: 1fr;
+  /* Stack on mobile */
+  gap: var(--agion-spacing-lg);
+}
+
+@media (min-width: 640px) {
+  .agion-grid-2x2 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* 3x2 Grid (Research Cards) */
+.agion-grid-3x2 {
+  display: grid;
+  grid-template-columns: 1fr;
+  /* Stack on mobile */
+  gap: var(--agion-spacing-lg);
+}
+
+@media (min-width: 768px) {
+  .agion-grid-3x2 {
+    grid-template-columns: repeat(2, 1fr);
+    /* 2 cols on tablet */
+  }
+}
+
+@media (min-width: 1024px) {
+  .agion-grid-3x2 {
+    grid-template-columns: repeat(3, 1fr);
+    /* 3 cols on desktop */
+  }
+}
+
+/* ============================================
+   FLEXBOX UTILITIES (for Navigation, Headers)
+   ============================================ */
+
+.agion-flex {
+  display: flex;
+}
+
+.agion-flex-row {
+  display: flex;
+  flex-direction: row;
+}
+
+.agion-flex-col {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Alignment */
+.agion-justify-start {
+  justify-content: flex-start;
+}
+
+.agion-justify-center {
+  justify-content: center;
+}
+
+.agion-justify-end {
+  justify-content: flex-end;
+}
+
+.agion-justify-between {
+  justify-content: space-between;
+}
+
+.agion-justify-around {
+  justify-content: space-around;
+}
+
+.agion-items-start {
+  align-items: flex-start;
+}
+
+.agion-items-center {
+  align-items: center;
+}
+
+.agion-items-end {
+  align-items: flex-end;
+}
+
+.agion-items-stretch {
+  align-items: stretch;
+}
+
+/* Gap utilities */
+.agion-gap-xs {
+  gap: var(--agion-spacing-xs);
+}
+
+.agion-gap-sm {
+  gap: var(--agion-spacing-sm);
+}
+
+.agion-gap-md {
+  gap: var(--agion-spacing-md);
+}
+
+.agion-gap-lg {
+  gap: var(--agion-spacing-lg);
+}
+
+.agion-gap-xl {
+  gap: var(--agion-spacing-xl);
+}
+
+.agion-gap-2xl {
+  gap: var(--agion-spacing-2xl);
+}
+
+/**
+ * Grid System - AEGIS AI Landing Page
+ * 12-column responsive grid with 8px baseline
+ */
+
+/* ============================================
+   CONTAINER
+   ============================================ */
+
+.agion-container {
+  width: 100%;
+  max-width: 1600px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 32px;
+  padding-right: 32px;
+}
+
+@media (min-width: 768px) {
+  .agion-container {
+    padding-left: 48px;
+    padding-right: 48px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .agion-container {
+    padding-left: 64px;
+    padding-right: 64px;
+  }
+}
+
+@media (min-width: 1920px) {
+  .agion-container {
+    max-width: 1800px;
+    padding-left: 80px;
+    padding-right: 80px;
+  }
+}
+
+/* 8K Ultra Wide */
+@media (min-width: 3840px) {
+  .agion-container {
+    max-width: 3200px;
+    padding-left: 120px;
+    padding-right: 120px;
+  }
+}
+
+/* Larger section spacing (hero, major sections) */
+.agion-section-lg {
+  padding-top: var(--agion-spacing-4xl);
+  padding-bottom: var(--agion-spacing-4xl);
+}
+
+/* ============================================
+   SECTION SPACING
+   ============================================ */
+
+/* Vertical section spacing (consistent rhythm) */
+.agion-section {
+  padding-top: var(--agion-spacing-3xl);
+  /* 64px mobile */
+  padding-bottom: var(--agion-spacing-3xl);
+}
+
+@media (min-width: 768px) {
+  .agion-section {
+    padding-top: var(--agion-spacing-4xl);
+    /* 80px tablet */
+    padding-bottom: var(--agion-spacing-4xl);
+  }
+}
+
+@media (min-width: 1024px) {
+  .agion-section {
+    padding-top: var(--agion-spacing-5xl);
+    /* 96px desktop */
+    padding-bottom: var(--agion-spacing-5xl);
+  }
+}
+
+/* Larger section spacing (hero, major sections) */
+.agion-section-lg {
+  padding-top: var(--agion-spacing-4xl);
+  padding-bottom: var(--agion-spacing-4xl);
+}
+
+@media (min-width: 768px) {
+  .agion-section-lg {
+    padding-top: var(--agion-spacing-5xl);
+    padding-bottom: var(--agion-spacing-5xl);
+  }
+}
+
+@media (min-width: 1024px) {
+  .agion-section-lg {
+    padding-top: var(--agion-spacing-6xl);
+    /* 128px desktop */
+    padding-bottom: var(--agion-spacing-6xl);
+  }
+}
+
+/* ============================================
+   8K RESOLUTION OPTIMIZATIONS
+   ============================================ */
+
+@media (min-width: 1920px) {
+
+  /* Increase spacing for ultra-high resolution displays */
+  .agion-grid,
+  .agion-grid-60-40,
+  .agion-grid-50-50,
+  .agion-grid-3-col,
+  .agion-grid-4-col,
+  .agion-grid-2x2,
+  .agion-grid-3x2 {
+    gap: var(--agion-spacing-2xl);
+    /* 48px */
+  }
+
+  /* Increase section spacing */
+  .agion-section {
+    padding-top: 120px;
+    padding-bottom: 120px;
+  }
+
+  .agion-section-lg {
+    padding-top: 160px;
+    padding-bottom: 160px;
+  }
+}
+
+/* ============================================
+   CONTENT WIDTH CONSTRAINTS
+   ============================================ */
+
+/* Optimal prose width for readability */
+.agion-prose {
+  max-width: var(--agion-content-width-prose);
+}
+
+.agion-prose-narrow {
+  max-width: var(--agion-content-width-narrow);
+}
+
+.agion-prose-wide {
+  max-width: var(--agion-content-width-wide);
+}
+
+/* Center content */
+.agion-mx-auto {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* ============================================
+   RESPONSIVE VISIBILITY
+   ============================================ */
+
+/* Hide on mobile, show on desktop */
+.agion-hidden-mobile {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .agion-hidden-mobile {
+    display: block;
+  }
+}
+
+/* Show on mobile, hide on desktop */
+.agion-hidden-desktop {
+  display: block;
+}
+
+@media (min-width: 768px) {
+  .agion-hidden-desktop {
+    display: none;
+  }
+}

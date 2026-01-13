@@ -1,0 +1,74 @@
+/**
+ * Card Component Styles - AGIon Design System
+ */
+
+/* ============================================
+   BASE CARD STYLES
+   ============================================ */
+
+.agion-card {
+    border-radius: var(--agion-radius-lg);
+    transition: transform var(--agion-duration-fast) var(--agion-ease-default),
+        border-color var(--agion-duration-fast) var(--agion-ease-default),
+        box-shadow var(--agion-duration-fast) var(--agion-ease-default);
+}
+
+/* ============================================
+   PADDING VARIANTS
+   ============================================ */
+
+.agion-card--padding-sm {
+    padding: var(--agion-spacing-md);
+}
+
+.agion-card--padding-md {
+    padding: var(--agion-spacing-lg);
+}
+
+.agion-card--padding-lg {
+    padding: var(--agion-spacing-xl);
+}
+
+/* ============================================
+   STYLE VARIANTS
+   ============================================ */
+
+/* Default card - solid background */
+.agion-card--default {
+    background: var(--agion-color-bg-secondary);
+    border: 1px solid var(--agion-color-border-subtle);
+}
+
+/* Glass card - glassmorphism effect */
+.agion-card--glass {
+    background: var(--agion-glass-bg);
+    border: 1px solid var(--agion-glass-border);
+    backdrop-filter: var(--agion-glass-blur) saturate(180%);
+    -webkit-backdrop-filter: var(--agion-glass-blur) saturate(180%);
+}
+
+/* ============================================
+   HOVER EFFECTS
+   ============================================ */
+
+.agion-card--hoverable {
+    will-change: transform;
+}
+
+.agion-card--hoverable:hover {
+    transform: translateY(-4px);
+    border-color: var(--agion-color-border-accent);
+    box-shadow: var(--agion-shadow-xl);
+}
+
+/* ============================================
+   CLICKABLE STATE
+   ============================================ */
+
+.agion-card--clickable {
+    cursor: pointer;
+}
+
+.agion-card--clickable:active {
+    transform: translateY(-2px);
+}

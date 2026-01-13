@@ -1,0 +1,361 @@
+/**
+ * Hero Section Styles - AGIon Landing Page
+ * 
+ * PERFORMANCE: GPU-accelerated animations, no layout thrashing
+ * RESPONSIVE: Mobile-first with 768px breakpoint
+ * 8K OPTIMIZED: Scales typography and spacing for ultra-high-res displays
+ */
+
+/* ============================================
+   HERO SECTION BASE
+   ============================================ */
+
+.hero-section {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    position: relative;
+    padding-top: var(--agion-spacing-5xl);
+    padding-bottom: var(--agion-spacing-5xl);
+    background: var(--agion-color-bg-primary);
+}
+
+/* ============================================
+   HERO GRID LAYOUT
+   ============================================ */
+
+.hero-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--agion-spacing-5xl);
+    align-items: center;
+}
+
+@media (min-width: 768px) {
+    .hero-grid {
+        grid-template-columns: 60% 40%;
+        gap: var(--agion-spacing-4xl);
+    }
+}
+
+@media (min-width: 1024px) {
+    .hero-grid {
+        grid-template-columns: 58fr 42fr;
+        gap: var(--agion-spacing-4xl);
+    }
+}
+
+/* 8K Ultra Premium Scaling */
+@media (min-width: 3840px) {
+    .hero-section {
+        padding-top: 120px;
+        padding-bottom: 120px;
+    }
+
+    .hero-grid {
+        gap: 120px;
+    }
+}
+
+@media (min-width: 1920px) {
+    .hero-grid {
+        gap: var(--agion-spacing-5xl);
+        /* 96px for 8K */
+    }
+}
+
+/* ============================================
+   LEFT ZONE - TEXT CONTENT
+   ============================================ */
+
+.hero-left {
+    display: flex;
+    flex-direction: column;
+    gap: var(--agion-spacing-lg);
+}
+
+.hero-eyebrow {
+    /* Styles inherited from .agion-eyebrow in typography.css */
+    opacity: 0;
+    animation: agion-fadeInUp 0.6s var(--agion-ease-default) 0.1s forwards;
+    color: var(--agion-color-accent-gold);
+    font-size: 13px;
+    margin-bottom: 24px;
+    letter-spacing: 0.18em;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+@media (min-width: 3840px) {
+    .hero-eyebrow {
+        font-size: 20px;
+        margin-bottom: 56px;
+    }
+}
+
+.hero-headline {
+    opacity: 0;
+    animation: agion-fadeInUp 0.6s var(--agion-ease-default) 0.2s forwards;
+    font-size: clamp(48px, 7vw, 96px);
+    line-height: 1.08;
+    letter-spacing: -0.04em;
+    font-weight: 700;
+    margin-bottom: 32px;
+    max-width: 20ch;
+}
+
+@media (min-width: 3840px) {
+    .hero-headline {
+        font-size: 140px;
+        margin-bottom: 80px;
+    }
+}
+
+.hero-subheadline {
+    max-width: 55ch;
+    color: rgba(255, 255, 255, 0.75);
+    opacity: 0;
+    animation: agion-fadeInUp 0.6s var(--agion-ease-default) 0.3s forwards;
+    font-size: 20px;
+    line-height: 1.65;
+    font-weight: 400;
+    margin-bottom: 40px;
+}
+
+@media (min-width: 3840px) {
+    .hero-subheadline {
+        font-size: 36px;
+        line-height: 1.6;
+        max-width: 60ch;
+    }
+}
+
+/* ============================================
+   ACTION CLUSTER
+   ============================================ */
+
+.hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--agion-spacing-md);
+    margin-top: var(--agion-spacing-sm);
+    opacity: 0;
+    animation: agion-fadeInUp 0.6s var(--agion-ease-default) 0.4s forwards;
+}
+
+.hero-link {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--agion-spacing-xs);
+    color: var(--agion-color-accent-gold);
+    font-size: 15px;
+    font-weight: 500;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.hero-link:hover {
+    color: var(--agion-color-accent-gold-light);
+    transform: translateX(4px);
+}
+
+/* 8K Scaling */
+@media (min-width: 3840px) {
+    .hero-link {
+        font-size: 24px;
+        gap: 16px;
+    }
+}
+
+.hero-link-icon {
+    transition: transform var(--agion-duration-fast) var(--agion-ease-default);
+}
+
+.hero-link:hover .hero-link-icon {
+    transform: translateX(4px);
+}
+
+/* ============================================
+   PROOF POINTS
+   ============================================ */
+
+.hero-proof-points {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--agion-spacing-xl);
+    margin-top: var(--agion-spacing-md);
+    opacity: 0;
+    animation: agion-fadeInUp 0.6s var(--agion-ease-default) 0.5s forwards;
+}
+
+.proof-item {
+    display: flex;
+    align-items: center;
+    gap: var(--agion-spacing-xs);
+    color: var(--agion-color-text-secondary);
+    font-size: 14px;
+}
+
+.proof-icon {
+    color: var(--agion-color-accent-gold);
+    flex-shrink: 0;
+}
+
+/* 8K Scaling */
+@media (min-width: 3840px) {
+    .proof-item {
+        font-size: 22px;
+        gap: 16px;
+    }
+}
+
+/* ============================================
+   RIGHT ZONE - COMPANION CARD
+   ============================================ */
+
+.hero-right {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    animation: agion-fadeInUp 0.6s var(--agion-ease-default) 0.4s forwards;
+}
+
+.hero-companion-card {
+    width: 100%;
+    max-width: 480px;
+    padding: var(--agion-spacing-2xl);
+    border-radius: var(--agion-radius-2xl);
+    background: rgba(20, 20, 20, 0.8);
+    border: 1px solid rgba(197, 165, 114, 0.25);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4),
+        0 4px 12px rgba(0, 0, 0, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.hero-companion-card:hover {
+    border-color: rgba(197, 165, 114, 0.4);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5),
+        0 6px 16px rgba(0, 0, 0, 0.25),
+        0 0 40px rgba(197, 165, 114, 0.15),
+        inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    transform: translateY(-2px);
+}
+
+.companion-title {
+    font-size: 22px;
+    font-weight: var(--agion-font-weight-bold);
+    margin-bottom: var(--agion-spacing-xl);
+    color: var(--agion-color-text-primary);
+    letter-spacing: -0.01em;
+}
+
+/* ============================================
+   COMPANION LIST
+   ============================================ */
+
+.companion-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--agion-spacing-sm);
+    margin-bottom: var(--agion-spacing-lg);
+}
+
+.companion-item {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--agion-spacing-md);
+    padding: var(--agion-spacing-md);
+    border-radius: var(--agion-radius-md);
+    background: rgba(10, 10, 10, 0.4);
+    border: 1px solid rgba(197, 165, 114, 0.15);
+    transition: all var(--agion-duration-fast) var(--agion-ease-default);
+    cursor: pointer;
+}
+
+.companion-item:hover {
+    background: rgba(197, 165, 114, 0.08);
+    border-color: rgba(197, 165, 114, 0.4);
+    transform: translateX(4px);
+}
+
+.companion-icon {
+    color: var(--agion-color-accent-gold);
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.companion-item span {
+    font-size: var(--agion-font-size-base);
+    color: var(--agion-color-text-primary);
+    line-height: var(--agion-line-height-snug);
+}
+
+.companion-footer {
+    font-size: var(--agion-font-size-xs);
+    color: var(--agion-color-text-muted);
+    text-align: center;
+    padding-top: var(--agion-spacing-md);
+    border-top: 1px solid rgba(197, 165, 114, 0.15);
+}
+
+/* ============================================
+   MOBILE RESPONSIVE
+   ============================================ */
+
+@media (max-width: 767px) {
+    .hero-section {
+        min-height: auto;
+        padding-top: var(--agion-spacing-3xl);
+    }
+
+    .hero-headline {
+        font-size: var(--agion-font-size-3xl);
+        /* 39px on mobile */
+    }
+
+    .hero-actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .hero-actions .agion-button {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .hero-proof-points {
+        flex-direction: column;
+        gap: var(--agion-spacing-md);
+    }
+}
+
+/* ============================================
+   8K OPTIMIZATION
+   ============================================ */
+
+@media (min-width: 1920px) {
+    .hero-headline {
+        font-size: 84px;
+        line-height: 1.1;
+    }
+
+    .hero-subheadline {
+        font-size: var(--agion-font-size-xl);
+        /* 25px */
+    }
+
+    .hero-companion-card {
+        max-width: 560px;
+        padding: var(--agion-spacing-2xl);
+    }
+
+    .companion-title {
+        font-size: var(--agion-font-size-2xl);
+        /* 31px */
+    }
+}

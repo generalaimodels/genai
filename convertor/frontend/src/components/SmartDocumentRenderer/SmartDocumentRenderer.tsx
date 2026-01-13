@@ -132,7 +132,7 @@ export function SmartDocumentRenderer({
 
                     // Update page title
                     const filename = path.split('/').pop() || 'Code';
-                    window.document.title = `${filename} | Docs`;
+                    window.document.title = `${filename} | AEGIS AI`;
 
                     // Code files don't have TOC headings (use symbols instead)
                     onHeadingsChange?.([]);

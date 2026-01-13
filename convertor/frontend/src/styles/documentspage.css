@@ -36,10 +36,10 @@
    ======================================== */
 
 .docs-header {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
     height: var(--docs-header-height);
     background: var(--bg-elevated, rgba(255, 255, 255, 0.95));
     backdrop-filter: blur(12px);
@@ -51,13 +51,15 @@
     padding: 0 2rem;
     z-index: 100;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    /* width: 100vw; -- REMOVED: causing potential scrollbar issues */
 }
 
 .docs-header-left,
 .docs-header-right {
     display: flex;
     align-items: center;
-    gap: 1rem;
+    gap: 2.5rem;
+    /* Increased from 1rem */
 }
 
 .docs-header-btn {
@@ -74,6 +76,8 @@
     transition: all 0.2s ease;
     font-size: 0.9rem;
     font-family: inherit;
+    flex-shrink: 0;
+    /* Prevent button from squishing */
 }
 
 .docs-header-btn:hover {
@@ -96,6 +100,10 @@
     font-weight: 600;
     font-size: 1.1rem;
     transition: opacity 0.2s;
+    flex-shrink: 0;
+    /* Prevent logo container from squishing */
+    margin-right: 1rem;
+    /* Force spacing from title */
 }
 
 .docs-logo:hover {
@@ -110,6 +118,32 @@
 .docs-logo-text {
     font-family: 'Space Grotesk', sans-serif;
     letter-spacing: -0.02em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 600px;
+    /* Limit width on desktop */
+}
+
+/* Responsive adjustment for long brand names */
+@media (max-width: 1024px) {
+    .docs-logo-text {
+        max-width: 400px;
+        font-size: 0.9rem !important;
+    }
+}
+
+@media (max-width: 768px) {
+    .docs-logo-text {
+        max-width: 200px;
+        /* Aggressively truncate on mobile */
+        font-size: 0.85rem !important;
+    }
+
+    .docs-header-left {
+        gap: 1.5rem;
+        /* increased separation on mobile */
+    }
 }
 
 .search-btn {
@@ -153,7 +187,7 @@
     overflow-x: hidden;
     display: flex;
     flex-direction: column;
-    z-index: 50;
+    z-index: 90;
 }
 
 .docs-sidebar-left {
@@ -165,6 +199,45 @@
     width: var(--docs-toc-width);
     border-right: none;
     border-left: 1px solid var(--border-primary, rgba(0, 0, 0, 0.1));
+}
+
+/* ========================================
+   Desktop Sticky Layout
+   Refactor transparency: Using sticky positioning
+   prevents footer overlap
+   ======================================== */
+@media (min-width: 1025px) {
+    .docs-sidebar {
+        position: sticky;
+        top: var(--docs-header-height);
+        height: calc(100vh - var(--docs-header-height));
+        /* Remove fixed positioning constraints */
+        bottom: auto;
+        left: auto;
+        right: auto;
+        /* Border handled by specific classes */
+        border-right: none;
+    }
+
+    .docs-sidebar-left {
+        /* Flex item */
+        flex-shrink: 0;
+        border-right: 1px solid var(--border-primary, rgba(0, 0, 0, 0.1));
+    }
+
+    .docs-sidebar-right {
+        /* Flex item */
+        flex-shrink: 0;
+        border-left: 1px solid var(--border-primary, rgba(0, 0, 0, 0.1));
+    }
+
+    /* Remove manual margins since we are using flexbox flow */
+    .docs-main,
+    .docs-page[data-sidebar-collapsed="true"] .docs-main,
+    .docs-page[data-toc-collapsed="true"] .docs-main {
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+    }
 }
 
 /* ========================================
@@ -326,7 +399,7 @@
     /* Buttery smooth transitions */
     transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
 
-    z-index: 60;
+    z-index: 95;
     opacity: 0.9;
 }
 
@@ -427,7 +500,7 @@
     /* Buttery smooth transitions */
     transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
 
-    z-index: 70;
+    z-index: 95;
     /* Above all content */
     opacity: 0.9;
 }
@@ -518,7 +591,7 @@
     /* Keep toggle button visible - user can manually open TOC as overlay */
     .toc-toggle-btn {
         display: flex;
-        z-index: 60;
+        z-index: 95;
         /* Above potentially overlapping content */
     }
 }
@@ -556,7 +629,16 @@
     }
 
     .docs-main {
-        padding: 1.5rem 1rem;
+        padding: 1.5rem 1rem !important;
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+        width: 100% !important;
+        display: block !important;
+    }
+
+    .docs-content {
+        width: 100% !important;
+        max-width: 100% !important;
     }
 
     .search-btn-label {
@@ -636,7 +718,7 @@
     box-shadow:
         0 8px 24px rgba(249, 115, 22, 0.25),
         0 4px 8px rgba(0, 0, 0, 0.1);
-    z-index: 9999;
+    z-index: 2000;
     animation: slideInUp 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
@@ -691,7 +773,7 @@
         0 8px 24px rgba(16, 185, 129, 0.25),
         0 4px 8px rgba(0, 0, 0, 0.1),
         inset 0 1px 0 rgba(255, 255, 255, 0.2);
-    z-index: 9999;
+    z-index: 2000;
 }
 
 .update-notification svg {

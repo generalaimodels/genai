@@ -1,0 +1,413 @@
+/**
+ * AGIon Typography System
+ * 
+ * HIERARCHY:
+ * - Headings: Inter/Geist (geometric sans)
+ * - Body: Inter with optimal readability
+ * - Mono: JetBrains Mono for code/data
+ * - Serif: Merriweather for mission statements
+ * 
+ * SCALE: 1.25 type scale
+ * BASE: 16px (1rem)
+ */
+
+/* ============================================
+   BASE TYPOGRAPHY
+   ============================================ */
+
+body {
+    font-family: var(--agion-font-primary);
+    font-size: var(--agion-font-size-base);
+    font-weight: var(--agion-font-weight-normal);
+    line-height: var(--agion-line-height-normal);
+    color: var(--agion-color-text-primary);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+}
+
+/* ============================================
+   HEADING STYLES
+   ============================================ */
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: var(--agion-font-heading);
+    font-weight: var(--agion-font-weight-bold);
+    line-height: var(--agion-line-height-tight);
+    letter-spacing: var(--agion-letter-spacing-tight);
+    color: var(--agion-color-text-primary);
+    margin: 0;
+    scroll-margin-top: calc(64px + 2rem);
+}
+
+h1 {
+    font-size: var(--agion-font-size-4xl);
+    /* 49px mobile */
+    line-height: 1.1;
+}
+
+@media (min-width: 768px) {
+    h1 {
+        font-size: var(--agion-font-size-5xl);
+        /* 61px tablet */
+    }
+}
+
+@media (min-width: 1024px) {
+    h1 {
+        font-size: var(--agion-font-size-6xl);
+        /* 76px desktop */
+    }
+}
+
+h2 {
+    font-size: var(--agion-font-size-2xl);
+    /* 31px mobile */
+}
+
+@media (min-width: 768px) {
+    h2 {
+        font-size: var(--agion-font-size-3xl);
+        /* 39px desktop */
+    }
+}
+
+h3 {
+    font-size: var(--agion-font-size-xl);
+    /* 25px mobile */
+}
+
+@media (min-width: 768px) {
+    h3 {
+        font-size: var(--agion-font-size-2xl);
+        /* 31px desktop */
+    }
+}
+
+h4 {
+    font-size: var(--agion-font-size-lg);
+    /* 20px mobile */
+}
+
+@media (min-width: 768px) {
+    h4 {
+        font-size: var(--agion-font-size-xl);
+        /* 25px desktop */
+    }
+}
+
+h5 {
+    font-size: var(--agion-font-size-md);
+    /* 18px */
+    font-weight: var(--agion-font-weight-semibold);
+}
+
+h6 {
+    font-size: var(--agion-font-size-base);
+    /* 16px */
+    font-weight: var(--agion-font-weight-semibold);
+    text-transform: uppercase;
+    letter-spacing: var(--agion-letter-spacing-wide);
+}
+
+/* ============================================
+   PARAGRAPH & BODY TEXT
+   ============================================ */
+
+p {
+    margin: 0 0 var(--agion-spacing-md) 0;
+    line-height: var(--agion-line-height-relaxed);
+}
+
+p:last-child {
+    margin-bottom: 0;
+}
+
+.agion-lead {
+    font-size: var(--agion-font-size-lg);
+    /* 20px */
+    line-height: var(--agion-line-height-relaxed);
+    font-weight: var(--agion-font-weight-normal);
+}
+
+.agion-small {
+    font-size: var(--agion-font-size-sm);
+    /* 13px */
+}
+
+.agion-xs {
+    font-size: var(--agion-font-size-xs);
+    /* 11px */
+}
+
+/* ============================================
+   SPECIAL TEXT STYLES
+   ============================================ */
+
+/* Eyebrow text (all caps, mono, wide tracking) */
+.agion-eyebrow {
+    font-family: var(--agion-font-mono);
+    font-size: var(--agion-font-size-xs);
+    /* 11px */
+    font-weight: var(--agion-font-weight-medium);
+    text-transform: uppercase;
+    letter-spacing: var(--agion-letter-spacing-widest);
+    /* 0.2em */
+    color: var(--agion-color-text-muted);
+}
+
+/* Gradient text (for "AGI" emphasis) */
+.agion-gradient-text {
+    background: var(--agion-color-accent-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* Monospace text (for code, data, dates) */
+.agion-mono {
+    font-family: var(--agion-font-mono);
+    font-size: 0.9em;
+    /* Slightly smaller than surrounding text */
+    letter-spacing: -0.01em;
+}
+
+/* Serif text (for mission statements) */
+.agion-serif {
+    font-family: var(--agion-font-serif);
+    font-size: var(--agion-font-size-lg);
+    line-height: var(--agion-line-height-relaxed);
+    font-weight: var(--agion-font-weight-normal);
+}
+
+/* ============================================
+   TEXT UTILITIES
+   ============================================ */
+
+/* Alignment */
+.agion-text-left {
+    text-align: left;
+}
+
+.agion-text-center {
+    text-align: center;
+}
+
+.agion-text-right {
+    text-align: right;
+}
+
+/* Color */
+.agion-text-primary {
+    color: var(--agion-color-text-primary);
+}
+
+.agion-text-secondary {
+    color: var(--agion-color-text-secondary);
+}
+
+.agion-text-muted {
+    color: var(--agion-color-text-muted);
+}
+
+.agion-text-accent {
+    color: var(--agion-color-accent-purple);
+}
+
+/* Weight */
+.agion-font-normal {
+    font-weight: var(--agion-font-weight-normal);
+}
+
+.agion-font-medium {
+    font-weight: var(--agion-font-weight-medium);
+}
+
+.agion-font-semibold {
+    font-weight: var(--agion-font-weight-semibold);
+}
+
+.agion-font-bold {
+    font-weight: var(--agion-font-weight-bold);
+}
+
+/* Transform */
+.agion-uppercase {
+    text-transform: uppercase;
+}
+
+.agion-lowercase {
+    text-transform: lowercase;
+}
+
+.agion-capitalize {
+    text-transform: capitalize;
+}
+
+/* Truncation */
+.agion-truncate {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.agion-line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.agion-line-clamp-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* ============================================
+   LINK STYLES
+   ============================================ */
+
+a {
+    color: rgba(255, 255, 255, 0.85);
+    text-decoration: none;
+    transition: color var(--agion-duration-fast) var(--agion-ease-default);
+}
+
+a:hover {
+    color: rgba(255, 255, 255, 0.85);
+}
+
+a:focus-visible {
+    outline: 2px solid rgba(255, 255, 255, 0.5);
+    outline-offset: 2px;
+    border-radius: 2px;
+}
+
+/* ============================================
+   LIST STYLES
+   ============================================ */
+
+ul,
+ol {
+    margin: 0 0 var(--agion-spacing-md) 0;
+    padding-left: var(--agion-spacing-lg);
+}
+
+ul:last-child,
+ol:last-child {
+    margin-bottom: 0;
+}
+
+li {
+    margin-bottom: var(--agion-spacing-xs);
+}
+
+li:last-child {
+    margin-bottom: 0;
+}
+
+/* Custom list style for mono bullets */
+.agion-list-mono {
+    list-style: none;
+    padding-left: 0;
+}
+
+.agion-list-mono li {
+    font-family: var(--agion-font-mono);
+    font-size: var(--agion-font-size-sm);
+    padding-left: var(--agion-spacing-md);
+    position: relative;
+}
+
+.agion-list-mono li::before {
+    content: '-';
+    position: absolute;
+    left: 0;
+    color: var(--agion-color-text-muted);
+}
+
+/* ============================================
+   BLOCKQUOTE
+   ============================================ */
+
+blockquote {
+    margin: var(--agion-spacing-xl) 0;
+    padding-left: var(--agion-spacing-lg);
+    border-left: 3px solid var(--agion-color-accent-purple);
+    font-style: italic;
+    color: var(--agion-color-text-secondary);
+}
+
+/* ============================================
+   CODE & PRE
+   ============================================ */
+
+code {
+    font-family: var(--agion-font-mono);
+    font-size: 0.875em;
+    background: var(--agion-color-bg-secondary);
+    padding: 2px 6px;
+    border-radius: var(--agion-radius-sm);
+    color: var(--agion-color-accent-purple);
+}
+
+pre {
+    font-family: var(--agion-font-mono);
+    font-size: var(--agion-font-size-sm);
+    background: var(--agion-color-bg-secondary);
+    padding: var(--agion-spacing-md);
+    border-radius: var(--agion-radius-lg);
+    overflow-x: auto;
+    margin: var(--agion-spacing-lg) 0;
+}
+
+pre code {
+    background: none;
+    padding: 0;
+    color: var(--agion-color-text-primary);
+}
+
+/* ============================================
+   SELECTION
+   ============================================ */
+
+::selection {
+    background: var(--agion-color-accent-purple);
+    color: white;
+}
+
+::-moz-selection {
+    background: var(--agion-color-accent-purple);
+    color: white;
+}
+
+/* ============================================
+   RESPONSIVE TYPOGRAPHY (8K)
+   ============================================ */
+
+@media (min-width: 1920px) {
+    h1 {
+        font-size: 84px;
+        /* Scale up for 8K displays */
+    }
+
+    h2 {
+        font-size: 49px;
+    }
+
+    h3 {
+        font-size: 39px;
+    }
+
+    .agion-lead {
+        font-size: var(--agion-font-size-xl);
+        /* 25px */
+    }
+}

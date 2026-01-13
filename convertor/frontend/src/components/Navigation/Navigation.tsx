@@ -62,7 +62,7 @@ interface NavGroupProps {
 const NavGroup = memo(function NavGroup({
     node,
     onNavigate,
-    defaultExpanded = true,
+    defaultExpanded = false,
 }: NavGroupProps): React.ReactElement {
     const [isExpanded, setIsExpanded] = React.useState(defaultExpanded);
     const currentPath = useCurrentPath();
