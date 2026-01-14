@@ -36,6 +36,11 @@ try:
     from core.file_watcher import FileWatcher
     from core.websocket_manager import WebSocketManager
     from api import router, init_preview_cache
+
+    # Git Pipeline Imports
+    from git_pipeline.router import router as git_router
+    from git_pipeline.db import GitRepoDatabase
+    from git_pipeline.service import GitService
 except ImportError:
     from .core import MarkdownParser, DocumentScanner, SearchEngine
     from .core.database import DocumentDatabase, DocumentMetadata
@@ -45,6 +50,11 @@ except ImportError:
     from .core.file_watcher import FileWatcher
     from .core.websocket_manager import WebSocketManager
     from .api import router, init_preview_cache
+
+    # Git Pipeline Imports
+    from .git_pipeline.router import router as git_router
+    from .git_pipeline.db import GitRepoDatabase
+    from .git_pipeline.service import GitService
 
 
 @asynccontextmanager
@@ -60,6 +70,11 @@ async def lifespan(app: FastAPI):
     db_path.parent.mkdir(exist_ok=True)
     db = DocumentDatabase(db_path)
     await db.connect()
+
+    # Initialize Git Pipeline Database
+    git_db_path = Path("data/git_repos.db")
+    git_db = GitRepoDatabase(git_db_path)
+    await git_db.connect()
     
     # Initialize task queue
     queue = DAGTaskQueue(max_workers=4)
@@ -105,6 +120,10 @@ async def lifespan(app: FastAPI):
     app.state.streaming_loader = streaming_loader
     app.state.hash_index = hash_index
     app.state.ws_manager = ws_manager
+
+    # Initialize Git Service
+    git_service = GitService(git_db, data_path)
+    app.state.git_service = git_service
     
     # Initialize preview cache for editor (100MB LRU)
     init_preview_cache(capacity_mb=100)
@@ -361,6 +380,7 @@ async def lifespan(app: FastAPI):
     for w in workers:
         w.cancel()
     await db.close()
+    await git_db.close()
     
     print("✓ Shutdown complete")
 
@@ -385,6 +405,7 @@ app.add_middleware(GZipMiddleware, minimum_size=1000)
 
 # Include routes
 app.include_router(router)
+app.include_router(git_router)
 
 
 if __name__ == "__main__":

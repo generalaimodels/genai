@@ -1,0 +1,804 @@
+/**
+ * Git Viewer Premium Layout System
+ * ==================================
+ * 3-Column Adaptive Grid Architecture
+ * 
+ * Layout:
+ * - Top Bar: 64px, persistent, URL + CTA
+ * - Left Panel: 280px, collapsible file tree
+ * - Center Panel: 60-70%, readability-optimized content
+ * - Right Panel: 280px, contextual metadata
+ * 
+ * Design Principles:
+ * - Center content is visual anchor
+ * - WCAG AA+ contrast (7:1 for body text)
+ * - Soft elevation, no hard borders
+ * - 80-90 char optimal line length
+ */
+
+/* ============================================
+   CSS CUSTOM PROPERTIES - Layout Tokens
+   ============================================ */
+
+.git-viewer {
+  --gv-topbar-height: 64px;
+  --gv-panel-left-width: 280px;
+  --gv-panel-right-width: 280px;
+  --gv-content-max-width: 900px;
+  --gv-content-line-length: 85ch;
+  --gv-panel-gap: 0;
+  --gv-panel-padding: 20px;
+
+  /* Elevated surface colors for panels */
+  --gv-surface-base: #0A0A0A;
+  --gv-surface-elevated: #111111;
+  --gv-surface-panel: #141414;
+  --gv-border-subtle: rgba(255, 255, 255, 0.06);
+  --gv-border-panel: rgba(197, 165, 114, 0.12);
+}
+
+/* ============================================
+   MAIN LAYOUT CONTAINER
+   ============================================ */
+
+.git-viewer {
+  display: grid;
+  grid-template-columns: var(--gv-panel-left-width) 1fr var(--gv-panel-right-width);
+  grid-template-rows: var(--gv-topbar-height) 1fr;
+  grid-template-areas:
+    "topbar topbar topbar"
+    "sidebar content details";
+  height: 100vh;
+  width: 100%;
+  background: var(--gv-surface-base);
+  overflow: hidden;
+}
+
+.git-viewer--loading {
+  opacity: 0.85;
+  pointer-events: none;
+}
+
+/* ============================================
+   TOP BAR - Repository URL + Actions
+   ============================================ */
+
+.git-topbar {
+  grid-area: topbar;
+  display: flex;
+  align-items: center;
+  gap: var(--agion-spacing-lg);
+  padding: 0 var(--agion-spacing-xl);
+  background: var(--gv-surface-elevated);
+  border-bottom: 1px solid var(--gv-border-subtle);
+  z-index: var(--agion-z-sticky);
+}
+
+.git-topbar__brand {
+  display: flex;
+  align-items: center;
+  gap: var(--agion-spacing-sm);
+  flex-shrink: 0;
+}
+
+.git-topbar__logo {
+  width: 28px;
+  height: 28px;
+  color: var(--agion-color-accent-gold);
+}
+
+.git-topbar__title {
+  font-family: var(--agion-font-heading);
+  font-size: var(--agion-font-size-md);
+  font-weight: var(--agion-font-weight-semibold);
+  color: var(--agion-color-text-primary);
+  letter-spacing: var(--agion-letter-spacing-tight);
+}
+
+.git-topbar__url-form {
+  display: flex;
+  align-items: center;
+  gap: var(--agion-spacing-md);
+  flex: 1;
+  max-width: 800px;
+}
+
+.git-topbar__input-wrapper {
+  position: relative;
+  flex: 1;
+}
+
+.git-topbar__input {
+  width: 100%;
+  padding: 10px 16px 10px 40px;
+  font-family: var(--agion-font-mono);
+  font-size: var(--agion-font-size-sm);
+  color: var(--agion-color-text-primary);
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid var(--gv-border-subtle);
+  border-radius: var(--agion-radius-md);
+  outline: none;
+  transition:
+    border-color var(--agion-duration-fast),
+    box-shadow var(--agion-duration-fast);
+}
+
+.git-topbar__input::placeholder {
+  color: var(--agion-color-text-muted);
+}
+
+.git-topbar__input:focus {
+  border-color: var(--agion-color-accent-gold);
+  box-shadow: 0 0 0 2px rgba(197, 165, 114, 0.1);
+}
+
+.git-topbar__input-icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 16px;
+  height: 16px;
+  color: var(--agion-color-text-muted);
+  pointer-events: none;
+}
+
+.git-topbar__submit {
+  display: flex;
+  align-items: center;
+  gap: var(--agion-spacing-sm);
+  padding: 10px 20px;
+  font-family: var(--agion-font-primary);
+  font-size: var(--agion-font-size-sm);
+  font-weight: var(--agion-font-weight-semibold);
+  letter-spacing: var(--agion-letter-spacing-wide);
+  color: #0A0A0A;
+  background: linear-gradient(135deg, #C5A572 0%, #D4B88A 50%, #C5A572 100%);
+  border: none;
+  border-radius: var(--agion-radius-md);
+  cursor: pointer;
+  white-space: nowrap;
+  transition:
+    transform var(--agion-duration-fast),
+    box-shadow var(--agion-duration-fast);
+}
+
+.git-topbar__submit:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(197, 165, 114, 0.3);
+}
+
+.git-topbar__submit:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.git-topbar__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--agion-spacing-sm);
+  margin-left: auto;
+}
+
+.git-topbar__status {
+  display: flex;
+  align-items: center;
+  gap: var(--agion-spacing-xs);
+  padding: 6px 12px;
+  font-size: var(--agion-font-size-xs);
+  font-weight: var(--agion-font-weight-medium);
+  border-radius: var(--agion-radius-full);
+  text-transform: uppercase;
+  letter-spacing: var(--agion-letter-spacing-wider);
+}
+
+.git-topbar__status--pending {
+  color: var(--agion-color-text-muted);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.git-topbar__status--cloning {
+  color: #60A5FA;
+  background: rgba(96, 165, 250, 0.1);
+}
+
+.git-topbar__status--processing {
+  color: var(--agion-color-accent-gold);
+  background: rgba(197, 165, 114, 0.1);
+}
+
+.git-topbar__status--completed {
+  color: #34D399;
+  background: rgba(52, 211, 153, 0.1);
+}
+
+.git-topbar__status--failed {
+  color: #F87171;
+  background: rgba(248, 113, 113, 0.1);
+}
+
+/* ============================================
+   LEFT PANEL - File Directory
+   ============================================ */
+
+.git-sidebar {
+  grid-area: sidebar;
+  display: flex;
+  flex-direction: column;
+  background: var(--gv-surface-panel);
+  border-right: 1px solid var(--gv-border-subtle);
+  overflow: hidden;
+}
+
+.git-sidebar__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--agion-spacing-md) var(--gv-panel-padding);
+  border-bottom: 1px solid var(--gv-border-subtle);
+}
+
+.git-sidebar__title {
+  font-size: var(--agion-font-size-xs);
+  font-weight: var(--agion-font-weight-semibold);
+  color: var(--agion-color-text-muted);
+  letter-spacing: var(--agion-letter-spacing-widest);
+  text-transform: uppercase;
+}
+
+.git-sidebar__toggle {
+  padding: 4px;
+  background: none;
+  border: none;
+  color: var(--agion-color-text-muted);
+  cursor: pointer;
+  border-radius: var(--agion-radius-sm);
+  transition: background var(--agion-duration-fast);
+}
+
+.git-sidebar__toggle:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.git-sidebar__content {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: var(--agion-spacing-sm) 0;
+}
+
+/* Custom scrollbar */
+.git-sidebar__content::-webkit-scrollbar {
+  width: 5px;
+}
+
+.git-sidebar__content::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.git-sidebar__content::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+}
+
+.git-sidebar__content::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* File Tree Nodes */
+.tree-node {
+  user-select: none;
+}
+
+.tree-node__row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px 6px 8px;
+  margin: 0 8px;
+  border-radius: var(--agion-radius-sm);
+  cursor: pointer;
+  transition: background var(--agion-duration-fast);
+}
+
+.tree-node__row:hover {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.tree-node__row--selected {
+  background: rgba(197, 165, 114, 0.1);
+}
+
+.tree-node__row--selected .tree-node__name {
+  color: var(--agion-color-accent-gold);
+}
+
+.tree-node__chevron {
+  width: 14px;
+  height: 14px;
+  color: var(--agion-color-text-muted);
+  opacity: 0.5;
+  transition: transform var(--agion-duration-fast);
+  flex-shrink: 0;
+}
+
+.tree-node__chevron--expanded {
+  transform: rotate(90deg);
+}
+
+.tree-node__chevron--hidden {
+  visibility: hidden;
+}
+
+.tree-node__icon {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  font-size: 10px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tree-node__icon--folder {
+  color: var(--agion-color-accent-gold);
+  opacity: 0.8;
+}
+
+.tree-node__icon--file {
+  color: var(--agion-color-text-muted);
+}
+
+.tree-node__icon--md {
+  color: #60A5FA;
+}
+
+.tree-node__icon--py {
+  color: #10B981;
+}
+
+.tree-node__icon--ts {
+  color: #3B82F6;
+}
+
+.tree-node__icon--js {
+  color: #FBBF24;
+}
+
+.tree-node__name {
+  font-family: var(--agion-font-mono);
+  font-size: 12px;
+  color: var(--agion-color-text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.tree-node__children {
+  margin-left: 12px;
+}
+
+/* ============================================
+   CENTER PANEL - Main Content (Visual Anchor)
+   ============================================ */
+
+.git-content {
+  grid-area: content;
+  display: flex;
+  flex-direction: column;
+  background: var(--gv-surface-base);
+  overflow: hidden;
+}
+
+.git-content__wrapper {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: var(--agion-spacing-2xl) var(--agion-spacing-3xl);
+}
+
+/* Center content with optimal line length */
+.git-content__inner {
+  max-width: var(--gv-content-line-length);
+  margin: 0 auto;
+}
+
+/* Empty state */
+.git-content__empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  text-align: center;
+  padding: var(--agion-spacing-3xl);
+}
+
+.git-content__empty-icon {
+  width: 80px;
+  height: 80px;
+  margin-bottom: var(--agion-spacing-xl);
+  color: var(--agion-color-text-muted);
+  opacity: 0.2;
+}
+
+.git-content__empty-title {
+  font-size: var(--agion-font-size-xl);
+  font-weight: var(--agion-font-weight-medium);
+  color: var(--agion-color-text-primary);
+  margin: 0 0 var(--agion-spacing-sm);
+}
+
+.git-content__empty-subtitle {
+  font-size: var(--agion-font-size-base);
+  color: var(--agion-color-text-muted);
+  margin: 0;
+  max-width: 400px;
+}
+
+/* Breadcrumb navigation */
+.git-content__breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: var(--agion-spacing-xl);
+  font-family: var(--agion-font-mono);
+  font-size: var(--agion-font-size-xs);
+  color: var(--agion-color-text-muted);
+}
+
+.git-content__breadcrumb-separator {
+  opacity: 0.3;
+}
+
+.git-content__breadcrumb-current {
+  color: var(--agion-color-accent-gold);
+}
+
+/* ============================================
+   MARKDOWN CONTENT - Readability Optimized
+   ============================================ */
+
+.git-content__markdown {
+  font-family: var(--agion-font-primary);
+  font-size: 17px;
+  /* Slightly larger for readability */
+  line-height: 1.75;
+  /* Generous line height */
+  color: #E8E8E8;
+  /* High contrast text */
+}
+
+.git-content__markdown h1 {
+  font-size: 2.25rem;
+  font-weight: var(--agion-font-weight-bold);
+  color: #FFFFFF;
+  margin: 0 0 var(--agion-spacing-xl);
+  padding-bottom: var(--agion-spacing-md);
+  border-bottom: 1px solid var(--gv-border-subtle);
+  letter-spacing: var(--agion-letter-spacing-tight);
+}
+
+.git-content__markdown h2 {
+  font-size: 1.625rem;
+  font-weight: var(--agion-font-weight-semibold);
+  color: #FFFFFF;
+  margin: var(--agion-spacing-3xl) 0 var(--agion-spacing-lg);
+  letter-spacing: var(--agion-letter-spacing-tight);
+}
+
+.git-content__markdown h3 {
+  font-size: 1.25rem;
+  font-weight: var(--agion-font-weight-semibold);
+  color: #FFFFFF;
+  margin: var(--agion-spacing-2xl) 0 var(--agion-spacing-md);
+}
+
+.git-content__markdown p {
+  margin-bottom: var(--agion-spacing-lg);
+}
+
+.git-content__markdown a {
+  color: var(--agion-color-accent-gold-light);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color var(--agion-duration-fast);
+}
+
+.git-content__markdown a:hover {
+  border-bottom-color: var(--agion-color-accent-gold);
+}
+
+.git-content__markdown code {
+  font-family: var(--agion-font-mono);
+  font-size: 0.9em;
+  padding: 3px 8px;
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: var(--agion-radius-sm);
+  color: #F0D9B5;
+}
+
+.git-content__markdown pre {
+  background: #0D0D0D;
+  border: 1px solid var(--gv-border-subtle);
+  border-radius: var(--agion-radius-lg);
+  padding: var(--agion-spacing-lg);
+  overflow-x: auto;
+  margin: var(--agion-spacing-lg) 0;
+}
+
+.git-content__markdown pre code {
+  background: none;
+  padding: 0;
+  color: #FFFFFF;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+/* Raw code file display (non-markdown) */
+.git-content__markdown code,
+.git-content__code {
+  font-family: var(--agion-font-mono);
+  font-size: 14px;
+  line-height: 1.7;
+  color: #FFFFFF;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.git-content__markdown blockquote {
+  border-left: 3px solid var(--agion-color-accent-gold);
+  margin: var(--agion-spacing-lg) 0;
+  padding: var(--agion-spacing-md) var(--agion-spacing-lg);
+  background: rgba(197, 165, 114, 0.03);
+  border-radius: 0 var(--agion-radius-md) var(--agion-radius-md) 0;
+  color: var(--agion-color-text-secondary);
+}
+
+.git-content__markdown ul,
+.git-content__markdown ol {
+  margin: var(--agion-spacing-lg) 0;
+  padding-left: var(--agion-spacing-xl);
+}
+
+.git-content__markdown li {
+  margin-bottom: var(--agion-spacing-sm);
+}
+
+.git-content__markdown li::marker {
+  color: var(--agion-color-accent-gold);
+}
+
+.git-content__markdown table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: var(--agion-spacing-lg) 0;
+  font-size: 15px;
+}
+
+.git-content__markdown th,
+.git-content__markdown td {
+  padding: var(--agion-spacing-sm) var(--agion-spacing-md);
+  border: 1px solid var(--gv-border-subtle);
+  text-align: left;
+}
+
+.git-content__markdown th {
+  background: rgba(255, 255, 255, 0.03);
+  font-weight: var(--agion-font-weight-semibold);
+  color: #FFFFFF;
+}
+
+.git-content__markdown img {
+  max-width: 100%;
+  border-radius: var(--agion-radius-lg);
+  margin: var(--agion-spacing-lg) 0;
+}
+
+/* ============================================
+   RIGHT PANEL - Contextual Details
+   ============================================ */
+
+.git-details {
+  grid-area: details;
+  display: flex;
+  flex-direction: column;
+  background: var(--gv-surface-panel);
+  border-left: 1px solid var(--gv-border-subtle);
+  overflow: hidden;
+}
+
+.git-details__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--agion-spacing-md) var(--gv-panel-padding);
+  border-bottom: 1px solid var(--gv-border-subtle);
+}
+
+.git-details__title {
+  font-size: var(--agion-font-size-xs);
+  font-weight: var(--agion-font-weight-semibold);
+  color: var(--agion-color-text-muted);
+  letter-spacing: var(--agion-letter-spacing-widest);
+  text-transform: uppercase;
+}
+
+.git-details__content {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--gv-panel-padding);
+}
+
+/* Metadata cards - Compact inline style */
+.git-meta-card {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+  padding: 4px 0;
+  background: transparent;
+  border-radius: 0;
+  border: none;
+  border-bottom: 1px solid var(--gv-border-subtle);
+}
+
+.git-meta-card:last-of-type {
+  border-bottom: none;
+}
+
+.git-meta-card__label {
+  font-size: 10px;
+  font-weight: var(--agion-font-weight-medium);
+  color: var(--agion-color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: var(--agion-letter-spacing-wider);
+  min-width: 36px;
+  margin-bottom: 0;
+}
+
+.git-meta-card__value {
+  font-size: 12px;
+  color: var(--agion-color-text-primary);
+  font-family: var(--agion-font-mono);
+  word-break: break-all;
+}
+
+.git-meta-card__value--gold {
+  color: var(--agion-color-accent-gold);
+}
+
+/* TOC in right panel */
+.git-toc {
+  margin-top: var(--agion-spacing-lg);
+}
+
+.git-toc__title {
+  font-size: 11px;
+  font-weight: var(--agion-font-weight-semibold);
+  color: var(--agion-color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: var(--agion-letter-spacing-wider);
+  margin-bottom: var(--agion-spacing-sm);
+}
+
+.git-toc__list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.git-toc__item {
+  padding: 6px 0;
+  font-size: 13px;
+  color: var(--agion-color-text-secondary);
+  cursor: pointer;
+  transition: color var(--agion-duration-fast);
+}
+
+.git-toc__item:hover {
+  color: var(--agion-color-accent-gold);
+}
+
+.git-toc__item--active {
+  color: var(--agion-color-accent-gold);
+}
+
+.git-toc__item--h3 {
+  padding-left: var(--agion-spacing-md);
+  font-size: 12px;
+}
+
+/* ============================================
+   ERROR STATE
+   ============================================ */
+
+.git-error {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  gap: var(--agion-spacing-md);
+  padding: var(--agion-spacing-md) var(--agion-spacing-xl);
+  background: rgba(248, 113, 113, 0.05);
+  border-bottom: 1px solid rgba(248, 113, 113, 0.2);
+  color: #F87171;
+  font-size: var(--agion-font-size-sm);
+}
+
+.git-error__icon {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+}
+
+/* ============================================
+   LOADING SPINNER
+   ============================================ */
+
+.git-spinner {
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--gv-border-subtle);
+  border-top-color: var(--agion-color-accent-gold);
+  border-radius: 50%;
+  animation: git-spin 0.8s linear infinite;
+}
+
+@keyframes git-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ============================================
+   RESPONSIVE - Collapsible Panels
+   ============================================ */
+
+@media (max-width: 1280px) {
+  .git-viewer {
+    --gv-panel-left-width: 240px;
+    --gv-panel-right-width: 240px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .git-viewer {
+    grid-template-columns: var(--gv-panel-left-width) 1fr;
+    grid-template-areas:
+      "topbar topbar"
+      "sidebar content";
+  }
+
+  .git-details {
+    display: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .git-viewer {
+    grid-template-columns: 1fr;
+    grid-template-rows: var(--gv-topbar-height) auto 1fr;
+    grid-template-areas:
+      "topbar"
+      "sidebar"
+      "content";
+  }
+
+  .git-sidebar {
+    max-height: 200px;
+    border-right: none;
+    border-bottom: 1px solid var(--gv-border-subtle);
+  }
+
+  .git-topbar__url-form {
+    flex-direction: column;
+    gap: var(--agion-spacing-sm);
+  }
+
+  .git-topbar__submit {
+    width: 100%;
+    justify-content: center;
+  }
+}
