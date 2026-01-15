@@ -41,17 +41,16 @@
     left: 0 !important;
     right: 0 !important;
     height: var(--docs-header-height);
-    background: var(--bg-elevated, rgba(255, 255, 255, 0.95));
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border-bottom: 1px solid var(--border-primary, rgba(0, 0, 0, 0.1));
+    /* demo.html header style */
+    border-bottom: 1px solid rgba(255, 255, 255, .10);
+    background: rgba(2, 6, 23, 0.40);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding: 0 2rem;
     z-index: 100;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-    /* width: 100vw; -- REMOVED: causing potential scrollbar issues */
 }
 
 .docs-header-left,
@@ -81,9 +80,10 @@
 }
 
 .docs-header-btn:hover {
-    background: var(--bg-tertiary, rgba(0, 0, 0, 0.05));
-    border-color: var(--border-hover, rgba(0, 0, 0, 0.2));
-    color: var(--text-primary, #000);
+    /* demo.html button hover style */
+    background: rgba(255, 255, 255, .10);
+    border-color: rgba(255, 255, 255, .10);
+    color: rgb(241, 245, 249);
 }
 
 .docs-header-btn svg {
@@ -116,7 +116,7 @@
 }
 
 .docs-logo-text {
-    font-family: 'Space Grotesk', sans-serif;
+    font-family: var(--font-heading);
     letter-spacing: -0.02em;
     white-space: nowrap;
     overflow: hidden;
@@ -181,8 +181,11 @@
     top: var(--docs-header-height);
     bottom: 0;
     width: var(--docs-sidebar-width);
-    background: var(--bg-elevated, rgba(255, 255, 255, 0.95));
-    border-right: 1px solid var(--border-primary, rgba(0, 0, 0, 0.1));
+    /* demo.html glassmorphism */
+    background: rgba(2, 6, 23, 0.60);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-right: 1px solid rgba(255, 255, 255, .10);
     overflow-y: auto;
     overflow-x: hidden;
     display: flex;
@@ -198,7 +201,7 @@
     right: 0;
     width: var(--docs-toc-width);
     border-right: none;
-    border-left: 1px solid var(--border-primary, rgba(0, 0, 0, 0.1));
+    border-left: 1px solid rgba(255, 255, 255, .10);
 }
 
 /* ========================================
@@ -247,7 +250,7 @@
 
 /* Sidebar header controls - Premium DeepMind style */
 .docs-sidebar-header {
-    padding: 1.5rem 1.5rem 1rem 1.5rem;
+    padding: 0.5rem 0.75rem;
     border-bottom: 1px solid var(--border-primary, rgba(0, 0, 0, 0.1));
     display: flex;
     align-items: center;
@@ -261,7 +264,7 @@
 }
 
 .docs-sidebar-header h2 {
-    font-size: 0.875rem;
+    font-size: 0.7rem;
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.05em;
@@ -275,8 +278,8 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 28px;
-    height: 28px;
+    width: 20px;
+    height: 20px;
     padding: 0;
     background: transparent;
     border: 1px solid transparent;
@@ -296,8 +299,8 @@
 
 .toc-close-btn svg,
 .sidebar-header-btn svg {
-    width: 16px;
-    height: 16px;
+    width: 12px;
+    height: 12px;
     transition: transform 0.2s ease;
 }
 
@@ -797,4 +800,84 @@
     box-shadow:
         0 8px 24px rgba(16, 185, 129, 0.35),
         0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* ========================================
+   LIGHT MODE - Sidebar High Contrast Fix
+   ======================================== */
+
+/* Light mode sidebar - clean white background with dark text */
+[data-theme="light"] .docs-sidebar {
+    background: rgba(255, 255, 255, 0.95) !important;
+    border-color: rgba(0, 0, 0, 0.10) !important;
+}
+
+[data-theme="light"] .docs-sidebar-left {
+    border-right: 1px solid rgba(0, 0, 0, 0.10) !important;
+}
+
+[data-theme="light"] .docs-sidebar-right {
+    border-left: 1px solid rgba(0, 0, 0, 0.10) !important;
+}
+
+/* Light mode sidebar header */
+[data-theme="light"] .docs-sidebar-header {
+    background: rgba(255, 255, 255, 0.98) !important;
+    border-color: rgba(0, 0, 0, 0.08) !important;
+}
+
+[data-theme="light"] .docs-sidebar-header h2 {
+    color: #475569 !important;
+    /* Slate-600 */
+}
+
+/* Light mode navigation items - DARK text for readability */
+[data-theme="light"] .docs-sidebar a,
+[data-theme="light"] .docs-sidebar-content a,
+[data-theme="light"] .docs-sidebar .nav-item,
+[data-theme="light"] .docs-sidebar .nav-link {
+    color: #1E293B !important;
+    /* Slate-800 - dark and readable */
+}
+
+[data-theme="light"] .docs-sidebar a:hover,
+[data-theme="light"] .docs-sidebar-content a:hover {
+    color: #6366F1 !important;
+    /* Indigo */
+    background: rgba(99, 102, 241, 0.08) !important;
+}
+
+/* Light mode TOC (right sidebar) */
+[data-theme="light"] .docs-sidebar-right a {
+    color: #475569 !important;
+    /* Slate-600 */
+}
+
+[data-theme="light"] .docs-sidebar-right a:hover,
+[data-theme="light"] .docs-sidebar-right a.active {
+    color: #6366F1 !important;
+    /* Indigo */
+}
+
+/* Light mode folder/tree nodes */
+[data-theme="light"] .nav-folder,
+[data-theme="light"] .nav-folder-title,
+[data-theme="light"] .tree-node {
+    color: #1E293B !important;
+    /* Slate-800 */
+}
+
+/* Light mode icons in sidebar */
+[data-theme="light"] .docs-sidebar svg {
+    color: #64748B !important;
+    /* Slate-500 */
+}
+
+/* Light mode active nav item */
+[data-theme="light"] .docs-sidebar a.active,
+[data-theme="light"] .docs-sidebar .nav-item.active {
+    color: #6366F1 !important;
+    /* Indigo */
+    background: rgba(99, 102, 241, 0.10) !important;
+    font-weight: 600 !important;
 }

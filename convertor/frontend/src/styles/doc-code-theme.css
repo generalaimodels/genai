@@ -35,13 +35,29 @@
 }
 
 [data-theme="dark"] .document-content code:not(pre code) {
-    background: rgba(25, 25, 25, 1);
-    color: rgba(255, 255, 255, 1);
-    padding: 3px 8px;
-    border-radius: 4px;
-    font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
-    font-size: 14px;
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: linear-gradient(160deg,
+            rgba(40, 40, 45, 0.9) 0%,
+            rgba(30, 30, 35, 0.85) 100%) !important;
+    color: #E2E8F0 !important;
+    /* Slate-200 - clean neutral, not pink */
+    padding: 4px 10px !important;
+    border-radius: 0.75rem !important;
+    /* iOS liquid glass curve */
+    font-family: 'Consolas', 'Monaco', 'Courier New', monospace !important;
+    font-size: 13px !important;
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+    font-weight: 500 !important;
+    text-decoration: none !important;
+    box-shadow: 0 1px 2px rgba(255, 255, 255, 0.08) inset,
+        0 2px 6px rgba(0, 0, 0, 0.15) !important;
+}
+
+/* Override link-inherited colors for inline code */
+[data-theme="dark"] .document-content a code,
+[data-theme="dark"] .document-content a>code {
+    color: #E2E8F0 !important;
+    /* Keep neutral, not link blue/pink */
+    text-decoration: none !important;
 }
 
 /* ============================================
@@ -65,14 +81,18 @@
 }
 
 [data-theme="light"] .document-content code:not(pre code) {
-    background: rgba(240, 240, 240, 1);
+    background: linear-gradient(160deg,
+            rgba(245, 245, 248, 0.95) 0%,
+            rgba(235, 235, 240, 0.90) 100%);
     color: rgba(30, 30, 30, 1);
-    padding: 3px 8px;
-    border-radius: 6px;
+    padding: 4px 10px;
+    border-radius: 0.75rem;
+    /* iOS liquid glass curve */
     font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
     font-size: 14px;
-    border: 1px solid rgba(0, 0, 0, 0.08);
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    border: 1px solid rgba(0, 0, 0, 0.12);
+    box-shadow: 0 1px 2px rgba(255, 255, 255, 0.5) inset,
+        0 2px 6px rgba(0, 0, 0, 0.08);
 }
 
 /* ============================================
@@ -97,20 +117,37 @@
     margin: 2rem 0;
 }
 
+/* iOS Liquid Glass Effect - matches search button styling */
 [data-theme="dark"] .document-content .code-block-container {
-    background: rgba(15, 15, 15, 1);
-    border: 2px solid rgba(255, 255, 255, 0.15);
-    border-radius: 12px;
-    overflow: hidden;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
+    background: linear-gradient(160deg,
+            rgba(20, 20, 25, 0.95) 0%,
+            rgba(15, 15, 18, 0.98) 100%) !important;
+    border: 1.5px solid rgba(255, 255, 255, 0.20) !important;
+    border-radius: 1.5rem !important;
+    /* Very curved - iOS liquid glass */
+    overflow: hidden !important;
+    box-shadow:
+        0 1px 3px rgba(255, 255, 255, 0.08) inset,
+        0 8px 32px rgba(0, 0, 0, 0.5),
+        0 2px 8px rgba(0, 0, 0, 0.3) !important;
+    backdrop-filter: blur(20px) saturate(150%) !important;
+    -webkit-backdrop-filter: blur(20px) saturate(150%) !important;
 }
 
 [data-theme="light"] .document-content .code-block-container {
-    background: rgba(15, 15, 15, 1);
-    border: 2px solid rgba(255, 255, 255, 0.15);
-    border-radius: 12px;
-    overflow: hidden;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
+    background: linear-gradient(160deg,
+            rgba(20, 20, 25, 0.95) 0%,
+            rgba(15, 15, 18, 0.98) 100%) !important;
+    border: 1.5px solid rgba(0, 0, 0, 0.20) !important;
+    border-radius: 1.5rem !important;
+    /* Very curved - iOS liquid glass */
+    overflow: hidden !important;
+    box-shadow:
+        0 1px 3px rgba(255, 255, 255, 0.05) inset,
+        0 8px 32px rgba(0, 0, 0, 0.25),
+        0 2px 8px rgba(0, 0, 0, 0.15) !important;
+    backdrop-filter: blur(20px) saturate(150%) !important;
+    -webkit-backdrop-filter: blur(20px) saturate(150%) !important;
 }
 
 /* Traffic lights */
@@ -284,8 +321,8 @@
 [data-theme="dark"] .document-content h4,
 [data-theme="dark"] .document-content h5,
 [data-theme="dark"] .document-content h6 {
-    color: #C5A572 !important;
-    /* Authentic AEGIS Gold - Force Override */
+    color: #F1F5F9 !important;
+    /* demo.html Slate-100 - Clean white */
 }
 
 [data-theme="light"] .document-content h1,
@@ -294,8 +331,8 @@
 [data-theme="light"] .document-content h4,
 [data-theme="light"] .document-content h5,
 [data-theme="light"] .document-content h6 {
-    color: #C5A572 !important;
-    /* Authentic AEGIS Gold - Force Override */
+    color: #1E293B !important;
+    /* demo.html Slate-800 - Dark for light mode */
 }
 
 /* Strong/Bold text */

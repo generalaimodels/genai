@@ -144,9 +144,7 @@ export function DocumentsPage(): React.ReactElement {
                         <span className="docs-logo-text" style={{
                             fontSize: '1rem',
                             fontWeight: 600,
-                            background: 'linear-gradient(to right, #C5A572, #D4B88A)', /* Authentic AEGIS Gold */
-                            WebkitBackgroundClip: 'text',
-                            WebkitTextFillColor: 'transparent',
+                            color: '#F1F5F9', /* Slate-100 - demo.html style */
                             letterSpacing: '-0.01em'
                         }}>
                             Advanced Engineering for General Intelligence System

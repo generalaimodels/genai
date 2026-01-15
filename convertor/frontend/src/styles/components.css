@@ -365,6 +365,19 @@
     border-left-color: var(--color-accent-400);
 }
 
+/* Light Mode Blockquote Text Visibility Override */
+[data-theme="light"] .document-content blockquote {
+    color: #111827 !important;
+    background: rgba(243, 244, 246, 1);
+    /* visible background */
+}
+
+[data-theme="light"] .document-content blockquote p,
+[data-theme="light"] .document-content blockquote li,
+[data-theme="light"] .document-content blockquote dd {
+    color: #111827 !important;
+}
+
 /* ========================================
    Inline Code
    ======================================== */
@@ -406,18 +419,15 @@
 .code-block {
     position: relative;
     margin: var(--space-6) 0;
-    border-radius: var(--radius-xl);
+    border-radius: 16px;
     overflow: hidden;
-    /* Premium dark gradient background */
-    background: linear-gradient(145deg, #1a1f35 0%, #0f172a 50%, #1e1b4b 100%);
-    box-shadow:
-        0 4px 6px -1px rgba(0, 0, 0, 0.3),
-        0 2px 4px -2px rgba(0, 0, 0, 0.2),
-        inset 0 1px 0 rgba(255, 255, 255, 0.05),
-        0 0 0 1px rgba(99, 102, 241, 0.1);
-    border: 1px solid rgba(99, 102, 241, 0.15);
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    backdrop-filter: blur(8px);
+    /* DARK TERMINAL - NOT Glass */
+    background: rgb(15, 15, 15) !important;
+    border: 2px solid rgba(255, 255, 255, 0.12) !important;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    transition: transform .18s ease, box-shadow .18s ease;
 }
 
 .code-block::before {
@@ -434,13 +444,8 @@
 }
 
 .code-block:hover {
-    box-shadow:
-        0 10px 25px -5px rgba(0, 0, 0, 0.4),
-        0 8px 10px -6px rgba(0, 0, 0, 0.3),
-        0 0 50px rgba(99, 102, 241, 0.15),
-        0 0 0 1px rgba(99, 102, 241, 0.3);
-    border-color: rgba(99, 102, 241, 0.4);
     transform: translateY(-2px);
+    box-shadow: 0 8px 28px rgba(0, 0, 0, 0.6);
 }
 
 .code-header {
@@ -605,13 +610,13 @@
     color: #F1F5F9 !important;
 }
 
-/* 2. Headings - Authentic AEGIS Gold (#C5A572) */
+/* 2. Headings - demo.html style (white/slate) */
 /* Light Mode */
 [data-theme="light"] .document-content h1,
 [data-theme="light"] .document-content h2,
 [data-theme="light"] .document-content h3 {
-    color: #C5A572 !important;
-    /* The REAL AEGIS Gold */
+    color: #1E293B !important;
+    /* Slate-800 for light mode */
     background: none !important;
     -webkit-text-fill-color: initial !important;
 }
@@ -620,48 +625,50 @@
 [data-theme="dark"] .document-content h1,
 [data-theme="dark"] .document-content h2,
 [data-theme="dark"] .document-content h3 {
-    color: #C5A572 !important;
-    /* Same Gold for Brand Stability */
+    color: #F1F5F9 !important;
+    /* Slate-100 - clean white */
     background: none !important;
     -webkit-text-fill-color: initial !important;
 }
 
-/* H1 Underline */
+/* H1 Underline - indigo accent */
 [data-theme="light"] .document-content h1 {
-    border-bottom: 2px solid #C5A572 !important;
+    border-bottom: 2px solid rgba(99, 102, 241, 0.3) !important;
 }
 
 [data-theme="dark"] .document-content h1 {
-    border-bottom: 2px solid #C5A572 !important;
+    border-bottom: 2px solid rgba(99, 102, 241, 0.4) !important;
 }
 
-/* 3. Links - AEGIS Gold */
+/* 3. Links - demo.html indigo */
 .document-content a {
     text-decoration: none;
     font-weight: 600;
-    transition: all 0.2s;
+    transition: all 0.18s ease;
 }
 
 [data-theme="light"] .document-content a {
-    color: #C5A572 !important;
+    color: #6366F1 !important;
     background: none !important;
 }
 
 [data-theme="light"] .document-content a:hover {
-    color: #D4B88A !important;
-    /* Lighter Gold on Hover */
+    color: #818CF8 !important;
+    /* Indigo-400 on Hover */
     text-decoration: underline;
 }
 
 [data-theme="dark"] .document-content a {
-    color: #C5A572 !important;
+    color: #818CF8 !important;
+    /* Indigo-400 */
     background: none !important;
 }
 
 [data-theme="dark"] .document-content a:hover {
-    color: #D4B88A !important;
+    color: #A5B4FC !important;
+    /* Indigo-300 */
     text-decoration: underline;
-    text-shadow: 0 0 10px rgba(197, 165, 114, 0.4);
+    text-shadow: 0 0 10px rgba(99, 102, 241, 0.4);
 }
 
 /* 4. CODE BLOCKS - ALWAYS DARK & READABLE */
@@ -680,58 +687,56 @@
 }
 
 .document-content h2 {
-    color: #9a3412 !important;
-    /* Orange-900 (Copper) */
-    border-bottom-color: rgba(154, 52, 18, 0.2);
+    color: #1E293B !important;
+    /* Slate-800 */
+    border-bottom-color: rgba(99, 102, 241, 0.2);
 }
 
 [data-theme="dark"] .document-content h2 {
-    color: #fbbf24 !important;
-    /* Amber-400 */
-    border-bottom-color: rgba(251, 191, 36, 0.2);
+    color: #F1F5F9 !important;
+    /* Slate-100 */
+    border-bottom-color: rgba(99, 102, 241, 0.3);
 }
 
-/* H3 - Deep Gold */
+/* H3 - demo.html style */
 .document-content h3 {
-    color: #b45309 !important;
-    /* Amber-700 */
+    color: #334155 !important;
+    /* Slate-700 */
 }
 
 [data-theme="dark"] .document-content h3 {
-    color: #fde047 !important;
-    /* Yellow-300 */
+    color: #E2E8F0 !important;
+    /* Slate-200 */
 }
 
-/* Links - Classic Gold */
+/* Links - demo.html indigo */
 .document-content a {
-    color: #d97706 !important;
-    /* Amber-600 */
+    color: #6366F1 !important;
+    /* Indigo-500 */
     font-weight: 600;
-    transition: all 0.2s ease;
+    transition: all 0.18s ease;
 }
 
 [data-theme="dark"] .document-content a {
-    color: #fbbf24 !important;
-    /* Amber-400 */
+    color: #818CF8 !important;
+    /* Indigo-400 */
 }
 
-/* Link Hover - Glowing Gold */
+/* Link Hover - indigo glow */
 .document-content a:hover {
-    color: #f59e0b !important;
-    /* Amber-500 */
-    text-shadow: 0 0 1px rgba(245, 158, 11, 0.3);
+    color: #818CF8 !important;
+    /* Indigo-400 */
+    text-shadow: 0 0 1px rgba(99, 102, 241, 0.3);
     text-decoration: underline;
-    text-decoration-color: rgba(245, 158, 11, 0.5);
+    text-decoration-color: rgba(99, 102, 241, 0.5);
     background: none !important;
-    /* Remove gradient underline for cleaner look */
 }
 
 [data-theme="dark"] .document-content a:hover {
-    color: #fcd34d !important;
-    /* Amber-300 */
-    text-shadow: 0 0 8px rgba(252, 211, 77, 0.5);
-    /* Premium Glow */
-    text-decoration-color: rgba(252, 211, 77, 0.5);
+    color: #A5B4FC !important;
+    /* Indigo-300 */
+    text-shadow: 0 0 8px rgba(99, 102, 241, 0.5);
+    text-decoration-color: rgba(99, 102, 241, 0.5);
 }
 
 /* Exclude pre, code, and their children from the black text forcing */
@@ -1353,6 +1358,23 @@
     margin-bottom: 0;
 }
 
+/* Light Mode Alert Text Visibility Override */
+[data-theme="light"] .alert {
+    color: #111827 !important;
+}
+
+[data-theme="light"] .alert .alert-title {
+    font-weight: 700 !important;
+}
+
+[data-theme="light"] .alert p,
+[data-theme="light"] .alert li,
+[data-theme="light"] .alert dd,
+[data-theme="light"] .alert td,
+[data-theme="light"] .alert th {
+    color: #111827 !important;
+}
+
 /* Alert variants */
 .alert-note {
     border-left-color: var(--color-info-500);
@@ -1669,9 +1691,47 @@ span.katex,
     display: inline-block;
 }
 
-/* Mermaid dark mode adjustments */
+/* Mermaid dark mode adjustments - HIGH CONTRAST */
 [data-theme="dark"] .mermaid {
-    filter: invert(93%) hue-rotate(180deg);
+    /* Remove the faint invert filter - use direct colors instead */
+    filter: none !important;
+}
+
+/* Force readable text colors on mermaid diagrams */
+[data-theme="dark"] .mermaid text,
+[data-theme="dark"] .mermaid .nodeLabel,
+[data-theme="dark"] .mermaid .label,
+[data-theme="dark"] .mermaid .edgeLabel,
+[data-theme="dark"] .mermaid .cluster-label,
+[data-theme="dark"] .mermaid tspan {
+    fill: #F1F5F9 !important;
+    /* Slate-100 - bright white */
+    color: #F1F5F9 !important;
+    font-weight: 500 !important;
+}
+
+/* Mermaid node styling for dark mode */
+[data-theme="dark"] .mermaid .node rect,
+[data-theme="dark"] .mermaid .node circle,
+[data-theme="dark"] .mermaid .node polygon {
+    fill: rgba(99, 102, 241, 0.15) !important;
+    /* Indigo tint */
+    stroke: rgba(99, 102, 241, 0.6) !important;
+    stroke-width: 2px !important;
+}
+
+/* Mermaid edges/lines for dark mode */
+[data-theme="dark"] .mermaid path.flowchart-link,
+[data-theme="dark"] .mermaid .edgePath path,
+[data-theme="dark"] .mermaid .edge path {
+    stroke: rgba(148, 163, 184, 0.7) !important;
+    /* Slate-400 */
+    stroke-width: 2px !important;
+}
+
+/* Mermaid arrow markers */
+[data-theme="dark"] .mermaid marker path {
+    fill: rgba(148, 163, 184, 0.7) !important;
 }
 
 /* ========================================

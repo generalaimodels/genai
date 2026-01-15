@@ -5,6 +5,7 @@
 # - converters: Format-specific converters (MDX, RD, RST, Notebook)
 # - file_watcher: Real-time file change detection
 # - websocket_manager: WebSocket broadcasting for live updates
+# - docs_cache: Production-grade LRU caching for 100k+ files
 
 from .parser import MarkdownParser
 from .scanner import DocumentScanner
@@ -15,6 +16,7 @@ from .rd_converter import RdConverter
 from .rst_converter import RstConverter
 from .file_watcher import FileWatcher
 from .websocket_manager import WebSocketManager
+from .docs_cache import DocsCache, get_docs_cache, init_docs_cache
 
 __all__ = [
     "MarkdownParser",
@@ -26,4 +28,7 @@ __all__ = [
     "RstConverter",
     "FileWatcher",
     "WebSocketManager",
+    "DocsCache",
+    "get_docs_cache",
+    "init_docs_cache",
 ]

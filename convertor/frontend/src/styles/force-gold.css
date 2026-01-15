@@ -1,35 +1,70 @@
-/* 
-   FORCE GOLD OVERRIDE 
-   This file is loaded last to guarantee the Gold theme wins 
-   against any legacy styles or cache mismatches.
-*/
+/**
+ * ═══════════════════════════════════════════════════════════════════════════════
+ * FORCE INDIGO OVERRIDE - demo.html Color Theme
+ * ═══════════════════════════════════════════════════════════════════════════════
+ * This file is loaded last to guarantee the Indigo theme wins
+ * Replaces previous gold (#C5A572) with indigo (#6366F1)
+ * ═══════════════════════════════════════════════════════════════════════════════
+ */
 
-[data-theme="dark"] h1,
-[data-theme="dark"] h2,
-[data-theme="dark"] h3,
-[data-theme="dark"] h4,
-[data-theme="dark"] h5,
-[data-theme="dark"] h6,
-[data-theme="dark"] .document-content h1,
-[data-theme="dark"] .document-content h2,
-[data-theme="dark"] .document-content h3,
-[data-theme="dark"] .document-content h4,
-[data-theme="dark"] .document-content h5,
-[data-theme="dark"] .document-content h6 {
-    color: #C5A572 !important;
+/* Primary accent color - Indigo from demo.html */
+:root {
+    --accent-color: #6366F1;
+    --accent-color-light: #818CF8;
+    --accent-color-rgb: 99, 102, 241;
+    --accent-cyan: #22D3EE;
+    --accent-cyan-rgb: 34, 211, 238;
 }
 
-[data-theme="light"] h1,
-[data-theme="light"] h2,
-[data-theme="light"] h3,
-[data-theme="light"] h4,
-[data-theme="light"] h5,
-[data-theme="light"] h6,
-[data-theme="light"] .document-content h1,
-[data-theme="light"] .document-content h2,
-[data-theme="light"] .document-content h3,
-[data-theme="light"] .document-content h4,
-[data-theme="light"] .document-content h5,
-[data-theme="light"] .document-content h6 {
-    color: #C5A572 !important;
+/* Force headings to use indigo (or white for clean look) */
+.doc-content h1,
+.doc-content h2,
+.doc-content h3,
+.doc-content h4,
+.doc-content h5,
+.doc-content h6 {
+    color: #F1F5F9 !important;
+    /* Slate-100 for clean headings */
+}
+
+/* Links - indigo accent */
+.doc-content a,
+a.doc-link {
+    color: #818CF8 !important;
+    /* Indigo-400 */
+    text-decoration: none;
+    transition: color 0.18s ease;
+}
+
+.doc-content a:hover,
+a.doc-link:hover {
+    color: #A5B4FC !important;
+    /* Indigo-300 */
+}
+
+/* Code elements */
+.doc-content code,
+.doc-content pre code {
+    color: #F1F5F9 !important;
+}
+
+/* Badges and pills - indigo theme */
+.badge,
+.pill,
+.tag {
+    background: rgba(99, 102, 241, 0.15) !important;
+    border-color: rgba(99, 102, 241, 0.30) !important;
+    color: #A5B4FC !important;
+}
+
+/* CTA buttons */
+.btn-primary,
+.cta-button {
+    background: #6366F1 !important;
+    color: white !important;
+}
+
+.btn-primary:hover,
+.cta-button:hover {
+    background: #818CF8 !important;
 }

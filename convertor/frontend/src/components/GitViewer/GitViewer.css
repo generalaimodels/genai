@@ -29,12 +29,13 @@
   --gv-panel-gap: 0;
   --gv-panel-padding: 20px;
 
-  /* Elevated surface colors for panels */
-  --gv-surface-base: #0A0A0A;
-  --gv-surface-elevated: #111111;
-  --gv-surface-panel: #141414;
-  --gv-border-subtle: rgba(255, 255, 255, 0.06);
-  --gv-border-panel: rgba(197, 165, 114, 0.12);
+  /* 8K Premium Deep Void Surfaces */
+  --gv-surface-base: #02020a;
+  --gv-surface-elevated: #0a0a12;
+  --gv-surface-panel: #111118;
+  --gv-border-subtle: rgba(255, 255, 255, 0.08);
+  --gv-border-panel: rgba(255, 255, 255, 0.12);
+  --gv-glass-inset: 0 1px 0 rgba(255, 255, 255, 0.06) inset;
 }
 
 /* ============================================
@@ -69,8 +70,11 @@
   align-items: center;
   gap: var(--agion-spacing-lg);
   padding: 0 var(--agion-spacing-xl);
-  background: var(--gv-surface-elevated);
-  border-bottom: 1px solid var(--gv-border-subtle);
+  /* demo.html header style */
+  border-bottom: 1px solid rgba(255, 255, 255, .10);
+  background: rgba(2, 6, 23, 0.40);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
   z-index: var(--agion-z-sticky);
 }
 
@@ -128,8 +132,8 @@
 }
 
 .git-topbar__input:focus {
-  border-color: var(--agion-color-accent-gold);
-  box-shadow: 0 0 0 2px rgba(197, 165, 114, 0.1);
+  border-color: var(--agion-color-accent-primary);
+  box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.3);
 }
 
 .git-topbar__input-icon {
@@ -152,8 +156,9 @@
   font-size: var(--agion-font-size-sm);
   font-weight: var(--agion-font-weight-semibold);
   letter-spacing: var(--agion-letter-spacing-wide);
-  color: #0A0A0A;
-  background: linear-gradient(135deg, #C5A572 0%, #D4B88A 50%, #C5A572 100%);
+  color: #FFFFFF;
+  /* demo.html indigo button */
+  background: linear-gradient(135deg, #6366F1 0%, #818CF8 50%, #6366F1 100%);
   border: none;
   border-radius: var(--agion-radius-md);
   cursor: pointer;
@@ -165,7 +170,7 @@
 
 .git-topbar__submit:hover {
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(197, 165, 114, 0.3);
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
 }
 
 .git-topbar__submit:disabled {
@@ -204,8 +209,9 @@
 }
 
 .git-topbar__status--processing {
-  color: var(--agion-color-accent-gold);
-  background: rgba(197, 165, 114, 0.1);
+  color: #22D3EE;
+  /* demo.html cyan */
+  background: rgba(34, 211, 238, 0.1);
 }
 
 .git-topbar__status--completed {
@@ -307,11 +313,11 @@
 }
 
 .tree-node__row--selected {
-  background: rgba(197, 165, 114, 0.1);
+  background: rgba(99, 102, 241, 0.1);
 }
 
 .tree-node__row--selected .tree-node__name {
-  color: var(--agion-color-accent-gold);
+  color: var(--agion-color-accent-primary);
 }
 
 .tree-node__chevron {
@@ -549,10 +555,10 @@
 }
 
 .git-content__markdown blockquote {
-  border-left: 3px solid var(--agion-color-accent-gold);
+  border-left: 3px solid var(--agion-color-accent-primary);
   margin: var(--agion-spacing-lg) 0;
   padding: var(--agion-spacing-md) var(--agion-spacing-lg);
-  background: rgba(197, 165, 114, 0.03);
+  background: rgba(99, 102, 241, 0.05);
   border-radius: 0 var(--agion-radius-md) var(--agion-radius-md) 0;
   color: var(--agion-color-text-secondary);
 }

@@ -27,6 +27,7 @@ from .code_converter import CodeConverter, is_code_extension
 from .hash_index import HashIndex
 from .streaming_loader import StreamingLoader
 from .database import DocumentDatabase
+from .docs_cache import DocsCache, get_docs_cache
 
 
 @dataclass(slots=True)  # OPTIMIZATION: 30-50% memory reduction with __slots__
@@ -128,14 +129,18 @@ class DocumentScanner:
         self.code_converter = CodeConverter(self.data_dir)
         
         # Cache for parsed documents (path -> FullDocument)
+        # DEPRECATED: Old simple cache - now using DocsCache
         self._cache: dict[str, FullDocument] = {}
-        self._cache_max_size: int = 100  # Limit cache to 100 documents
+        self._cache_max_size: int = 100  # Legacy limit
+        
+        # SOTA: Production-grade LRU cache for 100k+ files
+        self.docs_cache: DocsCache = get_docs_cache()
         
         # SOTA: Hash index for O(1) lookups
-        self.hash_index = HashIndex(expected_size=10000)
+        self.hash_index = HashIndex(expected_size=100000)  # Increased for 100k files
         
         # SOTA: Streaming loader for zero-copy I/O
-        self.streaming_loader = StreamingLoader(max_documents=100)
+        self.streaming_loader = StreamingLoader(max_documents=500)  # Increased capacity
         
         # Lock for thread-safe cache operations
         self._cache_lock = asyncio.Lock()
@@ -292,10 +297,24 @@ class DocumentScanner:
         """
         Extract document metadata without full parsing.
         
+        OPTIMIZATION: Uses DocsCache for O(1) lookups on repeated access.
         Reads first portion of file to extract title and description.
         """
         try:
             relative_path = filepath.relative_to(self.data_dir).as_posix()
+            
+            # SOTA: Check DocsCache first for O(1) lookup
+            cached_meta = self.docs_cache.get_metadata(relative_path)
+            if cached_meta is not None:
+                return DocumentInfo(
+                    path=cached_meta['path'],
+                    title=cached_meta['title'],
+                    description=cached_meta.get('description'),
+                    modified_at=datetime.fromisoformat(cached_meta['modified_at']),
+                    size_bytes=cached_meta['size_bytes'],
+                    heading_count=cached_meta['heading_count']
+                )
+            
             stat = filepath.stat()
             
             # Read file content for metadata extraction
@@ -308,7 +327,8 @@ class DocumentScanner:
             description = self._extract_description(content)
             heading_count = content.count('\n#')  # Approximate heading count
             
-            return DocumentInfo(
+            # Create DocumentInfo
+            doc_info = DocumentInfo(
                 path=relative_path,
                 title=title,
                 description=description,
@@ -316,6 +336,18 @@ class DocumentScanner:
                 size_bytes=stat.st_size,
                 heading_count=heading_count
             )
+            
+            # SOTA: Cache metadata for future lookups
+            self.docs_cache.put_metadata(relative_path, {
+                'path': relative_path,
+                'title': title,
+                'description': description,
+                'modified_at': doc_info.modified_at.isoformat(),
+                'size_bytes': stat.st_size,
+                'heading_count': heading_count
+            })
+            
+            return doc_info
         except Exception:
             return None
 
@@ -462,13 +494,39 @@ class DocumentScanner:
         """
         Get fully parsed document by path.
         
+        OPTIMIZATION: Uses DocsCache for O(1) content lookups.
+        - First checks content cache
+        - Falls back to file system with cache-through
+        
         Args:
             path: Relative path from data root
             
         Returns:
             FullDocument with parsed content, or None if not found
         """
-        # Check cache first
+        # SOTA: Check DocsCache content first (O(1) lookup)
+        cached_html = self.docs_cache.get_content(path)
+        if cached_html is not None:
+            # Get metadata from cache
+            cached_meta = self.docs_cache.get_metadata(path)
+            if cached_meta:
+                doc_info = DocumentInfo(
+                    path=cached_meta['path'],
+                    title=cached_meta['title'],
+                    description=cached_meta.get('description'),
+                    modified_at=datetime.fromisoformat(cached_meta['modified_at']),
+                    size_bytes=cached_meta['size_bytes'],
+                    heading_count=cached_meta['heading_count']
+                )
+                # Create ParsedDocument with cached HTML
+                parsed = ParsedDocument(
+                    content_html=cached_html,
+                    headings=[],  # Headings not cached separately
+                    front_matter={}
+                )
+                return FullDocument(info=doc_info, parsed=parsed)
+        
+        # Check legacy cache
         async with self._cache_lock:
             if path in self._cache:
                 return self._cache[path]
@@ -480,7 +538,6 @@ class DocumentScanner:
             return None
         
         # Only parse markdown/documentation files
-        # Other files (images, etc.) should be served directly via /api/media
         if not self._is_markdown_file(filepath):
             return None
         
@@ -497,7 +554,6 @@ class DocumentScanner:
         parsed = await asyncio.to_thread(self.parser.parse, content)
         
         # SOTA: Resolve media paths AFTER HTML conversion
-        # Import media resolver
         from .media_resolver import MediaPathResolver
         resolver = MediaPathResolver(self.data_dir)
         
@@ -509,9 +565,11 @@ class DocumentScanner:
         
         full_doc = FullDocument(info=doc_info, parsed=parsed)
         
-        # Update cache
+        # SOTA: Cache content in DocsCache (production LRU)
+        self.docs_cache.put_content(path, parsed.content_html)
+        
+        # Update legacy cache (for backward compatibility)
         async with self._cache_lock:
-            # Simple LRU: remove oldest if at capacity
             if len(self._cache) >= self._cache_max_size:
                 oldest_key = next(iter(self._cache))
                 del self._cache[oldest_key]
@@ -628,14 +686,41 @@ class DocumentScanner:
         """
         Invalidate cached documents.
         
+        OPTIMIZATION: Invalidates both legacy cache and DocsCache.
+        
         Args:
             path: Specific path to invalidate, or None for all
         """
         if path is None:
-            print(f"🗑️  Clearing entire scanner cache ({len(self._cache)} entries)")
+            print(f"🗑️  Clearing entire scanner cache ({len(self._cache)} legacy entries)")
             self._cache.clear()
+            self.docs_cache.clear_all()
+            print(f"✓ DocsCache cleared")
         elif path in self._cache:
-            print(f"🗑️  Invalidating scanner cache for: {path}")
+            print(f"🗑️  Invalidating cache for: {path}")
             del self._cache[path]
+            self.docs_cache.invalidate_path(path)
         else:
-            print(f"⚠️  Cache miss during invalidation: {path} (not in cache)")
+            # Still invalidate DocsCache even if not in legacy cache
+            count = self.docs_cache.invalidate_path(path)
+            if count > 0:
+                print(f"🗑️  Invalidated DocsCache entries for: {path} ({count} entries)")
+            else:
+                print(f"⚠️  Cache miss during invalidation: {path}")
+    
+    def get_cache_stats(self) -> dict:
+        """
+        Get comprehensive cache statistics.
+        
+        Returns:
+            Dictionary with cache hit rates, sizes, and memory usage.
+        """
+        return {
+            'legacy_cache_size': len(self._cache),
+            'docs_cache': self.docs_cache.stats,
+            'hash_index': {
+                'size': len(self.hash_index),
+                'capacity': self.hash_index._expected_size if hasattr(self.hash_index, '_expected_size') else 'unknown'
+            },
+            'streaming_loader': self.streaming_loader.get_stats()
+        }

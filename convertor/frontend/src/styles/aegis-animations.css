@@ -121,6 +121,32 @@
     }
 }
 
+/* Premium 8K Dialog Pop Animation */
+@keyframes agion-pop {
+    from {
+        transform: translateY(10px) scale(0.98);
+        opacity: 0.5;
+    }
+
+    to {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+    }
+}
+
+/* Premium 8K Toast Slide Animation */
+@keyframes agion-toastIn {
+    from {
+        transform: translateY(8px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
 /* Infinite horizontal scroll for logo carousel */
 @keyframes agion-scrollHorizontal {
     from {

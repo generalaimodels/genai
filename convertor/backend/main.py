@@ -35,6 +35,7 @@ try:
     from core.hash_index import HashIndex
     from core.file_watcher import FileWatcher
     from core.websocket_manager import WebSocketManager
+    from core.docs_cache import init_docs_cache, get_docs_cache
     from api import router, init_preview_cache
 
     # Git Pipeline Imports
@@ -49,6 +50,7 @@ except ImportError:
     from .core.hash_index import HashIndex
     from .core.file_watcher import FileWatcher
     from .core.websocket_manager import WebSocketManager
+    from .core.docs_cache import init_docs_cache, get_docs_cache
     from .api import router, init_preview_cache
 
     # Git Pipeline Imports
@@ -100,10 +102,22 @@ async def lifespan(app: FastAPI):
     search_engine = SearchEngine()
     
     # SOTA: Initialize streaming loader
-    streaming_loader = StreamingLoader(max_documents=100, max_bytes=1_073_741_824)  # 1GB
+    streaming_loader = StreamingLoader(max_documents=500, max_bytes=1_073_741_824)  # 500 docs, 1GB
     
-    # SOTA: Initialize hash index
-    hash_index = HashIndex(expected_size=10000)
+    # SOTA: Initialize hash index for 100k files
+    hash_index = HashIndex(expected_size=100000)
+    
+    # SOTA: Initialize DocsCache for production-grade caching (100k+ files)
+    docs_cache = init_docs_cache(
+        metadata_capacity=50000,   # 50k metadata entries
+        content_capacity=1000,     # 1k parsed content
+        navigation_capacity=100,   # 100 nav trees
+        hash_capacity=100000,      # 100k file hashes
+        metadata_ttl=300.0,        # 5 min
+        content_ttl=120.0,         # 2 min
+        navigation_ttl=60.0,       # 1 min
+        hash_ttl=3600.0            # 1 hour
+    )
     
     # CRITICAL: Pass database reference to scanner for navigation building
     scanner.db = db
@@ -120,6 +134,7 @@ async def lifespan(app: FastAPI):
     app.state.streaming_loader = streaming_loader
     app.state.hash_index = hash_index
     app.state.ws_manager = ws_manager
+    app.state.docs_cache = docs_cache  # Add DocsCache to app state
 
     # Initialize Git Service
     git_service = GitService(git_db, data_path)
@@ -343,7 +358,8 @@ async def lifespan(app: FastAPI):
     print(f"✓ Startup time: {startup_time:.1f}ms")
     print(f"✓ Database: {db_path}")
     print(f"✓ Workers: 4 active")
-    print(f"✓ Hash index: Bloom filter + O(1) lookups")
+    print(f"✓ Hash index: Bloom filter + O(1) lookups (100k capacity)")
+    print(f"✓ DocsCache: 50k metadata + 1k content capacity")
     print(f"✓ Streaming loader: Zero-copy mmap ready")
     print("="*60)
     
@@ -352,6 +368,12 @@ async def lifespan(app: FastAPI):
     print(f"📊 Hash Index Stats:")
     print(f"   Total documents: {hash_stats['unique_documents']}")
     print(f"   Bloom filter: {hash_stats['bloom_filter']['memory_bytes']} bytes")
+    
+    # Print DocsCache stats
+    docs_cache_stats = docs_cache.stats
+    print(f"📊 DocsCache Stats:")
+    print(f"   Metadata cache: {docs_cache_stats['metadata']['size']}/{docs_cache_stats['metadata']['capacity']}")
+    print(f"   Content cache: {docs_cache_stats['content']['size']}/{docs_cache_stats['content']['capacity']}")
     print("="*60)
     
     yield
@@ -363,6 +385,7 @@ async def lifespan(app: FastAPI):
     db_stats = await db.get_stats()
     hash_stats = hash_index.get_stats()
     loader_stats = streaming_loader.get_stats()
+    docs_cache_stats = docs_cache.stats
     
     print("📊 Final Statistics:")
     print(f"   Documents: {db_stats.get('total_docs', 0)}")
@@ -371,6 +394,8 @@ async def lifespan(app: FastAPI):
     print(f"   Bloom hit rate: {hash_stats['bloom_hit_rate']:.2%}")
     print(f"   Streaming loader cache hits: {loader_stats['cache_hits']}")
     print(f"   Streaming loader hit rate: {loader_stats['hit_rate']:.2%}")
+    print(f"   DocsCache metadata hit rate: {docs_cache_stats['metadata']['hit_rate_percent']:.1f}%")
+    print(f"   DocsCache content hit rate: {docs_cache_stats['content']['hit_rate_percent']:.1f}%")
     
     # Stop file watcher
     if hasattr(app.state, 'file_watcher'):
@@ -388,8 +413,8 @@ async def lifespan(app: FastAPI):
 # Create app
 app = FastAPI(
     title="SOTA Documentation Converter API",
-    version="3.0.0",
-    description="State-of-the-art document conversion with O(1) lookups and sub-500ms latency",
+    version="4.0.0",
+    description="State-of-the-art document conversion with O(1) lookups, 100k+ file LRU cache, and sub-500ms latency",
     lifespan=lifespan
 )
 

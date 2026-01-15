@@ -34,20 +34,26 @@
   --agion-color-surface-muted: #E5E7EB;
   /* Subtle borders, dividers */
 
-  /* Accent Colors - Premium Gold (from AEGIS AI logo) */
-  --agion-color-accent-gold: #C5A572;
-  /* Premium gold - primary accent */
-  --agion-color-accent-gold-light: #D4B88A;
-  /* Lighter gold for hover states */
-  --agion-color-accent-gradient: linear-gradient(135deg, #C5A572 0%, #D4B88A 100%);
+  /* Accent Colors - Demo.html Indigo/Cyan (from demo.html) */
+  --agion-color-accent-primary: #6366F1;
+  /* Indigo - primary accent */
+  --agion-color-accent-primary-light: #818CF8;
+  /* Lighter indigo for hover states */
+  --agion-color-accent-cyan: #22D3EE;
+  /* Cyan - secondary accent */
+  --agion-color-accent-gradient: linear-gradient(135deg, #6366F1 0%, #818CF8 100%);
+
+  /* Legacy aliases for compatibility */
+  --agion-color-accent-gold: #6366F1;
+  --agion-color-accent-gold-light: #818CF8;
 
   /* Text Colors - AAA Compliant */
   --agion-color-text-primary: #FFFFFF;
   /* Pure white for maximum contrast */
-  --agion-color-text-secondary: #B4B4B4;
-  /* Light gray for secondary text */
-  --agion-color-text-muted: #707070;
-  /* Muted text, metadata */
+  --agion-color-text-secondary: #CBD5E1;
+  /* Slate-300 for secondary text */
+  --agion-color-text-muted: #94A3B8;
+  /* Slate-400 - Muted text, metadata */
   --agion-color-text-dark: #111827;
   /* Primary text on light */
   --agion-color-text-dark-secondary: #374151;
@@ -55,20 +61,20 @@
 
   /* Semantic Colors */
   --agion-color-success: #10B981;
-  /* Success states */
-  --agion-color-warning: #C5A572;
-  /* Warning states - gold */
+  /* Success states - emerald */
+  --agion-color-warning: #F59E0B;
+  /* Warning states - amber */
   --agion-color-error: #EF4444;
-  /* Error states */
-  --agion-color-info: #C5A572;
-  /* Info states - gold */
+  /* Error states - red */
+  --agion-color-info: #6366F1;
+  /* Info states - indigo */
 
-  /* Border Colors */
-  --agion-color-border-subtle: rgba(197, 165, 114, 0.1);
-  /* Subtle gold borders */
-  --agion-color-border-muted: rgba(197, 165, 114, 0.2);
-  /* Standard gold borders */
-  --agion-color-border-accent: var(--agion-color-accent-gold);
+  /* Border Colors - demo.html style */
+  --agion-color-border-subtle: rgba(255, 255, 255, 0.10);
+  /* Subtle white borders */
+  --agion-color-border-muted: rgba(255, 255, 255, 0.12);
+  /* Standard borders */
+  --agion-color-border-accent: var(--agion-color-accent-primary);
   --agion-color-border-light: rgba(0, 0, 0, 0.1);
   /* Borders on light */
 
@@ -218,21 +224,23 @@
   --agion-shadow-xl: 0 12px 24px rgba(0, 0, 0, 0.15), 0 6px 12px rgba(0, 0, 0, 0.1);
   --agion-shadow-2xl: 0 24px 48px rgba(0, 0, 0, 0.2), 0 12px 24px rgba(0, 0, 0, 0.15);
 
-  /* Premium Accent Shadows (gold glow for interactive elements) */
-  --agion-shadow-accent: 0 4px 12px rgba(197, 165, 114, 0.25), 0 2px 6px rgba(197, 165, 114, 0.15);
-  --agion-shadow-accent-lg: 0 8px 24px rgba(197, 165, 114, 0.35), 0 4px 12px rgba(197, 165, 114, 0.2);
-  --agion-shadow-accent-xl: 0 16px 40px rgba(197, 165, 114, 0.4), 0 8px 20px rgba(197, 165, 114, 0.25);
+  /* Premium Accent Shadows (indigo glow for interactive elements) */
+  --agion-shadow-accent: 0 4px 12px rgba(99, 102, 241, 0.25), 0 2px 6px rgba(99, 102, 241, 0.15);
+  --agion-shadow-accent-lg: 0 8px 24px rgba(99, 102, 241, 0.35), 0 4px 12px rgba(99, 102, 241, 0.2);
+  --agion-shadow-accent-xl: 0 16px 40px rgba(99, 102, 241, 0.4), 0 8px 20px rgba(99, 102, 241, 0.25);
 
-  /* Glassmorphism Effects - Enhanced for 8K clarity */
-  --agion-glass-bg: rgba(10, 10, 10, 0.85);
-  --agion-glass-border: rgba(197, 165, 114, 0.25);
-  --agion-glass-blur: blur(16px);
-  --agion-glass-blur-heavy: blur(24px);
-  --agion-glass-saturate: saturate(180%);
+  /* Glassmorphism Effects - 8K Ultra High-Fidelity */
+  --agion-glass-bg: rgba(10, 10, 15, 0.90);
+  --agion-glass-border: rgba(255, 255, 255, 0.12);
+  --agion-glass-blur: blur(20px);
+  --agion-glass-blur-heavy: blur(32px);
+  --agion-glass-saturate: saturate(200%);
+  --agion-glass-inset: 0 1px 0 rgba(255, 255, 255, 0.08) inset;
 
   /* Premium border enhancements for 8K */
-  --agion-border-premium: 1px solid rgba(197, 165, 114, 0.3);
-  --agion-border-premium-thick: 2px solid rgba(197, 165, 114, 0.4);
+  --agion-border-premium: 1px solid rgba(255, 255, 255, 0.14);
+  --agion-border-premium-thick: 2px solid rgba(255, 255, 255, 0.18);
+  --agion-border-glow: 0 0 20px rgba(79, 140, 255, 0.15);
 
   /* ============================================
      BORDER RADIUS

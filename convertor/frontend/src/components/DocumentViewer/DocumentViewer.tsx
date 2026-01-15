@@ -69,9 +69,7 @@ function WelcomeScreen(): React.ReactElement {
             <h1 style={{
                 fontSize: 'var(--text-3xl)',
                 marginBottom: 'var(--space-4)',
-                background: 'linear-gradient(to right, #C5A572, #D4B88A)', // Authentic AEGIS Gold Gradient
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
+                color: '#F1F5F9', // Slate-100 - clean white (demo.html style)
                 fontWeight: 800
             }}>
                 Welcome to Documentation

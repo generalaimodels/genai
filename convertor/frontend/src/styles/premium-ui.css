@@ -18,12 +18,10 @@
 .lazy-image-placeholder {
     position: absolute;
     inset: 0;
-    background: linear-gradient(
-        90deg,
-        var(--bg-secondary) 25%,
-        var(--bg-tertiary) 50%,
-        var(--bg-secondary) 75%
-    );
+    background: linear-gradient(90deg,
+            var(--bg-secondary) 25%,
+            var(--bg-tertiary) 50%,
+            var(--bg-secondary) 75%);
     background-size: 200% 100%;
     animation: shimmer 2s infinite ease-in-out;
 }
@@ -47,6 +45,7 @@
     0% {
         background-position: -200% 0;
     }
+
     100% {
         background-position: 200% 0;
     }
@@ -58,12 +57,14 @@
 
 .code-block-container {
     position: relative;
-    background: #1e1e1e;
+    background: #02020a;
     border-radius: var(--radius-lg);
     overflow: hidden;
     margin: var(--space-4) 0;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow:
+        0 6px 20px rgba(0, 0, 0, 0.4),
+        0 1px 0 rgba(255, 255, 255, 0.06) inset;
+    border: 1px solid rgba(255, 255, 255, 0.10);
 }
 
 .code-block-header {
@@ -179,11 +180,9 @@
     top: 0;
     left: 0;
     height: 3px;
-    background: linear-gradient(
-        90deg,
-        var(--color-primary-500) 0%,
-        var(--color-secondary-500) 100%
-    );
+    background: linear-gradient(90deg,
+            var(--color-primary-500) 0%,
+            var(--color-secondary-500) 100%);
     z-index: 1000;
     transition: width 0.1s ease-out;
     box-shadow: 0 0 8px rgba(var(--color-primary-rgb), 0.5);
@@ -195,7 +194,7 @@
 
 .theme-transitioning,
 .theme-transitioning * {
-    transition: 
+    transition:
         background-color 0.3s ease,
         color 0.3s ease,
         border-color 0.3s ease,
@@ -210,9 +209,11 @@
     0% {
         transform: scale(1);
     }
+
     50% {
         transform: scale(0.95);
     }
+
     100% {
         transform: scale(1);
     }
@@ -258,7 +259,7 @@ html {
     html {
         scroll-behavior: auto;
     }
-    
+
     *,
     *::before,
     *::after {
@@ -301,12 +302,10 @@ html {
    ============================================ */
 
 .skeleton {
-    background: linear-gradient(
-        90deg,
-        var(--bg-secondary) 25%,
-        var(--bg-tertiary) 50%,
-        var(--bg-secondary) 75%
-    );
+    background: linear-gradient(90deg,
+            var(--bg-secondary) 25%,
+            var(--bg-tertiary) 50%,
+            var(--bg-secondary) 75%);
     background-size: 200% 100%;
     animation: shimmer 2s infinite;
     border-radius: var(--radius-sm);
@@ -322,7 +321,7 @@ html {
         align-items: flex-start;
         gap: var(--space-2);
     }
-    
+
     .copy-button {
         align-self: flex-end;
     }

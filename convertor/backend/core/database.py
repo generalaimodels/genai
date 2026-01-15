@@ -21,6 +21,7 @@ Complexity:
 from __future__ import annotations
 
 import aiosqlite
+import asyncio
 import json
 import time
 from pathlib import Path
@@ -159,6 +160,7 @@ class DocumentDatabase:
         """Initialize database connection."""
         self.db_path = Path(db_path)
         self.conn: Optional[aiosqlite.Connection] = None
+        self._lock = asyncio.Lock()  # Prevent concurrent transaction conflicts
     
     async def connect(self) -> None:
         """Connect to database and initialize schema with SOTA optimizations."""
@@ -334,9 +336,14 @@ class DocumentDatabase:
         return [dict(row) for row in rows]
     
     async def delete_document(self, path: str) -> None:
-        """Delete document (cascades to parsed_content)."""
-        await self.conn.execute("DELETE FROM documents WHERE path = ?", (path,))
-        await self.conn.commit()
+        """Delete document (cascades to parsed_content). Thread-safe."""
+        try:
+            async with self._lock:
+                await self.conn.execute("DELETE FROM documents WHERE path = ?", (path,))
+                await self.conn.commit()
+        except Exception as e:
+            # Log but don't crash on delete errors during file watching
+            print(f"⚠️ Delete document skipped: {path} ({e})")
     
     async def get_stats(self) -> dict:
         """Get database statistics with cache metrics."""

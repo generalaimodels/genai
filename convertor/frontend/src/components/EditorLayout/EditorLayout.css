@@ -2,6 +2,8 @@
     display: flex;
     flex-direction: column;
     height: 100vh;
+    width: 100vw;
+    flex: 1;
     background: #1e1e1e;
     /* Classic: Neutral gray instead of blue */
     color: #e2e8f0;
@@ -10,19 +12,26 @@
 }
 
 /* ========== TOP BAR ========== */
+/* ========== TOP BAR - iOS Liquid Glass ========== */
 .editor-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding: 12px 20px;
-    background: rgba(30, 30, 30, 0.85);
-    /* Premium: Glassmorphism */
-    border-bottom: 1px solid rgba(212, 175, 55, 0.2);
-    backdrop-filter: blur(20px) saturate(180%);
-    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    /* Liquid Glass - indigo tinted */
+    background: linear-gradient(160deg,
+            rgba(40, 40, 45, 0.90) 0%,
+            rgba(30, 30, 35, 0.85) 100%);
+    border-bottom: 1.5px solid rgba(99, 102, 241, 0.25);
+    backdrop-filter: blur(40px) saturate(200%);
+    -webkit-backdrop-filter: blur(40px) saturate(200%);
     z-index: 100;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    box-shadow:
+        0 1px 2px rgba(255, 255, 255, 0.10) inset,
+        0 4px 16px rgba(0, 0, 0, 0.20);
     flex-shrink: 0;
+    border-radius: 0 0 1rem 1rem;
+    /* Curved bottom corners */
 }
 
 .topbar-left,
@@ -50,27 +59,29 @@
     margin: 0;
     cursor: pointer;
     padding: 6px 12px;
-    border-radius: 6px;
+    border-radius: 1rem;
+    /* Curved */
     transition: all 0.2s ease;
 }
 
 .filename-display:hover {
-    background: rgba(212, 175, 55, 0.1);
-    color: #d4af37;
+    background: rgba(99, 102, 241, 0.15);
+    color: #818CF8;
 }
 
 .filename-input {
     font-size: 16px;
     font-weight: 600;
     color: #e2e8f0;
-    background: rgba(212, 175, 55, 0.15);
-    border: 2px solid #d4af37;
+    background: rgba(99, 102, 241, 0.15);
+    border: 2px solid #6366F1;
     padding: 6px 12px;
-    border-radius: 6px;
+    border-radius: 1rem;
+    /* Curved */
     outline: none;
     min-width: 200px;
     font-family: inherit;
-    box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.1);
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
 }
 
 .filename-input::placeholder {
@@ -253,29 +264,34 @@
     color: white;
 }
 
-/* ========== TOOLBAR ========== */
+/* ========== TOOLBAR - iOS Liquid Glass ========== */
 .editor-toolbar {
     display: flex;
     align-items: center;
-    gap: 4px;
-    padding: 8px 16px;
-    background: #252526;
-    border-bottom: 1px solid rgba(212, 175, 55, 0.15);
+    gap: 6px;
+    padding: 10px 16px;
+    /* Liquid Glass toolbar */
+    background: linear-gradient(160deg,
+            rgba(45, 45, 50, 0.90) 0%,
+            rgba(35, 35, 40, 0.85) 100%);
+    border-bottom: 1px solid rgba(99, 102, 241, 0.15);
     flex-wrap: wrap;
     overflow: hidden;
-    /* Critical: prevents layout shift */
     min-height: 0;
-    /* Allow complete collapse */
     flex-shrink: 0;
-    /* Don't affect main content */
+    backdrop-filter: blur(20px) saturate(160%);
+    -webkit-backdrop-filter: blur(20px) saturate(160%);
 }
 
 .editor-toolbar button {
-    background: transparent;
-    border: none;
+    background: linear-gradient(160deg,
+            rgba(255, 255, 255, 0.08) 0%,
+            rgba(255, 255, 255, 0.03) 100%);
+    border: 1px solid rgba(255, 255, 255, 0.08);
     color: #cccccc;
     padding: 8px 12px;
-    border-radius: 6px;
+    border-radius: 0.75rem;
+    /* Curved corners */
     cursor: pointer;
     font-size: 14px;
     font-weight: 500;
@@ -288,13 +304,13 @@
 }
 
 .editor-toolbar button:hover {
-    background: rgba(255, 255, 255, 0.05);
-    border-color: var(--accent-color, #d4af37);
-    color: var(--text-primary, #cccccc);
+    background: rgba(99, 102, 241, 0.15);
+    border-color: rgba(99, 102, 241, 0.3);
+    color: #F1F5F9;
 }
 
 .editor-toolbar button:active {
-    background: rgba(212, 175, 55, 0.1);
+    background: rgba(99, 102, 241, 0.25);
     transform: scale(0.95);
 }
 
@@ -444,30 +460,36 @@
     opacity: 0.8;
 }
 
-/* Premium: Enhanced buttons */
+/* Premium: Enhanced buttons - iOS Liquid Glass Curves */
 .btn-primary,
 .btn-secondary,
 .btn-danger {
     padding: 8px 20px;
-    border-radius: 8px;
+    border-radius: 1.25rem;
+    /* Very curved - liquid glass style */
     font-size: 13px;
     font-weight: 600;
     cursor: pointer;
-    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-    border: none;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    border: 1.5px solid transparent;
+    box-shadow:
+        0 1px 2px rgba(255, 255, 255, 0.15) inset,
+        0 4px 12px rgba(0, 0, 0, 0.20);
     letter-spacing: 0.3px;
 }
 
 .btn-primary {
-    background: linear-gradient(135deg, #d4af37 0%, #c9a325 100%);
-    color: #1a1a1a;
+    background: linear-gradient(135deg, #6366F1 0%, #4F46E5 100%);
+    color: #FFFFFF;
+    border-color: rgba(129, 140, 248, 0.3);
 }
 
 .btn-primary:hover:not(:disabled) {
-    background: linear-gradient(135deg, #e8c547 0%, #d4af37 100%);
-    box-shadow: 0 4px 16px rgba(212, 175, 55, 0.4);
-    transform: translateY(-1px);
+    background: linear-gradient(135deg, #818CF8 0%, #6366F1 100%);
+    box-shadow:
+        0 1px 2px rgba(255, 255, 255, 0.20) inset,
+        0 8px 24px rgba(99, 102, 241, 0.35);
+    transform: translateY(-2px);
 }
 
 .btn-primary:active {

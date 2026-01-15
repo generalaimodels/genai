@@ -40,3 +40,5 @@ docs/_build/
 .DS_Store
 /convertor/frontend/node_modules
 convertor/frontend/node_modules
+
+convertor/data
