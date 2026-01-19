@@ -1,0 +1,108 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: terminal-service
+  labels:
+    app: terminal-service
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: terminal-service
+  template:
+    metadata:
+      labels:
+        app: terminal-service
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8080"
+        prometheus.io/path: "/metrics"
+    spec:
+      containers:
+      - name: terminal-service
+        image: terminal-service:1.0.0
+        ports:
+        - containerPort: 8080
+          name: http
+        env:
+        - name: REDIS_CLUSTER_URLS
+          value: "redis://redis-service:6379"
+        - name: SESSION_TTL_SECONDS
+          value: "3600"
+        - name: WEBSOCKET_PING_INTERVAL
+          value: "15.0"
+        - name: LOG_LEVEL
+          value: "INFO"
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+        livenessProbe:
+          httpGet:
+            path: /api/v1/health
+            port: 8080
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+        readinessProbe:
+          httpGet:
+            path: /api/v1/health
+            port: 8080
+          initialDelaySeconds: 5
+          periodSeconds: 5
+          timeoutSeconds: 3
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: terminal-service
+  labels:
+    app: terminal-service
+spec:
+  type: LoadBalancer
+  sessionAffinity: ClientIP  # Sticky sessions for WebSocket
+  sessionAffinityConfig:
+    clientIP:
+      timeoutSeconds: 3600
+  ports:
+  - port: 80
+    targetPort: 8080
+    protocol: TCP
+    name: http
+  selector:
+    app: terminal-service
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: terminal-service-hpa
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: terminal-service
+  minReplicas: 3
+  maxReplicas: 10
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 70
+  - type: Resource
+    resource:
+      name: memory
+      target:
+        type: Utilization
+        averageUtilization: 80
+  - type: Pods
+    pods:
+      metric:
+        name: terminal_websocket_active_connections
+      target:
+        type: AverageValue
+        averageValue: "100"

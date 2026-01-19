@@ -1,0 +1,7 @@
+# Testing dependencies
+httpx>=0.26.0
+websockets>=12.0
+rich>=13.7.0
+
+# Additional CLI testing tools
+click>=8.1.7

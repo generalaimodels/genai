@@ -2,7 +2,7 @@
 __pycache__/
 *.py[cod]
 *$py.class
-
+*.db
 # Distribution / Packaging
 build/
 dist/
@@ -42,3 +42,6 @@ docs/_build/
 convertor/frontend/node_modules
 
 convertor/data
+
+convertor/redis.zip
+convertor/redis/
